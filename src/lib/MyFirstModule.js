@@ -8,8 +8,8 @@ var $builtinmodule = function (name) {
     //get square root of number
     mod.sqrt = new Sk.builtin.func(function (x) {
         Sk.builtin.pyCheckArgs("sqrt", arguments, 1, 1);
-        Sk.builtin.pyCheckType("x", "number", Sk.builtin.checkNumber(x));
-        return new Sk.builtin.float_(Math.sqrt(Sk.builtin.asnum$(x)));
+        Sk.builtin.pyCheckType("x", "number", Sk.builtin.checkNumber(x)); // validate / check if input is a number
+        return new Sk.builtin.float_(Math.sqrt(Sk.builtin.asnum$(x))); // validate / check if input is a number
     });
 
     // gets multiple by itself with number of y i.e. 2, 3 = 2*2*2
@@ -65,6 +65,7 @@ var $builtinmodule = function (name) {
         return randrange(x, (y + 1), 1);
     });
 
+    //non- functional function (require attention)
     mod.randrange = new Sk.builtin.func(function (start, stop, step) {
         Sk.builtin.pyCheckArgs("randrange", arguments, 1, 3);
 
@@ -74,6 +75,18 @@ var $builtinmodule = function (name) {
         return randrange(start, stop, step);
     });
 
+
+    mod.factorial = new Sk.builtin.func(function (x) {
+        Sk.builtin.pyCheckArgs("factorial", arguments, 1, 1);
+        Sk.builtin.pyCheckType("x", "number", Sk.builtin.checkNumber(x));
+
+        x = Math.floor(Sk.builtin.asnum$(x));
+        var r = 1;
+        for (var i = 2; i <= x; i++) {
+            r *= i;
+        }
+        return new Sk.builtin.int_(r);
+    });
 
     return mod;
 }
