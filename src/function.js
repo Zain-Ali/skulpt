@@ -117,7 +117,7 @@ Sk.builtin.checkNumber = function (arg) {
     return (arg !== null && (typeof arg === "number" ||
         arg instanceof Sk.builtin.int_ ||
         arg instanceof Sk.builtin.float_ ||
-        arg instanceof Sk.builtin.lng));
+        arg instanceof Sk.builtin.lng)); 
 };
 goog.exportSymbol("Sk.builtin.checkNumber", Sk.builtin.checkNumber);
 
