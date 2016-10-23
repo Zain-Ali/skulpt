@@ -17,7 +17,7 @@ var $builtinmodule = function (name) {
         Sk.builtin.pyCheckArgs("pow", arguments, 2, 2);
         Sk.builtin.pyCheckType("x", "number", Sk.builtin.checkNumber(x));
         Sk.builtin.pyCheckType("y", "number", Sk.builtin.checkNumber(y));
-        return new Sk.builtin.float_(Math.pow(Sk.builtin.asnum$(x), Sk.builtin.asnum$(y)));
+        return new Sk.builtin.float_(Math.pow(Sk.builtin.asnum$(x), Sk.builtin.asnum$(y))); // asnum function introduced to wrapp and unwrapp object
     });
 
     // it add x and y
