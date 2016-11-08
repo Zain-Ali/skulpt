@@ -4,7 +4,6 @@
  * todo; these should all be func objects too, otherwise str() of them won't
  * work, etc.
  */
-
 Sk.builtin.range = function range (start, stop, step) {
     var ret = [];
     var i;
@@ -1364,7 +1363,6 @@ Sk.builtin.coerce = function coerce () {
 Sk.builtin.intern = function intern () {
     throw new Sk.builtin.NotImplementedError("intern is not yet implemented");
 };
-
 
 /*
  Sk.builtinFiles = {};

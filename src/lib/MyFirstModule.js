@@ -1,5 +1,5 @@
 // All module must and always start with var $builtinmodule = statement
-// The SK.buildin.func call for adding functions to your module,
+// The SK.builtin.func call for adding functions to your module,
 // and the SK. miscebal.build class method,
 var $builtinmodule = function (name) {
     var mod = {};
