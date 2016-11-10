@@ -1,16 +1,32 @@
 /**
  * Created by ZainAli on 08/11/2016.
  */
-
 var $builtinmodule = function (name) {
+
+};
+
+
+/*var $builtinmodule = function (name) {
     "use strict";
 
-    function configureCanvas() {
+    function getConfiguredTarget() {
+        var selector, target;
+
+        selector = (Sk.graphics && Sk.graphics.target) || "graphics",
+            target   = typeof selector === "string" ?
+                document.getElementById(selector) :
+                selector;
+        // ensure that the canvas container is empty
+        while (target.firstChild) {
+            target.removeChild(target.firstChild);
+        }
+        return target;
     }
 
+/!*
     function generateGraphicsModule() {
 
-        var module = {};
+        var _module = {};
         var title = "Graphics Window"
         var self;
         var shapes;
@@ -21,42 +37,10 @@ var $builtinmodule = function (name) {
         var _mouseHandler;
         var master;
         var None = null;
-
-        // Ensure that the graphics DOM target has a tabindex
-        // so that it can accept keyboard focus and events
-        if (!_target.hasAttribute("tabindex")) {
-            _target.setAttribute("tabindex", 0);
-        }
-
-        /*        Types.FLOAT = function(value) {
-            return Sk.builtin.float_(value);
-        };
-
-        Types.COLOR = function(value) {
-            if (typeof value === "string") {
-                return new Sk.builtin.str(value);
-            }
-            else {
-                for(var i = 0; i < 3; i++) {
-                    value[i] = Sk.builtin.assk$(value[i]);
-                }
-                if (value.length === 4) {
-                    value[3] = Sk.builtin.float_(value[3]);
-                }
-                return new Sk.builtin.tuple(value);
-            }
-        };
-
-        Types.TURTLE_LIST = function(value) {
-            var skValues = [];
-            for (var i = 0; i < value.length; i++) {
-                skValues.push(value[i].skInstance);
-            }
-            return new Sk.builtin.tuple(skValues);
-        };*/
+        var color;
 
 
-        // some stuff to go here
+        mod.graphics = null;
 
         _config = (function() {
             var defaultSetup = {
@@ -87,16 +71,76 @@ var $builtinmodule = function (name) {
             return Sk.graphics;
         })();
 
-        assert.type(title) == type(""), "Title must be string";
-        self.foreground = "black";
-        self.items = [];
-        self.mouseX = None;
-        self.mouseY = None;
-        self.height = (height);
-        self.width = (width);
-        sef.autoFlush = autoFlush;
+        proto.$getscreen = function() {
+            return _module.Screen();
+        };
+
+        function Screen() {
+            var w,h;
+            this._frames    = 1;
+            this._delay     = undefined;
+            this._bgcolor   = "none";
+            this._mode      = "standard";
+            this._managers  = {};
+            this._keyLogger = {};
+            if (_config.height && _config.width) {
+                w = _config.width/2;
+                h = _config.height/2;
+            } else {
+                _config.defaultSetup = undefined;
+                w = _config.defaultSetup.width/2;
+                h = _config.defaultSetup.height/2;
+            }
+            this.setUpWorld(-w,-h,w,h);
+        }
+
+        function getScreen() {
+            if (!_screenInstance) {
+                _screenInstance = new Screen();
+            }
+            return _screenInstance;
+        }
+
+        function ScreenWrapper($gbl, $loc) {
+            $loc.__init__ = new Sk.builtin.func(function (self) {
+                self.instance = getScreen();
+            });
+
+            for(var key in Screen.prototype) {
+                if (/^\$[a-z_]+/.test(key)) {
+                    addModuleMethod(Screen, $loc, key);
+                }
+            }
+        }
+
+        // add Screen method aliases to the main turtle module
+        // to allow things like:
+        //   import turtle
+        //   turtle.mainloop()
+        addModuleMethod(Screen, _module, "$mainloop", getScreen);
+        addModuleMethod(Screen, _module, "$done", getScreen);
+        addModuleMethod(Screen, _module, "$bye", getScreen);
+        addModuleMethod(Screen, _module, "$tracer", getScreen);
+        addModuleMethod(Screen, _module, "$update", getScreen);
+        addModuleMethod(Screen, _module, "$delay", getScreen);
+        addModuleMethod(Screen, _module, "$window_width", getScreen);
+        addModuleMethod(Screen, _module, "$window_height", getScreen);
+
+        _module.Turtle = Sk.misceval.buildClass(_module, TurtleWrapper, "Turtle", []);
+        _module.Screen = Sk.misceval.buildClass(_module, ScreenWrapper, "Screen", []);
+
+
+        return {
+            skModule : _module,
+            reset    : resetTurtle,
+            stop     : stopTurtle,
+            focus    : focusTurtle,
+            Turtle   : Turtle,
+            Screen   : Screen
+        };
 
     }
-};
+*!/
+};*/
 
 

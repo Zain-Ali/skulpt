@@ -335,6 +335,14 @@ var $builtinmodule = function (name) {
         mod.processing.line(x1.v, y1.v, x2.v, y2.v);
     });
 
+    mod.line2 = new Sk.builtin.func(function (a, b, c, d) {
+        mod.processing.line(a.v, b.v, c.v, d.v);
+    });
+
+    mod.circle = new Sk.builtin.func(function (aa, a, b) {
+        mod.processing.line(point, a.v, b.v);
+    });
+
     mod.ellipse = new Sk.builtin.func(function (x, y, r1, r2) {
         mod.processing.ellipse(x.v, y.v, r1.v, r2.v);
 

@@ -6,7 +6,6 @@
         <title>Skulpt Project For Graphics Module</title>
         <script src="../dist/skulpt.min.js" type="text/javascript"></script>
         <script src="../dist/skulpt-stdlib.js" type="text/javascript"></script>
-
     </head>
 
     <body>
@@ -16,7 +15,9 @@
             <br>
             <a href="RunTurtle.html">2. Turtle Module</a>
             <br>
-            <a href="RunGraphics.html">3. Graphics Module</a>
+            <a href="RunProcessing.html">3. Processing Module</a>
+            <br>
+            <a href="RunGraphics.html">4. Graphics Module</a>
         </header>
 
         <script type="text/javascript">
@@ -36,14 +37,13 @@
             // get a reference to your pre element for output
             // configure the output function
             // call Sk.importMainWithBody()
-
             function runit() {
                 var prog = document.getElementById("yourcode").value;
                 var mypre = document.getElementById("output");
                 mypre.innerHTML = '';
                 Sk.pre = "output";
                 Sk.configure({output:outf, read:builtinRead});
-                (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = window.open();
+                (Sk.graphics || (Sk.graphics = {})).target = 'mycanvas';
                 var myPromise = Sk.misceval.asyncToPromise(function() {
                     return Sk.importMainWithBody("<stdin>", false, prog, true);
                 });
@@ -54,16 +54,13 @@
                             console.log(err.toString());
                         });
             }
-
         </script>
 
-        <h3>Graphics Under Construction(coming soon)</h3>
+        <h3>Try this only for Turtle </h3>
         <form>
         <textarea id="yourcode" cols="40" rows="10">
 
 import graphics
-
-win = GraphWin()
 
         </textarea><br />
             <button type="button" onclick="runit()">Run</button>
