@@ -6,6 +6,7 @@
         <title>Skulpt Project For Turtle</title>
         <script src="../dist/skulpt.min.js" type="text/javascript"></script>
         <script src="../dist/skulpt-stdlib.js" type="text/javascript"></script>
+       <!-- <script src="../src/lib/turtle.js/" type="text/javascript"></script> -->
 
     </head>
 
@@ -22,6 +23,15 @@
         </header>
 
         <script type="text/javascript">
+            Sk.externalLibraries = {
+                testModule: {
+                    path: '/MAIN PROJECT/skulpt/All HTML/ExternalSkulptModule/Graphics/__init__.js',
+                    dependencies: ['/MAIN PROJECT/skulpt/src/lib/turtle.js/']
+                }
+            }
+
+
+
             // output functions are configurable.  This one just appends some text
             // to a pre element.
             function outf(text) {
@@ -45,15 +55,15 @@
                 Sk.pre = "output";
                 Sk.configure({output:outf, read:builtinRead});
                 (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
-                var myPromise = Sk.misceval.asyncToPromise(function() {
+
+                Sk.misceval.asyncToPromise(function() {
                     return Sk.importMainWithBody("<stdin>", false, prog, true);
+                }).then(function(mod) {
+                    console.log('success');
+                },
+                    function(err) {
+                    console.log(err.toString());
                 });
-                myPromise.then(function(mod) {
-                            console.log('success');
-                        },
-                        function(err) {
-                            console.log(err.toString());
-                        });
             }
         </script>
 
