@@ -1,11 +1,17 @@
 /**
  * Created by zain on 11/11/2016.
  */
+//pure JS file
 
 var GraphWinJs, Point, Circle;
-
+// the variable is going to be glaoble scope which mean accessable anywhere.
+// which means our classes are accessable anywhere
+//$() fro JS query
 $(function(){
+    // we get the parentelement by id using Jquery
+    // we do this so we can get new canvas just like new window would be
     GraphWinJs = function(canvasParentId, width, height){
+        // the above is  constructor for the graphwinjs class
         if(canvasParentId == undefined)
             error('GraphWinJs canvasId undefined');
         if(width == undefined)
@@ -16,16 +22,23 @@ $(function(){
         //to do!
         //Validate Canvas parent exsists
         ///NEED TO ENSURE CHANGES TO HEIGHT VARIABLE AFFECT CANVAS ELEMENT
+
+        //seaching by id which means is either going to be 1 or 0
         this.canvas = $('#'+ canvasParentId)
             .append('<canvas height="'+height+'" width="'+width+'"> </canvas>')
             .children().last().get(0);
+        //it treatment canvas as the same way windows behove so I can keep on declaring ID
+        //it keeeps on adding to the above parentID and saves the element created in canvas variable
+
         this.context = this.canvas.getContext("2d");
     };
-
+    //we use prototype when we declare new instance of graphwinjs that the close function is present.
+    //create the prototype of the object
     GraphWinJs.prototype.close = function(){
         //remove canvas obj from dom using jquery
     };
 
+    //
     Point = function(x,y){
         if(x == undefined || y == undefined)
             throw ("Point class needs x and y cords");
@@ -42,7 +55,8 @@ $(function(){
         this.point = point;
         this.radius = radius;
     };
-
+    //it adds the draw function to circle just once
+    //this code is only execute once
     Circle.prototype.draw = function(graphWinObj){
         debugger;
         var con = graphWinObj.context;

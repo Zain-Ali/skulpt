@@ -30,13 +30,15 @@
         </header>
 
         <script type="text/javascript">
-
+            // I need to create seperate file for this
             Sk.externalLibraries = {
                 graphics: {
                     path: '/MAIN PROJECT/skulpt/All HTML/ExternalSkulptModule/Graphics/__init__.js',
                     dependencies: []
                 }
-            }
+            };
+            // the above is going to be called setup.js
+
             // output functions are configurable.  This one just appends some text
             // to a pre element.
             function outf(text) {
@@ -88,7 +90,10 @@ run()
         </form>
         <pre id="output" ></pre>
         <!-- If you want turtle graphics include a canvas -->
+
         <div id="mycanvas"></div>
+        <!-- If you want turtle graphics include a canvas -->
+
 
     </body>
 </html>
