@@ -4,9 +4,11 @@
 //pure JS file
 
 var GraphWinJs, Point, Circle;
+var Rectangle;
 // the variable is going to be glaoble scope which mean accessable anywhere.
 // which means our classes are accessable anywhere
 //$() fro JS query
+
 $(function(){
     // we get the parentelement by id using Jquery
     // we do this so we can get new canvas just like new window would be
@@ -34,6 +36,7 @@ $(function(){
     };
     //we use prototype when we declare new instance of graphwinjs that the close function is present.
     //create the prototype of the object
+
     GraphWinJs.prototype.close = function(){
         //remove canvas obj from dom using jquery
     };
@@ -48,6 +51,7 @@ $(function(){
 
 
     Circle = function(point,  radius){
+        debugger;
         if(point == undefined || point.x == undefined)
             throw ('A cricle needs cords');
         if(radius == undefined)
@@ -55,22 +59,36 @@ $(function(){
         this.point = point;
         this.radius = radius;
     };
+
     //it adds the draw function to circle just once
     //this code is only execute once
     Circle.prototype.draw = function(graphWinObj){
-        debugger;
         var con = graphWinObj.context;
         con.beginPath();
         con.arc(this.point.x, this.point.y, this.radius, 0, 2*Math.PI);
         con.stroke();
     };
 
+    Rectangle = function (TopLeftCorner, BottomRightCorner) {
+        if (TopLeftCorner == undefined || BottomRightCorner == undefined)
+            throw ('A rectangle needs points');
+        this.TopLeftCorner = TopLeftCorner;
+        this.BottomRighCorner = BottomRightCorner;
+    };
+    
+    Rectangle.prototype.draw = function(graphWinObj){
+        debugger;
+        var con = graphWinObj.context;
+        con.beginPath();
 
+        debugger;
+        var width = this.TopLeftCorner.x - this.BottomRighCorner.x;
+        var height = this.TopLeftCorner.y - this.BottomRighCorner.y;
 
+        con.rect(this.TopLeftCorner.x, this.BottomRighCorner.y, width, height);
+        con.stroke();
+    };
 });
-
-
-
 
 
 

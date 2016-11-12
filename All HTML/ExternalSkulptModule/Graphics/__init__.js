@@ -8,6 +8,7 @@ var $builtinmodule = function(name){
     var graphicsClass = {};
     var pointClass = {};
     var circleClass = {};
+    var rectangleClass = {};
     var mod = {};
 
     var reuseingIt = {
@@ -32,6 +33,7 @@ var $builtinmodule = function(name){
     mod.PGraphics = {};
     mod.PPointClass = {};
     mod.PCircleClass = {};
+    mod.PRectangleClass = {};
 
 
     graphicsClass = function($glb, $loc){
@@ -83,10 +85,12 @@ var $builtinmodule = function(name){
             //else throw exception
         });
     };
+    // because python types are different types to JS.
+    //look at the point
 
     circleClass = function($glb, $loc){
-        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius ){
-            self.modelObj = new Circle(pointObj.modelObj, radius.v)
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius){
+            self.modelObj = new Circle(pointObj.modelObj, radius.v);
             self.pointObj = pointObj;
             self.radius = radius;
             return self;
@@ -109,17 +113,34 @@ var $builtinmodule = function(name){
         });
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-            debugger;
            self.modelObj.draw(graphWinObj.modelObj);
 
         });
     };
 
+    rectangleClass = function($glb, $loc){
+        $loc.__init__ = new Sk.builtin.func(function(self, TopLeftCorner, BottomRightCorner ){
+            self.modelObj = new Rectangle(TopLeftCorner.modelObj, BottomRightCorner.modelObj);
+            self.TopLeftCorner = TopLeftCorner;
+            self.BottomRightCorner = BottomRightCorner;
+            return self;
+        });
 
+
+        $loc.__getattr__ = reuseingIt.__getattr__;
+
+        $loc.__setattr__ = reuseingIt.__setattr__;
+
+
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+    };
 
     mod.GraphicsWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
     mod.Point  = Sk.misceval.buildClass(mod, pointClass, "PPointClass", []);
     mod.Circle = Sk.misceval.buildClass(mod, circleClass, "PCircleClass", []);
+    mod.Rectangle = Sk.misceval.buildClass(mod, rectangleClass, "PRectangleClass", []);
 
     return mod;
 };
