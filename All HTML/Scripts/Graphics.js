@@ -13,7 +13,6 @@ $(function(){
         if(height)
             this.height = 300;
 
-
         //to do!
         //Validate Canvas parent exsists
         ///NEED TO ENSURE CHANGES TO HEIGHT VARIABLE AFFECT CANVAS ELEMENT
@@ -47,7 +46,9 @@ $(function(){
     Circle.prototype.draw = function(graphWinObj){
         debugger;
         var con = graphWinObj.context;
-        con.arc(this.point.x, this.point.y, this.radius);
+        con.beginPath();
+        con.arc(this.point.x, this.point.y, this.radius, 0, 2*Math.PI);
+        con.stroke();
     };
 
 
