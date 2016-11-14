@@ -41,11 +41,13 @@
                 var mypre = document.getElementById("output");
                 mypre.innerHTML = mypre.innerHTML + text;
             }
+
             function builtinRead(x) {
                 if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
                     throw "File not found: '" + x + "'";
                 return Sk.builtinFiles["files"][x];
             }
+
             // Here's everything you need to run a python program in skulpt
             // grab the code from your textarea
             // get a reference to your pre element for output
@@ -78,9 +80,10 @@ from graphics import*
 
 def main():
     win = GraphicsWin("mycanvas", 400, 400)
-    c = Circle(Point(50,50), 10)
-    c.draw(win)
-    win.close()
+    pCircle = Circle(Point(50,50), 10)
+    #pRectangle = Rectangle(Point(50,70), Point(70,100))
+    pCircle.draw(win)
+    #win.close()
 main()
             </textarea>
             <br/>

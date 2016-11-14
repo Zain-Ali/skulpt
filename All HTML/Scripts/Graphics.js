@@ -14,7 +14,6 @@ $(function(){
     // we do this so we can get new canvas just like new window would be
     GraphWinJs = function(canvasParentId, width, height){
         // the above is  constructor for the graphwinjs class
-        //debugger;
         if(canvasParentId == undefined)
             error('GraphWinJs canvasId undefined');
         if(width == undefined)
@@ -36,9 +35,9 @@ $(function(){
 
         this.context = this.canvas.getContext("2d");
     };
-
     //we use prototype when we declare new instance of graphwinjs that the close function is present.
     //create the prototype of the object
+
     GraphWinJs.prototype.close = function(){
         //remove canvas obj from dom using jquery
     };
@@ -64,7 +63,6 @@ $(function(){
     //it adds the draw function to circle just once
     //this code is only execute once
     Circle.prototype.draw = function(graphWinObj){
-        //debugger;
         var con = graphWinObj.context;
         con.beginPath();
         con.arc(this.point.x, this.point.y, this.radius, 0, 2*Math.PI);
@@ -79,7 +77,7 @@ $(function(){
     };
 
     Rectangle.prototype.draw = function(graphWinObj){
-        //debugger;
+        debugger;
         var con = graphWinObj.context;
         con.beginPath();
 
