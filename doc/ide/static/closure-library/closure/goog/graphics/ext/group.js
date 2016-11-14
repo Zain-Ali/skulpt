@@ -27,7 +27,7 @@ goog.require('goog.graphics.ext.Element');
 /**
  * Wrapper for a graphics group.
  * @param {goog.graphics.ext.Group} group Parent for this element. Can
- *     be null if this is a Graphics instance.
+ *     be null if this is a GraphicsWrapper instance.
  * @param {goog.graphics.GroupElement=} opt_wrapper The thin wrapper
  *     to wrap. If omitted, a new group will be created. Must be included
  *     when group is null.

@@ -158,7 +158,7 @@ var $builtinmodule = function(name)
                         });
 
                 /* Following gluLookAt implementation is adapted from
-                 * the Mesa 3D Graphics library. http://www.mesa3d.org
+                 * the Mesa 3D GraphicsWrapper library. http://www.mesa3d.org
                  */
                 // todo; rewrite this with proper vec/mat ops
                 $loc.lookAt = new Sk.builtin.func(function(self, eyeX, eyeY, eyeZ,

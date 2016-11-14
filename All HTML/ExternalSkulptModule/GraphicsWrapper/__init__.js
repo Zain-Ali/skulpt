@@ -29,14 +29,13 @@ var $builtinmodule = function(name){
         }),
     };
 
-
     mod.PGraphics = {};
     mod.PPointClass = {};
     mod.PCircleClass = {};
     mod.PRectangleClass = {};
 
-
     graphicsClass = function($glb, $loc){
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, parentId, width, height){
             self.parentId = parentId;
             self.height = height;
@@ -51,9 +50,7 @@ var $builtinmodule = function(name){
         //it executed from Python towards JSe.g. if (obj.Value == True)
         //return python values
         $loc.__getattr__ = reuseingIt.__getattr__;
-
         $loc.__setattr__ = reuseingIt.__setattr__;
-
 
         $loc.close = new Sk.builtin.func(function(self){
             console.log(self.testProperty.v);
@@ -62,6 +59,7 @@ var $builtinmodule = function(name){
 
 
     pointClass = function($glb, $loc){
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, x, y){
             self.modelObj = new Point(x.v, y.v);
             self.x = x;
@@ -89,6 +87,7 @@ var $builtinmodule = function(name){
     //look at the point
 
     circleClass = function($glb, $loc){
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius){
             self.modelObj = new Circle(pointObj.modelObj, radius.v);
             self.pointObj = pointObj;
@@ -119,6 +118,7 @@ var $builtinmodule = function(name){
     };
 
     rectangleClass = function($glb, $loc){
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, TopLeftCorner, BottomRightCorner ){
             self.modelObj = new Rectangle(TopLeftCorner.modelObj, BottomRightCorner.modelObj);
             self.TopLeftCorner = TopLeftCorner;
@@ -126,11 +126,8 @@ var $builtinmodule = function(name){
             return self;
         });
 
-
         $loc.__getattr__ = reuseingIt.__getattr__;
-
         $loc.__setattr__ = reuseingIt.__setattr__;
-
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
@@ -138,6 +135,7 @@ var $builtinmodule = function(name){
     };
 
     mod.GraphicsWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
+    //    mod.GraphicsWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
     mod.Point  = Sk.misceval.buildClass(mod, pointClass, "PPointClass", []);
     mod.Circle = Sk.misceval.buildClass(mod, circleClass, "PCircleClass", []);
     mod.Rectangle = Sk.misceval.buildClass(mod, rectangleClass, "PRectangleClass", []);

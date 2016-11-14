@@ -27,7 +27,7 @@ var $builtinmodule = function (name) {
     function generateGraphicsModule() {
 
         var _module = {};
-        var title = "Graphics Window"
+        var title = "GraphicsWrapper Window"
         var self;
         var shapes;
         var Shapes = {};
@@ -45,7 +45,7 @@ var $builtinmodule = function (name) {
         _config = (function() {
             var defaultSetup = {
                     target     : "graphics", // DOM element or id of parent container
-                    title      : "Graphics Window",
+                    title      : "GraphicsWrapper Window",
                     width      : 200, // if set to 0 it will use the target width
                     height     : 200, // if set to 0 it will use the target height
                     bufferSize : 0, // default MyGraphics buffer size

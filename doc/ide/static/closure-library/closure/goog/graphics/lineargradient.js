@@ -14,7 +14,7 @@
 
 
 /**
- * @fileoverview Represents a gradient to be used with a Graphics implementor.
+ * @fileoverview Represents a gradient to be used with a GraphicsWrapper implementor.
 *
  */
 

@@ -702,7 +702,7 @@ goog.ui.CanvasRoundedCorner.prototype.draw = function() {
  * Safari2-specific implementation for rendering a rounded corner with
  * a background color. The background is filled, followed by the rounded
  * corner path.
- * @param {Object} context Graphics context used for drawing.
+ * @param {Object} context GraphicsWrapper context used for drawing.
  * @param {boolean} counterClockwise Specify true to draw in a
  *     counter-clockwise direction, and false to draw clockwise.
  * @private

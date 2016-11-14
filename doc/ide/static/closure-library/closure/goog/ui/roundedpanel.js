@@ -475,7 +475,7 @@ goog.ui.GraphicsRoundedPanel.prototype.decorateInternal =
                                                                  element);
 
   // Calculate the points and angles for creating the rounded corners. Then
-  // instantiate a Graphics object for drawing purposes.
+  // instantiate a GraphicsWrapper object for drawing purposes.
   var elementSize = goog.style.getSize(this.getElement());
   this.calculateArcParameters_(elementSize);
   this.graphics_ = goog.graphics.createGraphics(

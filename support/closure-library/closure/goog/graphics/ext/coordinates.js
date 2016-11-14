@@ -14,7 +14,7 @@
 
 
 /**
- * @fileoverview Graphics utility functions for advanced coordinates.
+ * @fileoverview GraphicsWrapper utility functions for advanced coordinates.
  *
  * This file assists the use of advanced coordinates in goog.graphics.  Coords
  * can be specified as simple numbers which will correspond to units in the

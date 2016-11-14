@@ -14,7 +14,7 @@
 
 
 /**
- * @fileoverview Graphics utility functions and factory methods.
+ * @fileoverview GraphicsWrapper utility functions and factory methods.
 *
  * @see ../demos/graphics/advancedcoordinates.html
  * @see ../demos/graphics/advancedcoordinates2.html
@@ -35,7 +35,7 @@ goog.require('goog.userAgent');
 
 /**
  * Returns an instance of goog.graphics.AbstractGraphics that knows how to draw
- * for the current platform (A factory for the proper Graphics implementation)
+ * for the current platform (A factory for the proper GraphicsWrapper implementation)
  * @param {string|number} width The width in pixels.  Strings
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
  * @param {string|number} height The height in pixels.  Strings
@@ -73,7 +73,7 @@ goog.graphics.createGraphics = function(width, height, opt_coordWidth,
 
 /**
  * Returns an instance of goog.graphics.AbstractGraphics that knows how to draw
- * for the current platform (A factory for the proper Graphics implementation)
+ * for the current platform (A factory for the proper GraphicsWrapper implementation)
  * @param {string|number} width The width in pixels.  Strings
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
  * @param {string|number} height The height in pixels.   Strings
@@ -105,8 +105,8 @@ goog.graphics.createSimpleGraphics = function(width, height,
 
 
 /**
- * Static function to check if the current browser has Graphics support.
- * @return {boolean} True if the current browser has Graphics support.
+ * Static function to check if the current browser has GraphicsWrapper support.
+ * @return {boolean} True if the current browser has GraphicsWrapper support.
  */
 goog.graphics.isBrowserSupported = function() {
   if (goog.userAgent.IE) {

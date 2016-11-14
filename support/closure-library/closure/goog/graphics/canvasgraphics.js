@@ -38,7 +38,7 @@ goog.require('goog.style');
 
 
 /**
- * A Graphics implementation for drawing using canvas.
+ * A GraphicsWrapper implementation for drawing using canvas.
  * @param {string|number} width The (non-zero) width in pixels.  Strings
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
  * @param {string|number} height The (non-zero) height in pixels.  Strings

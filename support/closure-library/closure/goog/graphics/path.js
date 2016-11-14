@@ -14,7 +14,7 @@
 
 
 /**
- * @fileoverview Represents a path used with a Graphics implementation.
+ * @fileoverview Represents a path used with a GraphicsWrapper implementation.
  * @author arv@google.com (Erik Arvidsson)
  * @author glenning@google.com (Anthony Glenning)
  */

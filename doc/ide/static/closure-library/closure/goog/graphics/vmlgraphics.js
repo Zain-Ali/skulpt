@@ -42,7 +42,7 @@ goog.require('goog.string');
 
 
 /**
- * A Graphics implementation for drawing using VML.
+ * A GraphicsWrapper implementation for drawing using VML.
  * @param {string|number} width The (non-zero) width in pixels.  Strings
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
  * @param {string|number} height The (non-zero) height in pixels.  Strings

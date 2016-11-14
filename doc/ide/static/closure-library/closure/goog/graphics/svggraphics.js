@@ -40,7 +40,7 @@ goog.require('goog.userAgent');
 
 
 /**
- * A Graphics implementation for drawing using SVG.
+ * A GraphicsWrapper implementation for drawing using SVG.
  * @param {string|number} width The width in pixels.  Strings
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
  * @param {string|number} height The height in pixels.  Strings
