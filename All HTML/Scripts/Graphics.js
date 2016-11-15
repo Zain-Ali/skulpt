@@ -3,8 +3,12 @@
  */
 //pure JS file
 
-var GraphWinJs, Point, Circle;
+var GraphWinJs;
+var Point;
+var Circle;
 var Rectangle;
+var Line;
+var Triangle;
 // the variable is going to be glaoble scope which mean accessable anywhere.
 // which means our classes are accessable anywhere
 //$() fro JS query
@@ -26,8 +30,8 @@ $(function(){
         ///NEED TO ENSURE CHANGES TO HEIGHT VARIABLE AFFECT CANVAS ELEMENT
 
         //seaching by id which means is either going to be 1 or 0
-        //debugger;
-        this.canvas = $('#'+ canvasParentId)
+        debugger;
+        this.canvas = $('#'+ canvasParentId) // canvasParentId is hard coded and always going to be 'mycanvas'
             .append('<canvas height="'+height+'" width="'+width+'"> </canvas>')
             .children().last().get(0);
         //it treatment canvas as the same way windows behove so I can keep on declaring ID
@@ -43,12 +47,12 @@ $(function(){
     };
 
     Point = function(x,y){
+        //debugger;
         if(x == undefined || y == undefined)
             throw ("Point class needs x and y cords");
         this.x = x;
         this.y = y;
     };
-
 
     Circle = function(point,  radius){
         //debugger;
@@ -70,6 +74,7 @@ $(function(){
     };
 
     Rectangle = function (TopLeftCorner, BottomRightCorner) {
+        //debugger;
         if (TopLeftCorner == undefined || BottomRightCorner == undefined)
             throw ('A rectangle needs points');
         this.TopLeftCorner = TopLeftCorner;
@@ -77,7 +82,7 @@ $(function(){
     };
 
     Rectangle.prototype.draw = function(graphWinObj){
-        debugger;
+        //debugger;
         var con = graphWinObj.context;
         con.beginPath();
 
@@ -88,6 +93,24 @@ $(function(){
         con.rect(this.TopLeftCorner.x, this.BottomRighCorner.y, width, height);
         con.stroke();
     };
+
+    Line = function (x, y) {
+        //debugger;
+        if (x == undefined || y == undefined)
+            throw ('A line needs points');
+        this.x = x;
+        this.y = y;
+    };
+
+    Line.prototype.draw = function(graphWinObj){
+        //debugger;
+        var con = graphWinObj.context;
+        con.beginPath();
+        con.moveTo(x, y);
+        con.lineTo(this.x.x, this.y.y);
+        con.stroke();
+    };
+
 });
 
 

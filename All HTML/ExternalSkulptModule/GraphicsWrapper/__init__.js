@@ -9,9 +9,10 @@ var $builtinmodule = function(name){
     var pointClass = {};
     var circleClass = {};
     var rectangleClass = {};
+    var lineClass = {};
     var mod = {};
 
-    var reuseingIt = {
+    var reuseingGetterSetter = {
         __getattr__ : new Sk.builtin.func(function (self, key) {
             if(self[key.v] != undefined) { //everything is stored on self object
                 self[key.v].v = self.modelObj[key.v]; //
@@ -26,16 +27,19 @@ var $builtinmodule = function(name){
                 return self[key.v] = value;
             }
             //else throw exception
-        }),
+        })
     };
 
+    //P stand for Python
     mod.PGraphics = {};
     mod.PPointClass = {};
     mod.PCircleClass = {};
     mod.PRectangleClass = {};
+    mod.PLineClass = {};
 
 
     graphicsClass = function($glb, $loc){
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, parentId, width, height){
             self.parentId = parentId;
             self.height = height;
@@ -49,11 +53,11 @@ var $builtinmodule = function(name){
         //this function is excuted everytime you want to get attribute from Python
         //it executed from Python towards JSe.g. if (obj.Value == True)
         //return python values
-        $loc.__getattr__ = reuseingIt.__getattr__;
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
 
-        $loc.__setattr__ = reuseingIt.__setattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
-
+        //Functionality needed to be added for this to close the Window (Canvas / SVG)
         $loc.close = new Sk.builtin.func(function(self){
             console.log(self.testProperty.v);
         });
@@ -124,18 +128,37 @@ var $builtinmodule = function(name){
             return self;
         });
 
-        $loc.__getattr__ = reuseingIt.__getattr__;
-        $loc.__setattr__ = reuseingIt.__setattr__;
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
         });
     };
 
-    mod.GraphicsWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
+    lineClass = function($glb, $loc){
+        debugger;
+        $loc.__init__ = new Sk.builtin.func(function(self, x, y ){
+            self.modelObj = new Rectangle(x.modelObj, y.modelObj);
+            self.x = x;
+            self.y = y;
+            return self;
+        });
+
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+    };
+
+    mod.GraphWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
     mod.Point  = Sk.misceval.buildClass(mod, pointClass, "PPointClass", []);
     mod.Circle = Sk.misceval.buildClass(mod, circleClass, "PCircleClass", []);
     mod.Rectangle = Sk.misceval.buildClass(mod, rectangleClass, "PRectangleClass", []);
+    mod.Line = Sk.misceval.buildClass(mod, lineClass, "PLineClass", []);
+
 
     return mod;
 };

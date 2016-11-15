@@ -29,7 +29,7 @@
         <script type="text/javascript">
             Sk.externalLibraries = {
                 graphics: {
-                    path: '/MAIN PROJECT/skulpt/All HTML/ExternalSkulptModule/Graphics/__init__.js',
+                    path: '/MAIN PROJECT/skulpt/All HTML/ExternalSkulptModule/GraphicsWrapper/__init__.js',
                     dependencies: []
                 }
             };
@@ -79,9 +79,10 @@
 from graphics import*
 
 def main():
-    win = GraphicsWin("mycanvas", 400, 400)
+    win = GraphWin("mycanvas", 400, 400)
     pCircle = Circle(Point(50,50), 10)
     #pRectangle = Rectangle(Point(50,70), Point(70,100))
+    #pLine = Line(Point(20,20), Point(20,100))
     pCircle.draw(win)
     #win.close()
 main()
