@@ -3,16 +3,25 @@
  */
 //pure JS file
 
+/**
+ * for Graphics Shapes.
+ */
 var GraphWinJs;
 var Point;
 var Circle;
 var Rectangle;
 var Line;
 var Triangle;
+var Oval;
 // the variable is going to be glaoble scope which mean accessable anywhere.
 // which means our classes are accessable anywhere
-//$() fro JS query
 
+/**
+ * for Graphics Text.
+ */
+var Text;
+
+//$() fro JS query
 $(function(){
     // we get the parentelement by id using Jquery
     // we do this so we can get new canvas just like new window would be
@@ -30,7 +39,7 @@ $(function(){
         ///NEED TO ENSURE CHANGES TO HEIGHT VARIABLE AFFECT CANVAS ELEMENT
 
         //seaching by id which means is either going to be 1 or 0
-        debugger;
+        //debugger;
         this.canvas = $('#'+ canvasParentId) // canvasParentId is hard coded and always going to be 'mycanvas'
             .append('<canvas height="'+height+'" width="'+width+'"> </canvas>')
             .children().last().get(0);
@@ -46,7 +55,7 @@ $(function(){
         //remove canvas obj from dom using jquery
     };
 
-    Point = function(x,y){
+    Point = function(x, y){
         //debugger;
         if(x == undefined || y == undefined)
             throw ("Point class needs x and y cords");
@@ -111,10 +120,65 @@ $(function(){
         con.stroke();
     };
 
+    // /*
+    //  * Non Working Code
+    //  */
+    // Triangle = function (width, height) {
+    //     //debugger;
+    //     if (width == undefined || height == undefined)
+    //         throw ('A line needs points');
+    //     this.width = width;
+    //     this.height = height;
+    // };
+    //
+    // /*
+    //  * Non Working Code
+    //  */
+    // Triangle.prototype.draw = function(graphWinObj){
+    //     //debugger;
+    //     var con = graphWinObj.context;
+    //     con.beginPath();
+    //     con.moveTo(width, height);
+    //     con.lineTo(this.width.x, this.height.y);
+    //     con.lineTo(this.width.x, this.height.y);
+    //     con.stroke();
+    // };
+
+    // Oval = function(point,  radius){
+    //     //debugger;
+    //     if(point == undefined || point.x == undefined)
+    //         throw ('A Oval needs cords');
+    //     if(radius == undefined)
+    //         radius = 20;
+    //     this.point = point;
+    //     this.radius = radius;
+    // };
+    //
+    // Oval.prototype.draw = function(graphWinObj){
+    //     var con = graphWinObj.context;
+    //     con.beginPath();
+    //     con.translate(canvas.width /2, canvas.height /2);
+    //     context.scale(x, y);
+    //     con.stroke();
+    // };
+
+
+    //problem returning [object Object]
+    //
+    Text = function (text, point) {
+        debugger;
+        if (text == undefined || point == undefined)
+            throw ('Please write coords and text');
+        this.text = text;
+        this.point = point;
+    };
+
+    Text.prototype.draw = function(graphWinObj) {
+        var con = graphWinObj.context;
+        debugger;
+        con.fillText(this.text, this.point.x, this.point.y)
+    }
+
 });
-
-
-
-
 
 

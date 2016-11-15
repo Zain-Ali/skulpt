@@ -10,6 +10,10 @@ var $builtinmodule = function(name){
     var circleClass = {};
     var rectangleClass = {};
     var lineClass = {};
+    var triangleClass = {};
+    var ovalClass = {};
+
+    var textClass = {};
     var mod = {};
 
     var reuseingGetterSetter = {
@@ -36,6 +40,10 @@ var $builtinmodule = function(name){
     mod.PCircleClass = {};
     mod.PRectangleClass = {};
     mod.PLineClass = {};
+    mod.PTriangleClass = {};
+    mod.POvalClass = {};
+
+    mod.PTextClass = {};
 
 
     graphicsClass = function($glb, $loc){
@@ -64,6 +72,7 @@ var $builtinmodule = function(name){
     };
 
     pointClass = function($glb, $loc){
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, x, y){
             self.modelObj = new Point(x.v, y.v);
             self.x = x;
@@ -91,6 +100,7 @@ var $builtinmodule = function(name){
     //look at the point
 
     circleClass = function($glb, $loc){
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius){
             self.modelObj = new Circle(pointObj.modelObj, radius.v);
             self.pointObj = pointObj;
@@ -121,6 +131,7 @@ var $builtinmodule = function(name){
     };
 
     rectangleClass = function($glb, $loc){
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, TopLeftCorner, BottomRightCorner ){
             self.modelObj = new Rectangle(TopLeftCorner.modelObj, BottomRightCorner.modelObj);
             self.TopLeftCorner = TopLeftCorner;
@@ -137,11 +148,66 @@ var $builtinmodule = function(name){
     };
 
     lineClass = function($glb, $loc){
-        debugger;
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, x, y ){
             self.modelObj = new Rectangle(x.modelObj, y.modelObj);
             self.x = x;
             self.y = y;
+            return self;
+        });
+
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+    };
+
+    // /*
+    // * Non Working Code
+    // */
+    // triangleClass = function($glb, $loc){
+    //     //debugger;
+    //     $loc.__init__ = new Sk.builtin.func(function(self, width, height ){
+    //         self.modelObj = new Triangle(width.modelObj, height.modelObj);
+    //         self.width = width;
+    //         self.height = height;
+    //         return self;
+    //     });
+    //
+    //     $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+    //     $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+    //
+    //     $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+    //         self.modelObj.draw(graphWinObj.modelObj);
+    //     });
+    // };
+
+    // ovalClass = function($glb, $loc){
+    //     debugger;
+    //     $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius ){
+    //         self.modelObj = new Oval(pointObj.modelObj, radius.v);
+    //         self.pointObj = pointObj;
+    //         self.radius = radius;
+    //         return self;
+    //     });
+    //
+    //     $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+    //     $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+    //
+    //     $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+    //         self.modelObj.draw(graphWinObj.modelObj);
+    //     });
+    // };
+
+
+    textClass = function($glb, $loc){
+        debugger;
+        $loc.__init__ = new Sk.builtin.func(function(self, text, pointObj ){
+            self.modelObj = new Text(text, pointObj.modelObj);
+            self.text = text;
+            self.pointObj = pointObj;
             return self;
         });
 
@@ -158,6 +224,11 @@ var $builtinmodule = function(name){
     mod.Circle = Sk.misceval.buildClass(mod, circleClass, "PCircleClass", []);
     mod.Rectangle = Sk.misceval.buildClass(mod, rectangleClass, "PRectangleClass", []);
     mod.Line = Sk.misceval.buildClass(mod, lineClass, "PLineClass", []);
+    //mod.Triangle = Sk.misceval.buildClass(mod, triangleClass, "PTriangleClass", []);
+    //mod.Oval = Sk.misceval.buildClass(mod, ovalClass, "POvalClass", []);
+
+    mod.Text = Sk.misceval.buildClass(mod, textClass, "PTextClass", []);
+
 
 
     return mod;
