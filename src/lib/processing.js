@@ -20,7 +20,7 @@ var $builtinmodule = function (name) {
     var environmentClass;
     var keyboardClass;
     var mouseClass;
-    var vectorClass
+    var vectorClass;
 
     var mod = {};
     var imList = [];

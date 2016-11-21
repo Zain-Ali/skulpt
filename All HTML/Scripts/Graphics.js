@@ -13,40 +13,54 @@ var Rectangle;
 var Line;
 var Triangle;
 var Oval;
-// the variable is going to be glaoble scope which mean accessable anywhere.
-// which means our classes are accessable anywhere
 
 /**
  * for Graphics Text.
  */
 var Text;
 
+var color;
+
+// the variable is going to be glaoble scope which mean accessable anywhere.
+// which means our classes are accessable anywhere
+
+function getHtmlTemplate()
+{
+    var txt = "";
+    txt += "<Style> svg, body{width: 100%; height: 100%;} </style>"
+    return txt;
+}
+
+
 //$() fro JS query
 $(function(){
     // we get the parentelement by id using Jquery
     // we do this so we can get new canvas just like new window would be
-    GraphWinJs = function(canvasParentId, width, height){
-        // the above is  constructor for the graphwinjs class
-        if(canvasParentId == undefined)
-            error('GraphWinJs canvasId undefined');
+    GraphWinJs = function(title, width, height){
         if(width == undefined)
             this.width = 300;
         if(height)
             this.height = 300;
 
-        //to do!
-        //Validate Canvas parent exsists
-        ///NEED TO ENSURE CHANGES TO HEIGHT VARIABLE AFFECT CANVAS ELEMENT
+        this.windw = window.open('about:blank', title);
+        this.doc = this.windw.document;
 
-        //seaching by id which means is either going to be 1 or 0
-        //debugger;
-        this.canvas = $('#'+ canvasParentId) // canvasParentId is hard coded and always going to be 'mycanvas'
-            .append('<canvas height="'+height+'" width="'+width+'"> </canvas>')
-            .children().last().get(0);
+        this.doc.write(getHtmlTemplate() + '<svg id="mySvg"></svg>')
+        this.svg = $(this.doc).find('#mySvg').first();
+        this.windw.document.close();
+
+
+        // var svg_blob = new Blob([serializer.serializeToString(svg)],
+        //     {'type': "image/svg+xml"});
+        // var url = URL.createObjectURL(svg_blob);
+        //
+        // var svg_win = window.open(url, "svg_win");
+
+
         //it treatment canvas as the same way windows behove so I can keep on declaring ID
         //it keeeps on adding to the above parentID and saves the element created in canvas variable
-
-        this.context = this.canvas.getContext("2d");
+        // console.log(document.svg);
+        //this.context = this.canvas.getContext("2d");
     };
     //we use prototype when we declare new instance of graphwinjs that the close function is present.
     //create the prototype of the object
@@ -76,11 +90,24 @@ $(function(){
     //it adds the draw function to circle just once
     //this code is only execute once
     Circle.prototype.draw = function(graphWinObj){
-        var con = graphWinObj.context;
-        con.beginPath();
-        con.arc(this.point.x, this.point.y, this.radius, 0, 2*Math.PI);
-        con.stroke();
+        var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+        circle.setAttribute('cx', this.point.x);
+        circle.setAttribute('cy', this.point.y);
+        circle.setAttribute('r', this.radius);
+        circle.style.stroke = '#000';
+        circle.style.srokewidth = '3px';
+        circle.style.fill = '#f00';
+        debugger;
+
+        this.__insertIfNeeded(circle, graphWinObj);
     };
+
+    Circle.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    {
+        //todo check allready added? Mhhh
+        $(graphWinObj.svg).append(domElem);
+    }
+
 
     Rectangle = function (TopLeftCorner, BottomRightCorner) {
         //debugger;
@@ -166,7 +193,7 @@ $(function(){
     //problem returning [object Object]
     //
     Text = function (text, point) {
-        debugger;
+        //debugger;
         if (text == undefined || point == undefined)
             throw ('Please write coords and text');
         this.text = text;
@@ -175,7 +202,6 @@ $(function(){
 
     Text.prototype.draw = function(graphWinObj) {
         var con = graphWinObj.context;
-        debugger;
         con.fillText(this.text, this.point.x, this.point.y)
     }
 

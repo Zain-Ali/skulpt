@@ -14,7 +14,10 @@ var $builtinmodule = function(name){
     var ovalClass = {};
 
     var textClass = {};
+
+    var  colorClass = {};
     var mod = {};
+
 
     var reuseingGetterSetter = {
         __getattr__ : new Sk.builtin.func(function (self, key) {
@@ -48,11 +51,11 @@ var $builtinmodule = function(name){
 
     graphicsClass = function($glb, $loc){
         //debugger;
-        $loc.__init__ = new Sk.builtin.func(function(self, parentId, width, height){
-            self.parentId = parentId;
+        $loc.__init__ = new Sk.builtin.func(function(self, title, width, height){
+            self.title = title;
             self.height = height;
             self.width = width;
-            self.modelObj = new GraphWinJs(parentId.v, height.v, width.v); //
+            self.modelObj = new GraphWinJs(title.v, height.v, width.v); //
             return self;
         });
         // have to store the class I am wrapping in modelObj.
@@ -62,7 +65,6 @@ var $builtinmodule = function(name){
         //it executed from Python towards JSe.g. if (obj.Value == True)
         //return python values
         $loc.__getattr__ = reuseingGetterSetter.__getattr__;
-
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
         //Functionality needed to be added for this to close the Window (Canvas / SVG)
@@ -80,21 +82,8 @@ var $builtinmodule = function(name){
             return self;
         });
 
-        $loc.__getattr__ = new Sk.builtin.func(function (self, key) {
-            if(self[key.v] != undefined) {
-                self[key.v].v = self.modelObj[key.v];
-                return self[key.v];
-            }
-            //else throw exception
-        });
-
-        $loc.__setattr__ = new Sk.builtin.func(function (self, key, value) {
-            if(self[key.v] != undefined) {
-                self.modelObj[key.v] = value;
-                return self[key.v] = value;
-            }
-            //else throw exception
-        });
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
     };
     // because python types are different types to JS.
     //look at the point
@@ -108,24 +97,16 @@ var $builtinmodule = function(name){
             return self;
         });
 
-        $loc.__getattr__ = new Sk.builtin.func(function (self, key) {
-            if(self[key.v] != undefined) {
-                self[key.v].v = self.modelObj[key.v];
-                return self[key.v];
-            }
-            //else throw exception
-        });
-
-        $loc.__setattr__ = new Sk.builtin.func(function (self, key, value) {
-            if(self[key.v] != undefined) {
-                self.modelObj[key.v] = value;
-                return self[key.v] = value;
-            }
-            //else throw exception
-        });
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
+
+        });
+
+        $loc.draw = new Sk.builtin.func(function (self, fillStyle) {
+            self.modelObj.draw(fillStyle.modelObj);
 
         });
     };
@@ -203,10 +184,11 @@ var $builtinmodule = function(name){
 
 
     textClass = function($glb, $loc){
-        debugger;
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, text, pointObj ){
-            self.modelObj = new Text(text, pointObj.modelObj);
-            self.text = text;
+            self.modelObj = new Text(text.v, pointObj.modelObj);
+            debugger;
+            self.text = text; //self.text = JSON.stringify(text)
             self.pointObj = pointObj;
             return self;
         });
@@ -233,4 +215,3 @@ var $builtinmodule = function(name){
 
     return mod;
 };
-

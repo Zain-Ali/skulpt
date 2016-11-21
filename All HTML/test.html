@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8">
+    <script>
+        document.drawCanvas = function () {
+            var svg = window.opener.document.svg;
+            console.log(svg);
+            var container = document.getElementById('svgContainer');
+            container.innerHTML = '';
+            container.appendChild(svg);
+        };
+    </script>
+</head>
+<body>
+<h1>YO some content</h1>
+<div id="svgContainer"></div>
+</body>
+</html>
