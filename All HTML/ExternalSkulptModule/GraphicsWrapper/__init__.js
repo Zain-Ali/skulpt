@@ -109,6 +109,11 @@ var $builtinmodule = function(name){
             self.modelObj.draw(fillStyle.modelObj);
 
         });
+
+        $loc.unDraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.unDraw(graphWinObj.modelObj);
+        });
+
     };
 
     rectangleClass = function($glb, $loc){

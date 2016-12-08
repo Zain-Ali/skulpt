@@ -42,7 +42,7 @@ $(function(){
         if(height)
             this.height = 300;
 
-        this.windw = window.open('about:blank', title);
+        this.windw = window.open('about:blank', title, "height=300, width=300, top=400, left=400");
         this.doc = this.windw.document;
 
         this.doc.write(getHtmlTemplate() + '<svg id="mySvg"></svg>')
@@ -85,6 +85,7 @@ $(function(){
             radius = 20;
         this.point = point;
         this.radius = radius;
+        this.domObj = null;
     };
 
     //it adds the draw function to circle just once
@@ -97,16 +98,29 @@ $(function(){
         circle.style.stroke = '#000';
         circle.style.srokewidth = '3px';
         circle.style.fill = '#f00';
-        debugger;
 
         this.__insertIfNeeded(circle, graphWinObj);
     };
 
     Circle.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
-        //todo check allready added? Mhhh
-        $(graphWinObj.svg).append(domElem);
-    }
+        if($(graphWinObj.svg).find(domElem).length == 0) {
+            //Dom obj not found inside window
+            $(graphWinObj.svg).append(domElem);
+            this.domObj = domElem;
+        }
+    };
+
+    Circle.prototype.unDraw = function(graphWinObj)
+    {
+        debugger;
+        if(this.domObj != null)
+        {
+            if($(graphWinObj.svg).find(this.domObj).length == 1) {
+                $(graphWinObj.svg).find(this.domObj).remove();
+            }
+        }
+    };
 
 
     Rectangle = function (TopLeftCorner, BottomRightCorner) {
