@@ -1,16 +1,15 @@
 /**
  * Created by zain on 11/11/2016.
  */
-//pure JS file
 
-/**
- * for Graphics Shapes.
- */
+
 var GraphWinJs;
 var Point;
 var Circle;
 var Rectangle;
 var Line;
+var Polygon;
+
 var Triangle;
 var Oval;
 
@@ -18,9 +17,9 @@ var Text;
 var color;
 
 
+
 function getHtmlTemplate()
 {
-    debugger;
     var txt = "";
     txt += "<Style> svg, body{width: 100%; height: 100%;} </style>";
     return txt;
@@ -28,12 +27,10 @@ function getHtmlTemplate()
 
 
 
-//$() for JS query
 $(function(){
-    // we get the parentelement by id using Jquery
-    // we do this so we can get new canvas just like new window would be
-    GraphWinJs = function(title, width, height){
-        debugger;
+    GraphWinJs = function(title, width, height)
+    {
+        //debugger;
         if(width == undefined)
             this.width = 300;
         if(height)
@@ -49,14 +46,15 @@ $(function(){
     //we use prototype when we declare new instance of graphwinjs that the close function is present.
     //create the prototype of the object
 
-    GraphWinJs.prototype.close = function(){
+    GraphWinJs.prototype.close = function()
+    {
         //remove canvas obj from dom using jquery
     };
 
 
 
-    Point = function(x, y){
-        //debugger;
+    Point = function(x, y)
+    {
         if(x == undefined || y == undefined)
             throw ("Point class needs x and y cords");
         this.x = x;
@@ -65,8 +63,8 @@ $(function(){
 
 
 
-    Circle = function(point,  radius){
-        //debugger;
+    Circle = function(point,  radius)
+    {
         if(point == undefined || point.x == undefined)
             throw ('A circle needs cords');
         if(radius == undefined)
@@ -76,21 +74,29 @@ $(function(){
         //this.domObj = null;
     };
 
-    Circle.prototype.draw = function(graphWinObj){
+    Circle.prototype.draw = function(graphWinObj)
+    {
         var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
         circle.setAttribute('cx', this.point.x);
         circle.setAttribute('cy', this.point.y);
         circle.setAttribute('r', this.radius);
         //circle.style.stroke = '#000';
-        //circle.style.srokewidth = '3px';
-        //circle.style.fill = '#f00';
-        debugger;
+        //circle.style.fill = 'transparent';
         this.__insertIfNeeded(circle, graphWinObj);
     };
 
+    ////////////////
+    // //debugger;
+    // Circle.prototype.setFill = function(fill, graphWinObj)
+    // {
+    //     this.fill=fill.v;
+    //
+    // };
+    //////////////////
+
+
     Circle.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
-        debugger;
         if($(graphWinObj.svg).find(domElem).length == 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
@@ -100,51 +106,7 @@ $(function(){
 
     Circle.prototype.undraw = function(graphWinObj)
     {
-        debugger;
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1) {
-                $(graphWinObj.svg).find(this.domObj).remove();
-            }
-        }
-    };
-
-
-    ellipse = function(point,  radius){
         //debugger;
-        if(point == undefined || point.x == undefined)
-            throw ('A oval needs cords');
-        if(radius == undefined)
-            radius = 20;
-        this.point = point;
-        this.radius = radius;
-        //this.domObj = null;
-    };
-
-    ellipse.prototype.draw = function(graphWinObj){
-        var oval = document.createElementNS("http://www.w3.org/2000/svg", 'ellipse');
-        oval.setAttribute('cx', this.point.x);
-        oval.setAttribute('cy', this.point.y);
-        oval.setAttribute('rx', this.radius.x);
-        oval.setAttribute('ry', this.radius.y);
-        debugger;
-        this.__insertIfNeeded(oval, graphWinObj);
-        console.log("oval draw");
-    };
-
-    ellipse.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        debugger;
-        if($(graphWinObj.svg).find(domElem).length == 0) {
-            //Dom obj not found inside window
-            $(graphWinObj.svg).append(domElem);
-            this.domObj = domElem;
-        }
-    };
-
-    ellipse.prototype.undraw = function(graphWinObj)
-    {
-        debugger;
         if(this.domObj != null)
         {
             if($(graphWinObj.svg).find(this.domObj).length == 1) {
@@ -155,30 +117,26 @@ $(function(){
 
 
 
-    Rectangle = function (width, height) {
-        //debugger;
+    Rectangle = function (width, height)
+    {
         if (width == undefined || height == undefined)
             throw ('A rectangle needs points');
         this.width = width.x;
         this.height = height.y;
+        //this.domObj = null;
     };
 
-    Rectangle.prototype.draw = function(graphWinObj){
-        //debugger;
+    Rectangle.prototype.draw = function(graphWinObj)
+    {
         var svg = graphWinObj.svg;
         var rec = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
-        debugger;
         rec.setAttribute('width', this.width);
         rec.setAttribute('height', this.height);
-
-        console.log(rec);
-        //svg.appendChild(rec);
         this.__insertIfNeeded(rec, graphWinObj);
     };
 
     Rectangle.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
-        debugger;
         if($(graphWinObj.svg).find(domElem).length == 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
@@ -188,7 +146,6 @@ $(function(){
 
     Rectangle.prototype.undraw = function(graphWinObj)
     {
-        debugger;
         if(this.domObj != null)
         {
             if($(graphWinObj.svg).find(this.domObj).length == 1) {
@@ -199,34 +156,34 @@ $(function(){
 
 
 
-    Line = function (x1, y1, x2, y2) {
-        //debugger;
-        if (x == undefined || y == undefined)
-            throw ('A line needs points');
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-
+    Line = function(point1,  point2)
+    {
+        if(point1 == undefined)
+            throw ('A  needs cords');
+        if(point2 == undefined)
+            point2 = 20;
+        this.point1 = point1;
+        this.point2 = point2;
+        //this.domObj = null;
     };
 
-    Line.prototype.draw = function(graphWinObj){
-        //debugger;
-
+    Line.prototype.draw = function(graphWinObj)
+    {
         var svg = graphWinObj.svg;
         var line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
-        line.setAttribute('x1', this.x1);
-        line.setAttribute('y1', this.y1);
-        line.setAttribute('x2', this.x2);
-        line.setAttribute('y2', this.y1);
+        line.setAttribute('x1', this.point1.x);
+        line.setAttribute('y1', this.point1.y);
+        line.setAttribute('x2', this.point2.x);
+        line.setAttribute('y2', this.point2.y);
+        line.style.stroke = 'black';
         this.__insertIfNeeded(line, graphWinObj);
 
     };
 
     Line.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
-        debugger;
-        if($(graphWinObj.svg).find(domElem).length == 0) {
+        if($(graphWinObj.svg).find(domElem).length == 0)
+        {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
             this.domObj = domElem;
@@ -238,17 +195,69 @@ $(function(){
         debugger;
         if(this.domObj != null)
         {
-            if($(graphWinObj.svg).find(this.domObj).length == 1) {
+            if($(graphWinObj.svg).find(this.domObj).length == 1)
+            {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
     };
 
 
-    colour = function() {
-        //to do
+
+    Polygon = function(point1,  point2, point3)
+    {
+        if(point1 == undefined || point2 == undefined || point3 == undefined)
+            throw ('A  needs cords');
+        this.point1 = point1;
+        this.point2 = point2;
+        this.point3 = point3;
+        //this.domObj = null;
     };
 
+    Polygon.prototype.draw = function(graphWinObj)
+    {
+        var svg = graphWinObj.svg;
+        var polygon = document.createElementNS("http://www.w3.org/2000/svg", 'Polygon');
+        polygon.setAttribute('x1', this.point1.x);
+        polygon.setAttribute('y1', this.point1.y);
+        polygon.setAttribute('x2', this.point2.x);
+        polygon.setAttribute('y2', this.point2.y);
+        polygon.setAttribute('x3', this.point3.x);
+        polygon.setAttribute('y3', this.point3.y);
+
+        polygon.style.stroke = '#000';
+        polygon.style.fill = '#FF0000';
+        this.__insertIfNeeded(polygon, graphWinObj);
+
+    };
+
+    Polygon.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    {
+        if($(graphWinObj.svg).find(domElem).length == 0)
+        {
+            //Dom obj not found inside window
+            $(graphWinObj.svg).append(domElem);
+            this.domObj = domElem;
+        }
+    };
+
+    Polygon.prototype.undraw = function(graphWinObj)
+    {
+        debugger;
+        if(this.domObj != null)
+        {
+            if($(graphWinObj.svg).find(this.domObj).length == 1)
+            {
+                $(graphWinObj.svg).find(this.domObj).remove();
+            }
+        }
+    };
+
+
+
+
+
+//End of Main Function
 });
 
 

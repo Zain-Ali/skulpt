@@ -72,7 +72,7 @@
             }
         </script>
 
-        <h3>Try this only for Graphics.py (Under Major Construction Stay Away) </h3>
+        <h3>Try this only for Graphics.py (Under Major Construction) </h3>
 
         <form>
             <textarea id="yourcode" cols="70" rows="12">
@@ -80,11 +80,8 @@ from graphics import*
 
 def main():
     win = GraphWin("title" ,400, 400)
-    pCircle = Circle(Point(50,50), 10)
-    #pRectangle = Rectangle(Point(50,70), Point(70,100))
-    #pLine = Line(Point(20,20), Point(20,100))
-    #message = Text("Hello, World!", Point(30,40))
-    pCircle.draw(win)
+    pPoloygon = Polygon(Point(200,10), Point(250,190), Point(160,210))
+    pPoloygon.draw(win)
     #win.close()
 main()
             </textarea>
@@ -92,6 +89,24 @@ main()
             <button type="button" onclick="runit()">Run</button>
         </form>
 
+        <form> <h1>Just a Place holder (Doesn't Work)</h1>
+            <textarea  cols="70" rows="13">
+from graphics import*
+
+def main():
+    win = GraphWin("title" ,400, 400)
+    pCircle = Circle(Point(50,50), 10)
+    #pRectangle = Rectangle(Point(50,70), Point(70,100))
+    #pLine = Line(Point(20,20), Point(20,100))
+    #message = Text(Point(30,40), "Hello, World!")
+    #message = Text("Hello, World!", Point(30,40))
+    #pPoloygon = Polygon(Point(200,10), Point(250,190), Point(160,210))
+    pCircle.draw(win)
+    #win.close()
+main()
+            </textarea>
+            <br/>
+        </form>
         <pre id="output" ></pre>
         <div id="mycanvas"></div>
 
