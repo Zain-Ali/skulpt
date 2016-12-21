@@ -227,7 +227,6 @@ $(function(){
 
     Line.prototype.undraw = function(graphWinObj)
     {
-        debugger;
         if(this.domObj != null)
         {
             if($(graphWinObj.svg).find(this.domObj).length == 1)
@@ -337,8 +336,50 @@ $(function(){
     };
 
 
+    //Non Working Text
+    Text = function(point, text)
+    {
+        if(point == undefined)
+            throw ('A  needs cords');
 
+        this.point = point;
+        this.text = text;
+        //this.domObj = null;
+    };
 
+    Text.prototype.draw = function(graphWinObj)
+    {
+        debugger;
+        var svg = graphWinObj.svg;
+        var text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+        text.setAttribute('x', this.point.x);
+        text.setAttribute('y', this.point.y);
+        text.textContent = "abcde";
+        text.style.stroke = 'black';
+        this.__insertIfNeeded(text, graphWinObj);
+
+    };
+
+    Text.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    {
+        if($(graphWinObj.svg).find(domElem).length == 0)
+        {
+            //Dom obj not found inside window
+            $(graphWinObj.svg).append(domElem);
+            this.domObj = domElem;
+        }
+    };
+
+    Text.prototype.undraw = function(graphWinObj)
+    {
+        if(this.domObj != null)
+        {
+            if($(graphWinObj.svg).find(this.domObj).length == 1)
+            {
+                $(graphWinObj.svg).find(this.domObj).remove();
+            }
+        }
+    };
 
 
 //End of Main Function

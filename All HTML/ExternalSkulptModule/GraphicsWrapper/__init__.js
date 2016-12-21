@@ -235,31 +235,36 @@ var $builtinmodule = function(name){
 
 
 
+    textClass = function($glb, $loc){
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, text ){
+            self.modelObj = new Text(pointObj.modelObj, text.v);
+            self.pointObj = pointObj;
+            self.text = text;
+
+            return self;
+        });
 
 
-    // textClass = function($glb, $loc){
-    //     $loc.__init__ = new Sk.builtin.func(function(self, x, y ){
-    //         self.modelObj = new Text(x.modelObj, y.modelObj);
-    //         self.x = x;
-    //         self.y = y;
-    //
-    //         return self;
-    //     });
-    //
-    //
-    //     $loc.__getattr__ = reuseingGetterSetter.__getattr__;
-    //     $loc.__setattr__ = reuseingGetterSetter.__setattr__;
-    //
-    //
-    //     $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-    //         self.modelObj.draw(graphWinObj.modelObj);
-    //     });
-    //
-    //
-    //     $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
-    //         self.modelObj.undraw(graphWinObj.modelObj);
-    //     });
-    // };
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
+    };
+
+
+
+
+
+
+
 
     // /*
     // * Non Working Code
@@ -293,7 +298,7 @@ var $builtinmodule = function(name){
 
     //mod.Triangle = Sk.misceval.buildClass(mod, triangleClass, "PTriangleClass", []);
 
-    //mod.Text = Sk.misceval.buildClass(mod, textClass, "PTextClass", []);
+    mod.Text = Sk.misceval.buildClass(mod, textClass, "PTextClass", []);
 
 
     return mod;
