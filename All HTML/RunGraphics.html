@@ -80,8 +80,8 @@ from graphics import*
 
 def main():
     win = GraphWin("title" ,400, 400)
-    pPoloygon = Polygon(Point(200,10), Point(250,190), Point(160,210))
-    pPoloygon.draw(win)
+    pOval = Oval(Point(300, 200), Point(120, 80))
+    pOval.draw(win)
     #win.close()
 main()
             </textarea>
@@ -90,7 +90,7 @@ main()
         </form>
 
         <form> <h1>Just a Place holder (Doesn't Work)</h1>
-            <textarea  cols="70" rows="13">
+            <textarea  cols="70" rows="20">
 from graphics import*
 
 def main():
@@ -98,9 +98,11 @@ def main():
     pCircle = Circle(Point(50,50), 10)
     #pRectangle = Rectangle(Point(50,70), Point(70,100))
     #pLine = Line(Point(20,20), Point(20,100))
+    #pOval = Oval(Point(300, 200), Point(120, 80))
     #message = Text(Point(30,40), "Hello, World!")
     #message = Text("Hello, World!", Point(30,40))
     #pPoloygon = Polygon(Point(200,10), Point(250,190), Point(160,210))
+    #aPoint = Point(3.5, 8)
     pCircle.draw(win)
     #win.close()
 main()

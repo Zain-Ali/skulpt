@@ -8,12 +8,13 @@ var Point;
 var Circle;
 var Rectangle;
 var Line;
+var Oval;
 var Polygon;
 
-var Triangle;
-var Oval;
-
 var Text;
+
+var Triangle;
+
 var color;
 
 
@@ -59,6 +60,40 @@ $(function(){
             throw ("Point class needs x and y cords");
         this.x = x;
         this.y = y;
+    };
+
+    //Does not draw on SVG Window
+    Point.prototype.draw = function(graphWinObj)
+    {
+        var svg = graphWinObj.svg;
+        var point = document.createElementNS("http://www.w3.org/2000/svg", 'point');
+        point.setAttribute('x1', this.x);
+        point.setAttribute('y1', this.y);
+
+        this.__insertIfNeeded(point, graphWinObj);
+
+    };
+
+    Point.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    {
+        if($(graphWinObj.svg).find(domElem).length == 0)
+        {
+            //Dom obj not found inside window
+            $(graphWinObj.svg).append(domElem);
+            this.domObj = domElem;
+        }
+    };
+
+    Point.prototype.undraw = function(graphWinObj)
+    {
+        debugger;
+        if(this.domObj != null)
+        {
+            if($(graphWinObj.svg).find(this.domObj).length == 1)
+            {
+                $(graphWinObj.svg).find(this.domObj).remove();
+            }
+        }
     };
 
 
@@ -204,6 +239,54 @@ $(function(){
 
 
 
+    Oval = function(point,  radius)
+    {
+        if(point == undefined || point.x == undefined)
+            throw ('A Ellipse needs cords');
+        if(radius == undefined)
+            radius = 20;
+        this.point = point;
+        this.radius = radius;
+        //this.domObj = null;
+    };
+
+    Oval.prototype.draw = function(graphWinObj)
+    {
+        var ellipse = document.createElementNS("http://www.w3.org/2000/svg", 'ellipse');
+        ellipse.setAttribute('cx', this.point.x);
+        ellipse.setAttribute('cy', this.point.y);
+        ellipse.setAttribute('rx', this.radius);
+        ellipse.setAttribute('ry', this.radius);
+
+        //circle.style.stroke = '#000';
+        //circle.style.fill = 'transparent';
+        this.__insertIfNeeded(ellipse, graphWinObj);
+    };
+
+
+    Oval.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    {
+        if($(graphWinObj.svg).find(domElem).length == 0) {
+            //Dom obj not found inside window
+            $(graphWinObj.svg).append(domElem);
+            this.domObj = domElem;
+        }
+    };
+
+    Oval.prototype.undraw = function(graphWinObj)
+    {
+        //debugger;
+        if(this.domObj != null)
+        {
+            if($(graphWinObj.svg).find(this.domObj).length == 1) {
+                $(graphWinObj.svg).find(this.domObj).remove();
+            }
+        }
+    };
+
+
+
+    //Not printing on the screen
     Polygon = function(point1,  point2, point3)
     {
         if(point1 == undefined || point2 == undefined || point3 == undefined)
@@ -252,6 +335,7 @@ $(function(){
             }
         }
     };
+
 
 
 
