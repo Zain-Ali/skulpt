@@ -50,7 +50,7 @@ var $builtinmodule = function(name){
 
 
     graphicsClass = function($glb, $loc){
-        //debugger;
+        debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, title, width, height){
             self.title = title;
             self.height = height;
@@ -110,8 +110,8 @@ var $builtinmodule = function(name){
 
         });
 
-        $loc.unDraw = new Sk.builtin.func(function(self, graphWinObj) {
-            self.modelObj.unDraw(graphWinObj.modelObj);
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
         });
 
     };
@@ -131,6 +131,10 @@ var $builtinmodule = function(name){
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
         });
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
     };
 
     lineClass = function($glb, $loc){
@@ -147,6 +151,10 @@ var $builtinmodule = function(name){
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
+        });
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
         });
     };
 
@@ -170,22 +178,32 @@ var $builtinmodule = function(name){
     //     });
     // };
 
-    // ovalClass = function($glb, $loc){
-    //     debugger;
-    //     $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius ){
-    //         self.modelObj = new Oval(pointObj.modelObj, radius.v);
-    //         self.pointObj = pointObj;
-    //         self.radius = radius;
-    //         return self;
-    //     });
-    //
-    //     $loc.__getattr__ = reuseingGetterSetter.__getattr__;
-    //     $loc.__setattr__ = reuseingGetterSetter.__setattr__;
-    //
-    //     $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-    //         self.modelObj.draw(graphWinObj.modelObj);
-    //     });
-    // };
+
+
+
+    ovalClass = function($glb, $loc){
+        debugger;
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius ){
+            self.modelObj = new Oval(pointObj.modelObj, radius.v);
+            self.pointObj = pointObj;
+            self.radius = radius;
+            return self;
+        });
+
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
+    };
+
+
+
 
 
     textClass = function($glb, $loc){
@@ -212,9 +230,9 @@ var $builtinmodule = function(name){
     mod.Rectangle = Sk.misceval.buildClass(mod, rectangleClass, "PRectangleClass", []);
     mod.Line = Sk.misceval.buildClass(mod, lineClass, "PLineClass", []);
     //mod.Triangle = Sk.misceval.buildClass(mod, triangleClass, "PTriangleClass", []);
-    //mod.Oval = Sk.misceval.buildClass(mod, ovalClass, "POvalClass", []);
+    mod.Oval = Sk.misceval.buildClass(mod, ovalClass, "POvalClass", []);
 
-    mod.Text = Sk.misceval.buildClass(mod, textClass, "PTextClass", []);
+   // mod.Text = Sk.misceval.buildClass(mod, textClass, "PTextClass", []);
 
 
 
