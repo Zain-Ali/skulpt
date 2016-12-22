@@ -68,8 +68,8 @@ var $builtinmodule = function(name){
 
 
         $loc.close = new Sk.builtin.func(function(self){
-            //Functionality needed to be added for this to close the Window (Canvas / SVG)
-            //console.log(self.testProperty.v);
+            self.modelObj.close();
+
         });
     };
 

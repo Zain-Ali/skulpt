@@ -50,6 +50,7 @@ $(function(){
     GraphWinJs.prototype.close = function()
     {
         //remove canvas obj from dom using jquery
+        this.windw.close();
     };
 
 
@@ -237,7 +238,7 @@ $(function(){
     };
 
 
-
+    //not printing Oval but Circle. For some reason it change the rx, and ry to 20 and not the user input
     Oval = function(point,  radius)
     {
         if(point == undefined || point.x == undefined)
@@ -336,7 +337,6 @@ $(function(){
     };
 
 
-    //Non Working Text
     Text = function(point, text)
     {
         if(point == undefined)
@@ -354,8 +354,9 @@ $(function(){
         var text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
         text.setAttribute('x', this.point.x);
         text.setAttribute('y', this.point.y);
-        text.textContent = "abcde";
-        text.style.stroke = 'black';
+        //text.textContent = "abcde";
+        text.textContent= this.text;
+        text.style.stroke = '#FF0000';
         this.__insertIfNeeded(text, graphWinObj);
 
     };
