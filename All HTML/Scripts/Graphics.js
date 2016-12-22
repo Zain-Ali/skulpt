@@ -10,8 +10,9 @@ var Rectangle;
 var Line;
 var Oval;
 var Polygon;
-
 var Text;
+
+var Image;
 
 var Triangle;
 
@@ -123,11 +124,14 @@ $(function(){
 
     ////////////////
     // //debugger;
+
     // Circle.prototype.setFill = function(fill, graphWinObj)
     // {
-    //     this.fill=fill.v;
+    //     var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    //     circle.style.fill ==this.fill;
     //
     // };
+
     //////////////////
 
 
@@ -142,7 +146,6 @@ $(function(){
 
     Circle.prototype.undraw = function(graphWinObj)
     {
-        //debugger;
         if(this.domObj != null)
         {
             if($(graphWinObj.svg).find(this.domObj).length == 1) {
@@ -381,6 +384,49 @@ $(function(){
             }
         }
     };
+
+
+
+    // Image = function (point, image)
+    // {
+    //     if (point == undefined)
+    //         throw ('A image needs points');
+    //     this.point = point;
+    //     this.image = image;
+    //     //this.domObj = null;
+    // };
+    //
+    // Image.prototype.draw = function(graphWinObj)
+    // {
+    //     var svg = graphWinObj.svg;
+    //     var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+    //     img.setAttribute('width', this.point.x);
+    //     img.setAttribute('height', this.point.y);
+    //
+    //     //image attribute
+    //
+    //     this.__insertIfNeeded(img, graphWinObj);
+    // };
+    //
+    // Image.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    // {
+    //     if($(graphWinObj.svg).find(domElem).length == 0) {
+    //         //Dom obj not found inside window
+    //         $(graphWinObj.svg).append(domElem);
+    //         this.domObj = domElem;
+    //     }
+    // };
+    //
+    // Image.prototype.undraw = function(graphWinObj)
+    // {
+    //     if(this.domObj != null)
+    //     {
+    //         if($(graphWinObj.svg).find(this.domObj).length == 1) {
+    //             $(graphWinObj.svg).find(this.domObj).remove();
+    //         }
+    //     }
+    // };
+
 
 
 //End of Main Function
