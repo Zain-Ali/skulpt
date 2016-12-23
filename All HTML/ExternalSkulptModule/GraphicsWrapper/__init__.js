@@ -57,7 +57,8 @@ var $builtinmodule = function(name){
             self.title = title;
             self.height = height;
             self.width = width;
-            self.modelObj = new GraphWinJs(title.v, height.v, width.v); //
+            self.modelObj = new GraphWinJs(title.v, height.v, width.v);
+
             return self;
         });
 
@@ -79,6 +80,7 @@ var $builtinmodule = function(name){
             self.modelObj = new Point(x.v, y.v);
             self.x = x;
             self.y = y;
+
             return self;
         });
 
@@ -104,6 +106,7 @@ var $builtinmodule = function(name){
             self.modelObj = new Circle(pointObj.modelObj, radius.v);
             self.pointObj = pointObj;
             self.radius = radius;
+
             return self;
         });
 
@@ -119,10 +122,9 @@ var $builtinmodule = function(name){
 
         //////////////////
 
-        // $loc.setFill = new Sk.builtin.func(function (self, graphWinObj, setFill) {
-        //     self.modelObj.setFill(graphWinObj.modelObj, setFill);
-        //
-        // });
+        $loc.setFill = new Sk.builtin.func(function(self, fill) {
+            self.modelObj.setFill(fill.v);
+        });
 
         /////////////////
 
@@ -140,6 +142,7 @@ var $builtinmodule = function(name){
             self.modelObj = new Rectangle(TopLeftCorner.modelObj, BottomRightCorner.modelObj);
             self.TopLeftCorner = TopLeftCorner;
             self.BottomRightCorner = BottomRightCorner;
+
             return self;
         });
 
@@ -165,6 +168,7 @@ var $builtinmodule = function(name){
             self.modelObj = new Line(point1.modelObj, point2.modelObj);
             self.point1 = point1;
             self.point2 = point2;
+
             return self;
         });
 
@@ -190,6 +194,7 @@ var $builtinmodule = function(name){
             self.modelObj = new Oval(pointObj.modelObj, radius.v);
             self.pointObj = pointObj;
             self.radius = radius;
+
             return self;
         });
 
@@ -207,7 +212,6 @@ var $builtinmodule = function(name){
 
 
 
-
     polygonClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, point1, point2, point3){
             self.modelObj = new Polygon(point1.modelObj, point2.modelObj, point3.modelObj);
@@ -215,8 +219,8 @@ var $builtinmodule = function(name){
             self.point2 = point2;
             self.point3 = point3;
 
-
             return self;
+
         });
 
 
@@ -263,30 +267,29 @@ var $builtinmodule = function(name){
 
 
 
-    // imageClass = function($glb, $loc){
-    //     $loc.__init__ = new Sk.builtin.func(function(self, pointObj, image){
-    //         self.modelObj = new Image(pointObj.modelObj, image.v);
-    //         self.pointObj = pointObj;
-    //         self.image = image;
-    //         return self;
-    //     });
-    //
-    //
-    //     $loc.__getattr__ = reuseingGetterSetter.__getattr__;
-    //     $loc.__setattr__ = reuseingGetterSetter.__setattr__;
-    //
-    //
-    //     $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-    //         self.modelObj.draw(graphWinObj.modelObj);
-    //     });
-    //
-    //
-    //     $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
-    //         self.modelObj.undraw(graphWinObj.modelObj);
-    //     });
-    // };
+    imageClass = function($glb, $loc){
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, image){
+            self.modelObj = new Image(pointObj.modelObj, image.v);
+            self.pointObj = pointObj;
+            self.image = image;
+
+            return self;
+        });
 
 
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
+    };
 
 
 

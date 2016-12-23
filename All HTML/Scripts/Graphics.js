@@ -1,7 +1,7 @@
+
 /**
  * Created by zain on 11/11/2016.
  */
-
 
 var GraphWinJs;
 var Point;
@@ -11,13 +11,14 @@ var Line;
 var Oval;
 var Polygon;
 var Text;
-
 var Image;
-
-var Triangle;
 
 var color;
 
+//have class for all shapes
+// {
+//first thing as super class
+// }
 
 
 function getHtmlTemplate()
@@ -108,28 +109,39 @@ $(function(){
             radius = 20;
         this.point = point;
         this.radius = radius;
+        this.modelObj = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+        this.modelObj.style.stroke = '#000';
+        this.modelObj.style.fill = 'red';
+
         //this.domObj = null;
     };
 
     Circle.prototype.draw = function(graphWinObj)
     {
-        var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-        circle.setAttribute('cx', this.point.x);
-        circle.setAttribute('cy', this.point.y);
-        circle.setAttribute('r', this.radius);
-        //circle.style.stroke = '#000';
-        //circle.style.fill = 'transparent';
-        this.__insertIfNeeded(circle, graphWinObj);
+        debugger;
+        this.modelObj.setAttribute('cx', this.point.x);
+        this.modelObj.setAttribute('cy', this.point.y);
+        this.modelObj.setAttribute('r', this.radius);
+
+        this.__insertIfNeeded(this.modelObj, graphWinObj);
     };
 
+
+
     ////////////////
-    // //debugger;
+    //debugger;
+    //modelOBJ name is used because its generic and can be used for super class
+    Circle.prototype.setFill = function(fill)
+    {
+        debugger;
+        this.modelObj.style.fill = fill;
+    };
 
     // Circle.prototype.setFill = function(fill, graphWinObj)
     // {
+    //     debugger;
     //     var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-    //     circle.style.fill ==this.fill;
-    //
+    //     circle.style.fill = this.fill;
     // };
 
     //////////////////
@@ -241,10 +253,11 @@ $(function(){
     };
 
 
-    //not printing Oval but Circle. For some reason it change the rx, and ry to 20 and not the user input
+    //not printing Oval but Circle.  it change the rx, and ry to 20 and not the user input
+    //It isn't reading radius and change the rx and ry value to 20 based on line 250 and 251
     Oval = function(point,  radius)
     {
-        if(point == undefined || point.x == undefined)
+        if(point == undefined)
             throw ('A Ellipse needs cords');
         if(radius == undefined)
             radius = 20;
@@ -264,6 +277,11 @@ $(function(){
         //circle.style.stroke = '#000';
         //circle.style.fill = 'transparent';
         this.__insertIfNeeded(ellipse, graphWinObj);
+
+        console.log('cx', this.point.x);
+        console.log('cy', this.point.y);
+        console.log('rx', this.radius);
+        console.log('ry', this.radius);
     };
 
 
@@ -278,7 +296,6 @@ $(function(){
 
     Oval.prototype.undraw = function(graphWinObj)
     {
-        //debugger;
         if(this.domObj != null)
         {
             if($(graphWinObj.svg).find(this.domObj).length == 1) {
@@ -352,13 +369,12 @@ $(function(){
 
     Text.prototype.draw = function(graphWinObj)
     {
-        debugger;
         var svg = graphWinObj.svg;
         var text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
         text.setAttribute('x', this.point.x);
         text.setAttribute('y', this.point.y);
         //text.textContent = "abcde";
-        text.textContent= this.text;
+        text.textContent = this.text;
         text.style.stroke = '#FF0000';
         this.__insertIfNeeded(text, graphWinObj);
 
@@ -387,45 +403,48 @@ $(function(){
 
 
 
-    // Image = function (point, image)
-    // {
-    //     if (point == undefined)
-    //         throw ('A image needs points');
-    //     this.point = point;
-    //     this.image = image;
-    //     //this.domObj = null;
-    // };
-    //
-    // Image.prototype.draw = function(graphWinObj)
-    // {
-    //     var svg = graphWinObj.svg;
-    //     var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-    //     img.setAttribute('width', this.point.x);
-    //     img.setAttribute('height', this.point.y);
-    //
-    //     //image attribute
-    //
-    //     this.__insertIfNeeded(img, graphWinObj);
-    // };
-    //
-    // Image.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    // {
-    //     if($(graphWinObj.svg).find(domElem).length == 0) {
-    //         //Dom obj not found inside window
-    //         $(graphWinObj.svg).append(domElem);
-    //         this.domObj = domElem;
-    //     }
-    // };
-    //
-    // Image.prototype.undraw = function(graphWinObj)
-    // {
-    //     if(this.domObj != null)
-    //     {
-    //         if($(graphWinObj.svg).find(this.domObj).length == 1) {
-    //             $(graphWinObj.svg).find(this.domObj).remove();
-    //         }
-    //     }
-    // };
+    Image = function (point, image)
+    {
+        if (point == undefined)
+            throw ('A image needs points');
+        this.point = point;
+        this.image = image;
+        //this.domObj = null;
+    };
+
+    Image.prototype.draw = function(graphWinObj)
+    {
+        var svg = graphWinObj.svg;
+        var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+        img.setAttribute('width', this.point.x);
+        img.setAttribute('height', this.point.y);
+
+        //image attribute
+        //img --------
+        //img.preserveAspectRatio = this.image;
+        img.iri = this.image;
+        console.log(this.image);
+        this.__insertIfNeeded(img, graphWinObj);
+    };
+
+    Image.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    {
+        if($(graphWinObj.svg).find(domElem).length == 0) {
+            //Dom obj not found inside window
+            $(graphWinObj.svg).append(domElem);
+            this.domObj = domElem;
+        }
+    };
+
+    Image.prototype.undraw = function(graphWinObj)
+    {
+        if(this.domObj != null)
+        {
+            if($(graphWinObj.svg).find(this.domObj).length == 1) {
+                $(graphWinObj.svg).find(this.domObj).remove();
+            }
+        }
+    };
 
 
 
