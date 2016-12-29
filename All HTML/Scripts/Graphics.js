@@ -49,6 +49,11 @@ $(function(){
     //we use prototype when we declare new instance of graphwinjs that the close function is present.
     //create the prototype of the object
 
+    GraphWinJs.prototype.setBackground = function()
+    {
+        //set background colour
+    };
+
     GraphWinJs.prototype.close = function()
     {
         //remove canvas obj from dom using jquery
@@ -99,7 +104,7 @@ $(function(){
         }
     };
 
-
+    //modelOBJ name is used because its generic and can be used for super class
 
     Circle = function(point,  radius)
     {
@@ -109,43 +114,33 @@ $(function(){
             radius = 20;
         this.point = point;
         this.radius = radius;
-        this.modelObj = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-        this.modelObj.style.stroke = '#000';
-        this.modelObj.style.fill = 'red';
+
+        this.circleModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+        //custom default setting of colours
+        this.circleModelObj.style.stroke = '#000';
+        this.circleModelObj.style.fill = 'transparent';
 
         //this.domObj = null;
     };
 
     Circle.prototype.draw = function(graphWinObj)
     {
-        debugger;
-        this.modelObj.setAttribute('cx', this.point.x);
-        this.modelObj.setAttribute('cy', this.point.y);
-        this.modelObj.setAttribute('r', this.radius);
+        this.circleModelObj.setAttribute('cx', this.point.x);
+        this.circleModelObj.setAttribute('cy', this.point.y);
+        this.circleModelObj.setAttribute('r', this.radius);
 
-        this.__insertIfNeeded(this.modelObj, graphWinObj);
+        this.__insertIfNeeded(this.circleModelObj, graphWinObj);
     };
 
-
-
-    ////////////////
-    //debugger;
-    //modelOBJ name is used because its generic and can be used for super class
     Circle.prototype.setFill = function(fill)
     {
-        debugger;
-        this.modelObj.style.fill = fill;
+        this.circleModelObj.style.fill = fill;
     };
 
-    // Circle.prototype.setFill = function(fill, graphWinObj)
-    // {
-    //     debugger;
-    //     var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-    //     circle.style.fill = this.fill;
-    // };
-
-    //////////////////
-
+    Circle.prototype.setOutline = function(stroke)
+    {
+        this.circleModelObj.style.stroke = stroke;
+    };
 
     Circle.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
@@ -174,16 +169,30 @@ $(function(){
             throw ('A rectangle needs points');
         this.width = width.x;
         this.height = height.y;
+
+        this.recModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+        //custom default setting of colours
+        this.recModelObj.style.stroke = '#000';
+        this.recModelObj.style.fill = 'transparent';
         //this.domObj = null;
     };
 
     Rectangle.prototype.draw = function(graphWinObj)
     {
-        var svg = graphWinObj.svg;
-        var rec = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
-        rec.setAttribute('width', this.width);
-        rec.setAttribute('height', this.height);
-        this.__insertIfNeeded(rec, graphWinObj);
+        //var svg = graphWinObj.svg;
+        this.recModelObj.setAttribute('width', this.width);
+        this.recModelObj.setAttribute('height', this.height);
+        this.__insertIfNeeded(recModelObj, graphWinObj);
+    };
+
+    Rectangle.prototype.setFill = function(fill)
+    {
+        this.recModelObj.style.fill = fill;
+    };
+
+    Rectangle.prototype.outLine = function(stroke)
+    {
+        this.recModelObj.style.stroke = stroke;
     };
 
     Rectangle.prototype.__insertIfNeeded = function(domElem, graphWinObj)

@@ -97,6 +97,7 @@ var $builtinmodule = function(name){
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
             self.modelObj.undraw(graphWinObj.modelObj);
         });
+
     };
 
 
@@ -115,18 +116,20 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
-        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-            self.modelObj.draw(graphWinObj.modelObj);
-
-        });
-
-        //////////////////
-
         $loc.setFill = new Sk.builtin.func(function(self, fill) {
             self.modelObj.setFill(fill.v);
         });
 
-        /////////////////
+
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
+        });
+
+
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+
+        });
 
 
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
@@ -151,6 +154,11 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
+        $loc.setFill = new Sk.builtin.func(function(self, fill) {
+            self.modelObj.setFill(fill.v);
+        });
+
+
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
         });
@@ -159,6 +167,7 @@ var $builtinmodule = function(name){
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
             self.modelObj.undraw(graphWinObj.modelObj);
         });
+
     };
 
 
@@ -175,6 +184,11 @@ var $builtinmodule = function(name){
 
         $loc.__getattr__ = reuseingGetterSetter.__getattr__;
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        $loc.setFill = new Sk.builtin.func(function(self, fill) {
+            self.modelObj.setFill(fill.v);
+        });
 
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
@@ -198,12 +212,20 @@ var $builtinmodule = function(name){
             return self;
         });
 
+
         $loc.__getattr__ = reuseingGetterSetter.__getattr__;
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        $loc.setFill = new Sk.builtin.func(function(self, fill) {
+            self.modelObj.setFill(fill.v);
+        });
+
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
         });
+
 
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
             self.modelObj.undraw(graphWinObj.modelObj);
@@ -226,6 +248,11 @@ var $builtinmodule = function(name){
 
         $loc.__getattr__ = reuseingGetterSetter.__getattr__;
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        $loc.setFill = new Sk.builtin.func(function(self, fill) {
+            self.modelObj.setFill(fill.v);
+        });
 
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
@@ -253,6 +280,11 @@ var $builtinmodule = function(name){
 
         $loc.__getattr__ = reuseingGetterSetter.__getattr__;
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        // $loc.setFill = new Sk.builtin.func(function(self, fill) {
+        //     self.modelObj.setFill(fill.v);
+        // });
 
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
