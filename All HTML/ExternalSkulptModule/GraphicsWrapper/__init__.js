@@ -159,6 +159,11 @@ var $builtinmodule = function(name){
         });
 
 
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
+        });
+
+
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
         });
@@ -186,8 +191,8 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
-        $loc.setFill = new Sk.builtin.func(function(self, fill) {
-            self.modelObj.setFill(fill.v);
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
         });
 
 
@@ -219,6 +224,11 @@ var $builtinmodule = function(name){
 
         $loc.setFill = new Sk.builtin.func(function(self, fill) {
             self.modelObj.setFill(fill.v);
+        });
+
+
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
         });
 
 
@@ -255,6 +265,11 @@ var $builtinmodule = function(name){
         });
 
 
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
+        });
+
+
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
         });
@@ -282,9 +297,19 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
-        // $loc.setFill = new Sk.builtin.func(function(self, fill) {
-        //     self.modelObj.setFill(fill.v);
-        // });
+        $loc.setText = new Sk.builtin.func(function(self, text) {
+            self.modelObj.setText(text.v);
+        });
+
+
+        $loc.setFill = new Sk.builtin.func(function(self, fill) {
+            self.modelObj.setFill(fill.v);
+        });
+
+
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
+        });
 
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
