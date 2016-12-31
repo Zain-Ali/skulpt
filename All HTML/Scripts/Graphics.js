@@ -11,6 +11,7 @@ var Line;
 var Oval;
 var Polygon;
 var Text;
+var Entry;
 var Image;
 
 var color;
@@ -50,9 +51,10 @@ $(function(){
     //create the prototype of the object
 
 
-    GraphWinJs.prototype.setBackground = function()
+    //not working
+    GraphWinJs.prototype.setBackground = function(background)
     {
-        //set background colour
+        this.windw.body.style.background = "red";
     };
 
 
@@ -540,6 +542,76 @@ $(function(){
             }
         }
     };
+
+
+
+
+
+    Entry = function(point,  radius)
+    {
+        if(point == undefined || point.x == undefined)
+            throw ('A circle needs cords');
+        if(radius == undefined)
+            radius = 20;
+        this.point = point;
+        this.radius = radius;
+        this.domObj = null;
+
+        this.entryModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
+    };
+
+
+    Entry.prototype.draw = function(graphWinObj)
+    {
+        this.entryModelObj = document.createElement("input"); //input element, text
+        this.entryModelObj.setAttribute('cx', this.point.x);
+        this.entryModelObj.setAttribute('cy', this.point.y);
+        this.entryModelObj.setAttribute('r', this.radius);
+
+        //
+        this.entryModelObj.setAttribute("type", "text");
+
+
+        this.__insertIfNeeded(this.entryModelObj, graphWinObj);
+    };
+
+
+    Entry.prototype.setFill = function(fill)
+    {
+        this.entryModelObj.style.fill = fill;
+    };
+
+
+    Entry.prototype.setOutline = function(stroke)
+    {
+        this.entryModelObj.style.stroke = stroke;
+    };
+
+
+    Entry.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    {
+        if($(graphWinObj.svg).find(domElem).length == 0) {
+            //Dom obj not found inside window
+            $(graphWinObj.svg).append(domElem);
+            this.domObj = domElem;
+        }
+    };
+
+
+    Entry.prototype.undraw = function(graphWinObj)
+    {
+        if(this.domObj != null)
+        {
+            if($(graphWinObj.svg).find(this.domObj).length == 1) {
+                $(graphWinObj.svg).find(this.domObj).remove();
+            }
+        }
+    };
+
+
+
+
+
 
 
 

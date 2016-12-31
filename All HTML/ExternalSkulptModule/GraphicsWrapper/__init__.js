@@ -15,6 +15,7 @@ var $builtinmodule = function(name){
     var textClass = {};
     var polygonClass = {};
     var imageClass = {};
+    var entryClass = {};
     var mod = {};
 
 
@@ -49,6 +50,7 @@ var $builtinmodule = function(name){
     mod.POvalClass = {};
     mod.PTextClass = {};
     mod.PImageClass = {};
+    mod.PEntryClass = {};
 
 
 
@@ -69,7 +71,10 @@ var $builtinmodule = function(name){
 
         $loc.close = new Sk.builtin.func(function(self){
             self.modelObj.close();
+        });
 
+        $loc.setBackground = new Sk.builtin.func(function (self, background) {
+            self.modelObj.setBackground(background.v);
         });
     };
 
@@ -350,6 +355,52 @@ var $builtinmodule = function(name){
 
 
 
+
+
+
+    entryClass = function($glb, $loc){
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius){
+            self.modelObj = new Entry(pointObj.modelObj, radius.v);
+            self.pointObj = pointObj;
+            self.radius = radius;
+
+            return self;
+        });
+
+
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        $loc.setFill = new Sk.builtin.func(function(self, fill) {
+            self.modelObj.setFill(fill.v);
+        });
+
+
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
+        });
+
+
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+
+        });
+
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
+
+    };
+
+
+
+
+
+
+
+
     mod.GraphWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
     mod.Point  = Sk.misceval.buildClass(mod, pointClass, "PPointClass", []);
     mod.Circle = Sk.misceval.buildClass(mod, circleClass, "PCircleClass", []);
@@ -359,6 +410,7 @@ var $builtinmodule = function(name){
     mod.Oval = Sk.misceval.buildClass(mod, ovalClass, "POvalClass", []);
     mod.Text = Sk.misceval.buildClass(mod, textClass, "PTextClass", []);
     mod.Image = Sk.misceval.buildClass(mod, imageClass, "PImageClass", []);
+    mod.Entry = Sk.misceval.buildClass(mod, entryClass, "PEntryClass", []);
 
 
 
