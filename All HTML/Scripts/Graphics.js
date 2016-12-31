@@ -14,7 +14,9 @@ var Text;
 var Entry;
 var Image;
 
-var color;
+var MouseEvent;
+
+
 
 //have class for all shapes
 // {
@@ -46,21 +48,28 @@ $(function(){
         this.doc.write(getHtmlTemplate() + '<svg id="mySvg"></svg>');
         this.svg = $(this.doc).find('#mySvg').first();
         this.windw.document.close();
+
+
+        // ///////////////
+        // this.svg.addEventListener("mousedown", MouseEvent, false);
+        // ///////////////
     };
     //we use prototype when we declare new instance of graphwinjs that the close function is present.
     //create the prototype of the object
 
 
     //not working
-    GraphWinJs.prototype.setBackground = function(background)
-    {
-        this.windw.body.style.background = "red";
-    };
+    // GraphWinJs.prototype.setBackground = function(background)
+    // {
+    //     console.log(this.svg);
+    //     this.svg.style.background = "red";
+    //     console.log(this.svg);
+    // };
 
 
     GraphWinJs.prototype.close = function()
     {
-        //remove canvas obj from dom using jquery
+        //remove svg/canvas obj from dom using jquery
         this.windw.close();
     };
 
@@ -72,19 +81,20 @@ $(function(){
             throw ("Point class needs x and y cords");
         this.x = x;
         this.y = y;
+        this.domObj = null;
+
+
+        this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'point');
     };
 
 
     //Does not draw on SVG Window
     Point.prototype.draw = function(graphWinObj)
     {
-        var svg = graphWinObj.svg;
-        var point = document.createElementNS("http://www.w3.org/2000/svg", 'point');
-        point.setAttribute('x1', this.x);
-        point.setAttribute('y1', this.y);
+        this.pointModelObj.setAttribute('x1', this.x);
+        this.pointModelObj.setAttribute('y1', this.y);
 
-        this.__insertIfNeeded(point, graphWinObj);
-
+        this.__insertIfNeeded(this.pointModelObj, graphWinObj);
     };
 
 
@@ -109,6 +119,19 @@ $(function(){
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
+    };
+
+
+    Point.prototype.getX = function()
+    {
+        //debugger;
+        return this.pointModelObj.getAttribute(this.x);
+    };
+
+
+    Point.prototype.getY = function()
+    {
+        return this.pointModelObj.getAttribute(this.y);
     };
 
 
@@ -176,6 +199,30 @@ $(function(){
     };
 
 
+    Circle.prototype.getCenter = function()
+    {
+        //return this.circleModelObj.getAttribute(this.point.x);
+    };
+
+
+    Circle.prototype.getP1 = function()
+    {
+        return this.circleModelObj.getAttribute(this.point.x);
+    };
+
+
+    Circle.prototype.getP2 = function()
+    {
+        return this.circleModelObj.getAttribute(this.point.y);
+    };
+
+
+    Circle.prototype.getRadius = function()
+    {
+        return this.circleModelObj.getAttribute(this.radius);
+    };
+
+
 
     Rectangle = function (width, height)
     {
@@ -232,6 +279,24 @@ $(function(){
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
+    };
+
+
+    Rectangle.prototype.getCenter = function()
+    {
+
+    };
+
+
+    Rectangle.prototype.getP1 = function()
+    {
+        return this.recModelObj.getAttribute(this.width);
+    };
+
+
+    Rectangle.prototype.getP2 = function()
+    {
+        return this.recModelObj.getAttribute(this.height);
     };
 
 
@@ -292,6 +357,24 @@ $(function(){
     };
 
 
+    Line.prototype.getCenter = function()
+    {
+
+    };
+
+
+    Line.prototype.getP1 = function()
+    {
+
+    };
+
+
+    Line.prototype.getP2 = function()
+    {
+
+    };
+
+
 
     //not printing Oval but Circle.  it change the rx, and ry to 20 and not the user input
     //It isn't reading radius and change the rx and ry value to 20 based on line 250 and 251
@@ -314,6 +397,7 @@ $(function(){
 
     Oval.prototype.draw = function(graphWinObj)
     {
+        debugger;
         this.ovalModelObj.setAttribute('cx', this.point.x);
         this.ovalModelObj.setAttribute('cy', this.point.y);
         this.ovalModelObj.setAttribute('rx', this.radius);
@@ -363,25 +447,46 @@ $(function(){
     };
 
 
+    Oval.prototype.getCenter = function()
+    {
+
+    };
+
+
+    Oval.prototype.getP1 = function()
+    {
+        return this.recModelObj.getAttribute(this.point.x);
+    };
+
+
+    Oval.prototype.getP2 = function()
+    {
+        return this.recModelObj.getAttribute(this.point.y);
+    };
+
+
 
     //Not printing on the screen
     //Not Working for some reason
     Polygon = function(point1,  point2, point3)
     {
+        //debugger;
         if(point1 == undefined || point2 == undefined || point3 == undefined)
             throw ('A  needs cords');
         this.point1 = point1;
         this.point2 = point2;
         this.point3 = point3;
+
         this.domObj = null;
 
-        this.polygonModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
+        this.polygonModelObj = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
         this.polygonModelObj.style.stroke = '#000';
         this.polygonModelObj.style.fill = 'transparent';
     };
 
     Polygon.prototype.draw = function(graphWinObj)
     {
+        //debugger;
         this.polygonModelObj.setAttribute('x1', this.point1.x);
         this.polygonModelObj.setAttribute('y1', this.point1.y);
         this.polygonModelObj.setAttribute('x2', this.point2.x);
@@ -419,7 +524,6 @@ $(function(){
 
     Polygon.prototype.undraw = function(graphWinObj)
     {
-        debugger;
         if(this.domObj != null)
         {
             if($(graphWinObj.svg).find(this.domObj).length == 1)
@@ -427,6 +531,12 @@ $(function(){
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
+    };
+
+
+    Polygon.prototype.getPoints = function ()
+    {
+
     };
 
 
@@ -496,6 +606,12 @@ $(function(){
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
+    };
+
+
+    Text.prototype.getText = function (text)
+    {
+        return this.textModelObj.textContent = text;
     };
 
 
@@ -611,8 +727,22 @@ $(function(){
 
 
 
+    MouseEvent = function(point, event)
+    {
+
+        this.point = point;
+        this.event = event;
+    };
 
 
+    MouseEvent.prototype.getMouse = function(graphWinObj)
+    {
+
+        var x = this.point.getAttribute(this.point.x);
+        var y = this.point.getAttribute(this.point.y);
+        var coords = "X coords: " + x + ", Y coords: " + y;
+        return coords;
+    };
 
 
 //End of Main Function

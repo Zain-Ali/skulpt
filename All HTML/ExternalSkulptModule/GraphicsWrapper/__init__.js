@@ -16,8 +16,9 @@ var $builtinmodule = function(name){
     var polygonClass = {};
     var imageClass = {};
     var entryClass = {};
-    var mod = {};
 
+
+    var mod = {};
 
 
     var reuseingGetterSetter = {
@@ -101,6 +102,16 @@ var $builtinmodule = function(name){
 
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
             self.modelObj.undraw(graphWinObj.modelObj);
+        });
+
+        $loc.getX = new Sk.builtin.func(function(self) {
+            debugger;
+            console.log(self.modelObj.getX());
+            return self.modelObj.getX();
+        });
+
+        $loc.getY = new Sk.builtin.func(function(self) {
+            return self.modelObj.getY();
         });
 
     };
@@ -250,6 +261,7 @@ var $builtinmodule = function(name){
 
 
     polygonClass = function($glb, $loc){
+        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self, point1, point2, point3){
             self.modelObj = new Polygon(point1.modelObj, point2.modelObj, point3.modelObj);
             self.point1 = point1;
@@ -396,11 +408,6 @@ var $builtinmodule = function(name){
 
 
 
-
-
-
-
-
     mod.GraphWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
     mod.Point  = Sk.misceval.buildClass(mod, pointClass, "PPointClass", []);
     mod.Circle = Sk.misceval.buildClass(mod, circleClass, "PCircleClass", []);
@@ -411,7 +418,6 @@ var $builtinmodule = function(name){
     mod.Text = Sk.misceval.buildClass(mod, textClass, "PTextClass", []);
     mod.Image = Sk.misceval.buildClass(mod, imageClass, "PImageClass", []);
     mod.Entry = Sk.misceval.buildClass(mod, entryClass, "PEntryClass", []);
-
 
 
     return mod;
