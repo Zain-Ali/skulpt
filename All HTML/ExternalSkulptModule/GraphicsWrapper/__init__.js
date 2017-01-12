@@ -132,16 +132,6 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
-        $loc.setFill = new Sk.builtin.func(function(self, fill) {
-            self.modelObj.setFill(fill.v);
-        });
-
-
-        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
-            self.modelObj.setOutline(stroke.v);
-        });
-
-
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
 
@@ -150,6 +140,16 @@ var $builtinmodule = function(name){
 
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
             self.modelObj.undraw(graphWinObj.modelObj);
+        });
+
+
+        $loc.setFill = new Sk.builtin.func(function(self, fill) {
+            self.modelObj.setFill(fill.v);
+        });
+
+
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
         });
 
 
@@ -167,6 +167,15 @@ var $builtinmodule = function(name){
             return self.modelObj.getRadius();
         });
 
+
+        $loc.getCenter = new Sk.builtin.func(function(self) {
+            return self.modelObj.getCenter();
+        });
+
+
+        $loc.setWidth = new Sk.builtin.func(function(self, width) {
+            return self.modelObj.setWidth(width.v);
+        });
 
     };
 
@@ -186,6 +195,16 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
+
+
         $loc.setFill = new Sk.builtin.func(function(self, fill) {
             self.modelObj.setFill(fill.v);
         });
@@ -196,13 +215,23 @@ var $builtinmodule = function(name){
         });
 
 
-        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-            self.modelObj.draw(graphWinObj.modelObj);
+        $loc.getP1 = new Sk.builtin.func(function(self) {
+            return self.modelObj.getP1();
         });
 
 
-        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
-            self.modelObj.undraw(graphWinObj.modelObj);
+        $loc.getP2 = new Sk.builtin.func(function(self) {
+            return self.modelObj.getP2();
+        });
+
+
+        $loc.getCenter = new Sk.builtin.func(function(self) {
+            return self.modelObj.getCenter();
+        });
+
+
+        $loc.setWidth = new Sk.builtin.func(function(self, width) {
+            return self.modelObj.setWidth(width.v);
         });
 
     };
@@ -223,11 +252,6 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
-        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
-            self.modelObj.setOutline(stroke.v);
-        });
-
-
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
         });
@@ -235,6 +259,31 @@ var $builtinmodule = function(name){
 
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
             self.modelObj.undraw(graphWinObj.modelObj);
+        });
+
+
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
+        });
+
+
+        $loc.getP1 = new Sk.builtin.func(function(self) {
+            return self.modelObj.getP1();
+        });
+
+
+        $loc.getP2 = new Sk.builtin.func(function(self) {
+            return self.modelObj.getP2();
+        });
+
+
+        $loc.getCenter = new Sk.builtin.func(function(self) {
+            return self.modelObj.getCenter();
+        });
+
+
+        $loc.setWidth = new Sk.builtin.func(function(self, width) {
+            return self.modelObj.setWidth(width.v);
         });
     };
 
@@ -254,6 +303,16 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
+
+
         $loc.setFill = new Sk.builtin.func(function(self, fill) {
             self.modelObj.setFill(fill.v);
         });
@@ -264,13 +323,23 @@ var $builtinmodule = function(name){
         });
 
 
-        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-            self.modelObj.draw(graphWinObj.modelObj);
+        $loc.getP1 = new Sk.builtin.func(function(self) {
+            return self.modelObj.getP1();
         });
 
 
-        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
-            self.modelObj.undraw(graphWinObj.modelObj);
+        $loc.getP2 = new Sk.builtin.func(function(self) {
+            return self.modelObj.getP2();
+        });
+
+
+        $loc.getCenter = new Sk.builtin.func(function(self) {
+            return self.modelObj.getCenter();
+        });
+
+
+        $loc.setWidth = new Sk.builtin.func(function(self, width) {
+            return self.modelObj.setWidth(width.v);
         });
     };
 
@@ -298,6 +367,16 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
+
+
         $loc.setFill = new Sk.builtin.func(function(self, fill) {
             self.modelObj.setFill(fill.v);
         });
@@ -308,14 +387,15 @@ var $builtinmodule = function(name){
         });
 
 
-        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-            self.modelObj.draw(graphWinObj.modelObj);
+        $loc.getPoints = new Sk.builtin.func(function(self) {
+            return self.modelObj.getPoints();
         });
 
 
-        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
-            self.modelObj.undraw(graphWinObj.modelObj);
+        $loc.setWidth = new Sk.builtin.func(function(self, width) {
+            return self.modelObj.setWidth(width.v);
         });
+
     };
 
 
@@ -335,21 +415,6 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
-        $loc.setText = new Sk.builtin.func(function(self, text) {
-            self.modelObj.setText(text.v);
-        });
-
-
-        $loc.setFill = new Sk.builtin.func(function(self, fill) {
-            self.modelObj.setFill(fill.v);
-        });
-
-
-        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
-            self.modelObj.setOutline(stroke.v);
-        });
-
-
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
             self.modelObj.draw(graphWinObj.modelObj);
         });
@@ -358,13 +423,38 @@ var $builtinmodule = function(name){
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
             self.modelObj.undraw(graphWinObj.modelObj);
         });
+
+
+        $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
+            self.modelObj.setOutline(stroke.v);
+        });
+
+
+        $loc.setText = new Sk.builtin.func(function(self, text) {
+            self.modelObj.setText(text.v);
+        });
+
+
+        $loc.setTextColor = new Sk.builtin.func(function(self, fill) {
+            self.modelObj.setTextColor(fill.v);
+        });
+
+
+        $loc.getText = new Sk.builtin.func(function(self) {
+            self.modelObj.getText();
+        });
+
+
+        $loc.setAnchor = new Sk.builtin.func(function(self) {
+            self.modelObj.setAnchor();
+        });
     };
 
 
 
     imageClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, pointObj, image){
-            self.modelObj = new Image(pointObj.modelObj, image.v);
+            self.modelObj = new Image(pointObj.modelObj, image.PImage);
             self.pointObj = pointObj;
             self.image = image;
 

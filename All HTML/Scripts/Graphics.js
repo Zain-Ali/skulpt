@@ -14,15 +14,6 @@ var Text;
 var Entry;
 var Image;
 
-var MouseEvent;
-
-
-
-//have class for all shapes
-// {
-//first thing as super class
-// }
-
 
 function getHtmlTemplate()
 {
@@ -50,26 +41,40 @@ $(function(){
         this.windw.document.close();
 
     };
-    //we use prototype when we declare new instance of graphwinjs that the close function is present.
-    //create the prototype of the object
+
 
     GraphWinJs.prototype.close = function()
     {
-        //remove svg/canvas obj from dom using jquery
+        //remove svg obj from dom using jquery
         this.windw.close();
     };
 
 
-    //not working
-    // GraphWinJs.prototype.setBackground = function(background)
-    // {
-    //     console.log(this.svg);
-    //     this.svg.style.background = "red";
-    //     console.log(this.svg);
-    // };
-
-
     //PlaceHolder for Future Interactive Functionality
+    GraphWinJs.prototype.setBackground = function(background)
+    {
+
+    };
+
+
+    GraphWinJs.prototype.plot = function()
+    {
+
+    };
+
+
+    GraphWinJs.prototype.plotPixel = function()
+    {
+
+    };
+
+
+    GraphWinJs.prototype.setCoords = function()
+    {
+
+    };
+
+
     GraphWinJs.prototype.getMouse = function()
     {
 
@@ -94,24 +99,6 @@ $(function(){
     };
 
 
-    GraphWinJs.prototype.plot = function()
-    {
-
-    };
-
-
-    GraphWinJs.prototype.plotPixel = function()
-    {
-
-    };
-
-
-    GraphWinJs.prototype.setCoords = function()
-    {
-
-    };
-
-
 
     Point = function(x, y)
     {
@@ -120,7 +107,6 @@ $(function(){
         this.x = x;
         this.y = y;
         this.domObj = null;
-
 
         this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'point');
     };
@@ -161,24 +147,18 @@ $(function(){
 
     Point.prototype.getX = function()
     {
-        // debugger;
-        // console.log(this.x); //  From class attribute, look up value
-        //console.log(this.pointModelObj.getAttribute('x1')); // From the element, look up element attribute
-        console.log(this.x);
         return this.x;
     };
 
 
     Point.prototype.getY = function()
     {
-        console.log(this.y);
         return this.y;
     };
 
 
 
     //modelOBJ name is used because its generic and can be used for super class
-
     Circle = function(point,  radius)
     {
         if(point == undefined || point.x == undefined)
@@ -190,12 +170,11 @@ $(function(){
         this.domObj = null;
 
         this.circleModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+
         //custom default setting of colours
         this.circleModelObj.style.stroke = '#000'; //black
         this.circleModelObj.style.fill = 'transparent';
-
-
-        //this.circleModelObj.stroke-width = '10';
+        this.circleModelObj.style.strokeWidth = 1;
 
     };
 
@@ -274,14 +253,15 @@ $(function(){
 
     Circle.prototype.getCenter = function()
     {
-        console.log();
-        return ;
+        console.log("Point ("+[this.point.x, this.point.y]+")");
+        return ([this.point.x, this.point.y]);
+        //return "Point ("+[this.point.x, this.point.y]+")";
     };
 
 
     Circle.prototype.setWidth = function(width)
     {
-
+        this.circleModelObj.style.strokeWidth = width;
     };
 
 
@@ -310,11 +290,13 @@ $(function(){
         //custom default setting of colours
         this.recModelObj.style.stroke = '#000'; //black
         this.recModelObj.style.fill = 'transparent';
+        this.recModelObj.style.strokeWidth = 1;
     };
 
 
     Rectangle.prototype.draw = function(graphWinObj)
     {
+        //debugger;
         this.recModelObj.setAttribute('width', this.width);
         this.recModelObj.setAttribute('height', this.height);
         this.__insertIfNeeded(this.recModelObj, graphWinObj);
@@ -356,24 +338,27 @@ $(function(){
     };
 
 
+    Rectangle.prototype.getP1 = function()
+    {
+
+    };
+
+
+    Rectangle.prototype.getP2 = function()
+    {
+
+    };
+
+
     Rectangle.prototype.getCenter = function()
     {
 
     };
 
 
-    Rectangle.prototype.getP1 = function()
+    Rectangle.prototype.setWidth = function(width)
     {
-    };
-
-
-    Rectangle.prototype.getP2 = function()
-    {
-    };
-
-
-    Rectangle.prototype.setWidth = function()
-    {
+        this.recModelObj.style.strokeWidth = width;
 
     };
 
@@ -403,6 +388,7 @@ $(function(){
 
         this.lineModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'line');
         this.lineModelObj.style.stroke = '#000'; //black
+        this.lineModelObj.style.strokeWidth = 1;
 
     };
 
@@ -414,12 +400,6 @@ $(function(){
         this.lineModelObj.setAttribute('x2', this.point2.x);
         this.lineModelObj.setAttribute('y2', this.point2.y);
         this.__insertIfNeeded(this.lineModelObj, graphWinObj);
-    };
-
-
-    Line.prototype.setOutline = function(stroke)
-    {
-        this.lineModelObj.style.stroke = stroke;
     };
 
 
@@ -446,6 +426,12 @@ $(function(){
     };
 
 
+    Line.prototype.setOutline = function(stroke)
+    {
+        this.lineModelObj.style.stroke = stroke;
+    };
+
+
     Line.prototype.getCenter = function()
     {
 
@@ -464,9 +450,9 @@ $(function(){
     };
 
 
-    Line.prototype.setWidth = function()
+    Line.prototype.setWidth = function(width)
     {
-
+        this.lineModelObj.style.strokeWidth = width;
     };
 
 
@@ -500,6 +486,7 @@ $(function(){
         this.ovalModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'ellipse');
         this.ovalModelObj.style.stroke = '#000'; //black
         this.ovalModelObj.style.fill = 'transparent';
+        this.lineModelObj.style.strokeWidth = 1;
 
     };
 
@@ -518,18 +505,6 @@ $(function(){
         console.log('cy', this.point.y);
         console.log('rx', this.radius);
         console.log('ry', this.radius);
-    };
-
-
-    Oval.prototype.setFill = function(fill)
-    {
-        this.ovalModelObj.style.fill = fill;
-    };
-
-
-    Oval.prototype.setOutline = function(stroke)
-    {
-        this.ovalModelObj.style.stroke = stroke;
     };
 
 
@@ -556,6 +531,18 @@ $(function(){
     };
 
 
+    Oval.prototype.setFill = function(fill)
+    {
+        this.ovalModelObj.style.fill = fill;
+    };
+
+
+    Oval.prototype.setOutline = function(stroke)
+    {
+        this.ovalModelObj.style.stroke = stroke;
+    };
+
+
     Oval.prototype.getCenter = function()
     {
 
@@ -572,9 +559,9 @@ $(function(){
     };
 
 
-    Oval.prototype.setWidth = function()
+    Oval.prototype.setWidth = function(width)
     {
-
+        this.ovalModelObj.style.strokeWidth = width;
     };
 
 
@@ -590,14 +577,12 @@ $(function(){
     };
 
 
-    //Not printing on the screen
-    //Not Working for some reason
+
+    //Hard Coded for Now
     Polygon = function(...points)
     {
         points.forEach(point => console.log(point.getX(), point.getY() ));
-        // //debugger;
-        // if(point1 == undefined || point2 == undefined || point3 == undefined)
-        //     throw ('A  needs cords');
+
         //error checking
         this.points = points;
 
@@ -605,13 +590,14 @@ $(function(){
         // arrow function
         // String interpolation (Template literals)
         this.points = this.points.reduce( (acc, current) => acc + current);
-        console.log(this.points);
 
         this.domObj = null;
 
         this.polygonModelObj = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
         this.polygonModelObj.style.stroke = '#000';
         this.polygonModelObj.style.fill = 'transparent';
+        this.polygonModelObj.style.strokeWidth = 1;
+
     };
 
     Polygon.prototype.draw = function(graphWinObj)
@@ -659,13 +645,14 @@ $(function(){
 
     Polygon.prototype.getPoints = function ()
     {
-
+        console.log("Points (" + this.points + ")");
+        return this.points;
     };
 
 
-    Polygon.prototype.setWidth = function()
+    Polygon.prototype.setWidth = function(width)
     {
-
+        this.polygonModelObj.style.strokeWidth = width;
     };
 
 
@@ -695,6 +682,11 @@ $(function(){
         this.textModelObj.style.stroke = '#000';
         this.textModelObj.style.fill = '#000';
 
+        //this.textModelObj.style.font-Size = 100;
+        //this.textModelObj.style.font-family = "arial";
+
+
+        this.textModelObj.textContent = this.text;
     };
 
 
@@ -702,7 +694,6 @@ $(function(){
     {
         this.textModelObj.setAttribute('x', this.point.x);
         this.textModelObj.setAttribute('y', this.point.y);
-        this.textModelObj.textContent = this.text;
         this.__insertIfNeeded(this.textModelObj, graphWinObj);
     };
 
@@ -730,8 +721,9 @@ $(function(){
     };
 
 
-    Text.prototype.setFill = function(fill)
+    Text.prototype.setTextColor = function(fill)
     {
+        //does not change colour
         this.textModelObj.style.fill = fill;
     };
 
@@ -742,43 +734,54 @@ $(function(){
     };
 
 
-    //PLEASE NOTE: not setting text before draw method
     Text.prototype.setText = function (text)
     {
-        //debugger;
-        //this.textModelObj.textContent = text;
+        this.textModelObj.textContent = text;
     };
 
 
-    Text.prototype.getText = function (text)
+    Text.prototype.getText = function ()
     {
-        return this.textModelObj.textContent = text;
+        //doesn't work, returning orignal text not new setText
+        console.log(this.text);
+        return this.text;
     };
 
 
     Text.prototype.setAnchor = function (text)
     {
+        this.textModelObj.setAttribute('x', this.point.x);
+        this.textModelObj.setAttribute('y', this.point.y);
+
+        console.log("Point ("+[this.point.x, this.point.y]+")");
+        return "Point ("+[this.point.x, this.point.y]+")";
 
     };
 
 
     Text.prototype.setFace = function (text)
     {
-
+        //only 3 options to chose from which are ("arial", "courier", "times roman")
     };
 
 
     Text.prototype.setSize = function (text)
     {
-
+        //size between 5 and 36
     };
 
 
     Text.prototype.setStyle = function (text)
     {
+        //style is italic and bold italic and bold
 
     };
 
+
+    Text.prototype.setTextColor = function (text)
+    {
+
+    };
 
     Text.prototype.setTextColor = function (text)
     {
@@ -803,11 +806,10 @@ $(function(){
         img.setAttribute('width', this.point.x);
         img.setAttribute('height', this.point.y);
 
-        //image attribute
-        //img --------
-        //img.preserveAspectRatio = this.image;
-        img.iri = this.image;
+
+        //no attribute for image so far (javascript attributes needed)
         console.log(this.image);
+
         this.__insertIfNeeded(img, graphWinObj);
     };
 
@@ -829,7 +831,6 @@ $(function(){
             }
         }
     };
-
 
 
 
@@ -856,11 +857,30 @@ $(function(){
         this.entryModelObj.setAttribute('r', this.radius);
 
         //
-        this.entryModelObj.setAttribute("type", "text");
+        //this.entryModelObj.setAttribute("type", "text");
+        var text = document.createElementNS("http://www.w3.org/1999/xhtml", "textarea");
+        text.innerHTML = "hello";
+        this.entryModelObj.appendChild(text);
+        //document.getElementById("#mySvg").appendChild(this.entryModelObj);
 
 
         this.__insertIfNeeded(this.entryModelObj, graphWinObj);
     };
+
+
+    // http://stackoverflow.com/questions/29295322/javascript-to-create-a-textarea-with-foreign-object-in-svg-not-working
+    // var fo = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+    // fo.setAttribute("id", "y");
+    // fo.setAttribute("x", "110");
+    // fo.setAttribute("y", "50");
+    // fo.setAttribute("width", "300");
+    // fo.setAttribute("height", "100");
+    // var ta = document.createElementNS("http://www.w3.org/1999/xhtml", "textarea");
+    // ta.rows = 3;
+    // ta.cols = 30;
+    // ta.innerHTML = "world";
+    // fo.appendChild(ta);
+    // document.getElementById("svg").appendChild(fo);
 
 
     Entry.prototype.setFill = function(fill)
