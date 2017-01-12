@@ -104,11 +104,11 @@ var $builtinmodule = function(name){
             self.modelObj.undraw(graphWinObj.modelObj);
         });
 
+
         $loc.getX = new Sk.builtin.func(function(self) {
-            debugger;
-            console.log(self.modelObj.getX());
             return self.modelObj.getX();
         });
+
 
         $loc.getY = new Sk.builtin.func(function(self) {
             return self.modelObj.getY();
@@ -151,6 +151,22 @@ var $builtinmodule = function(name){
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
             self.modelObj.undraw(graphWinObj.modelObj);
         });
+
+
+        $loc.getP1 = new Sk.builtin.func(function(self) {
+            return self.modelObj.getP1();
+        });
+
+
+        $loc.getP2 = new Sk.builtin.func(function(self) {
+            return self.modelObj.getP2();
+        });
+
+
+        $loc.getRadius = new Sk.builtin.func(function(self) {
+            return self.modelObj.getRadius();
+        });
+
 
     };
 
@@ -262,11 +278,16 @@ var $builtinmodule = function(name){
 
     polygonClass = function($glb, $loc){
         //debugger;
-        $loc.__init__ = new Sk.builtin.func(function(self, point1, point2, point3){
-            self.modelObj = new Polygon(point1.modelObj, point2.modelObj, point3.modelObj);
-            self.point1 = point1;
-            self.point2 = point2;
-            self.point3 = point3;
+        $loc.__init__ = new Sk.builtin.func(function(self){
+            self.modelObj = new Polygon(
+                new Point(10, 10),
+                new Point(50, 50),
+                new Point(100, 80)
+            );
+            // self.modelObj = new Polygon(point1.modelObj, point2.modelObj, point3.modelObj);
+            // self.point1 = point1;
+            // self.point2 = point2;
+            // self.point3 = point3;
 
             return self;
 
