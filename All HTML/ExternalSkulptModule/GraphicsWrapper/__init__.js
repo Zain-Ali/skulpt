@@ -177,6 +177,12 @@ var $builtinmodule = function(name){
             return self.modelObj.setWidth(width.v);
         });
 
+
+        $loc.move = new Sk.builtin.func(function (self, dx, dy) {
+            self.modelObj.move(dx.v, dy.v);
+
+        });
+
     };
 
 
@@ -234,6 +240,11 @@ var $builtinmodule = function(name){
             return self.modelObj.setWidth(width.v);
         });
 
+
+        $loc.move = new Sk.builtin.func(function (self, dx, dy) {
+            self.modelObj.move(dx.v, dy.v);
+
+        });
     };
 
 
@@ -284,6 +295,12 @@ var $builtinmodule = function(name){
 
         $loc.setWidth = new Sk.builtin.func(function(self, width) {
             return self.modelObj.setWidth(width.v);
+        });
+
+
+        $loc.move = new Sk.builtin.func(function (self, dx, dy) {
+            self.modelObj.move(dx.v, dy.v);
+
         });
     };
 
@@ -341,6 +358,12 @@ var $builtinmodule = function(name){
         $loc.setWidth = new Sk.builtin.func(function(self, width) {
             return self.modelObj.setWidth(width.v);
         });
+
+
+        $loc.move = new Sk.builtin.func(function (self, dx, dy) {
+            self.modelObj.move(dx.v, dy.v);
+
+        });
     };
 
 
@@ -396,6 +419,12 @@ var $builtinmodule = function(name){
             return self.modelObj.setWidth(width.v);
         });
 
+
+        $loc.move = new Sk.builtin.func(function (self, dx, dy) {
+            self.modelObj.move(dx.v, dy.v);
+
+        });
+
     };
 
 
@@ -435,8 +464,8 @@ var $builtinmodule = function(name){
         });
 
 
-        $loc.setTextColor = new Sk.builtin.func(function(self, fill) {
-            self.modelObj.setTextColor(fill.v);
+        $loc.setTextColor = new Sk.builtin.func(function(self, fillTextColor) {
+            self.modelObj.setTextColor(fillTextColor.v);
         });
 
 
@@ -448,6 +477,23 @@ var $builtinmodule = function(name){
         $loc.setAnchor = new Sk.builtin.func(function(self) {
             self.modelObj.setAnchor();
         });
+
+
+        $loc.setFace = new Sk.builtin.func(function(self, fontFace) {
+            self.modelObj.setFace(fontFace.v);
+        });
+
+
+        $loc.setStyle = new Sk.builtin.func(function(self, fontStyle) {
+            self.modelObj.setStyle(fontStyle.v);
+        });
+
+
+        $loc.move = new Sk.builtin.func(function (self, dx, dy) {
+            self.modelObj.move(dx.v, dy.v);
+
+        });
+
     };
 
 

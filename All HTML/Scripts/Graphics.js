@@ -265,9 +265,10 @@ $(function(){
     };
 
 
-    Circle.prototype.move = function()
+    Circle.prototype.move = function(dx, dy)
     {
-
+        this.circleModelObj.setAttribute('cx', dx);
+        this.circleModelObj.setAttribute('cx', dy);
     };
 
 
@@ -363,9 +364,10 @@ $(function(){
     };
 
 
-    Rectangle.prototype.move = function()
+    Rectangle.prototype.move = function(dx, dy)
     {
-
+        this.recModelObj.setAttribute('x', dx);
+        this.recModelObj.setAttribute('y', dy);
     };
 
 
@@ -434,6 +436,19 @@ $(function(){
 
     Line.prototype.getCenter = function()
     {
+        /**
+         *
+         * Formula to get Mid Point of Line using Points
+         */
+        var P1 = ((this.point1.x + this.point2. x) / 2);
+        var P2 = ((this.point1.y + this.point2. y) / 2);
+        console.log(P1);
+        console.log(P2);
+
+        console.log(P1, P2);
+        return (P1, P2);
+
+
 
     };
 
@@ -456,9 +471,10 @@ $(function(){
     };
 
 
-    Line.prototype.move = function()
+    Line.prototype.move = function(dx, dy)
     {
-
+        this.lineModelObj.setAttribute('x1', dx);
+        this.lineModelObj.setAttribute('x2', dy);
     };
 
 
@@ -486,7 +502,7 @@ $(function(){
         this.ovalModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'ellipse');
         this.ovalModelObj.style.stroke = '#000'; //black
         this.ovalModelObj.style.fill = 'transparent';
-        this.lineModelObj.style.strokeWidth = 1;
+        this.ovalModelObj.style.strokeWidth = 1;
 
     };
 
@@ -565,9 +581,10 @@ $(function(){
     };
 
 
-    Oval.prototype.move = function()
+    Oval.prototype.move = function(dx, dy)
     {
-
+        this.ovalModelObj.setAttribute('cx', dx);
+        this.ovalModelObj.setAttribute('cy', dy);
     };
 
 
@@ -656,9 +673,10 @@ $(function(){
     };
 
 
-    Polygon.prototype.move = function()
+    Polygon.prototype.move = function(dx, dy)
     {
-
+        this.polygonModelObj.setAttribute('dx', dx);
+        this.polygonModelObj.setAttribute('dx', dy);
     };
 
 
@@ -679,14 +697,13 @@ $(function(){
         this.domObj = null;
 
         this.textModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-        this.textModelObj.style.stroke = '#000';
-        this.textModelObj.style.fill = '#000';
-
-        //this.textModelObj.style.font-Size = 100;
-        //this.textModelObj.style.font-family = "arial";
-
-
         this.textModelObj.textContent = this.text;
+        this.textModelObj.style.fill = 'black';
+        this.textModelObj.style.fontFamily = "arial";
+        debugger;
+        //this.textModelObj.style.fontSize = "normal";
+
+
     };
 
 
@@ -742,7 +759,7 @@ $(function(){
 
     Text.prototype.getText = function ()
     {
-        //doesn't work, returning orignal text not new setText
+        //doesn't work, returning original text not new setText
         console.log(this.text);
         return this.text;
     };
@@ -759,33 +776,43 @@ $(function(){
     };
 
 
-    Text.prototype.setFace = function (text)
+    Text.prototype.setFace = function (fontFace)
     {
-        //only 3 options to chose from which are ("arial", "courier", "times roman")
+        this.textModelObj.style.fontFamily = fontFace;
     };
 
 
-    Text.prototype.setSize = function (text)
+    Text.prototype.setSize = function (textFontSize)
     {
         //size between 5 and 36
-    };
-
-
-    Text.prototype.setStyle = function (text)
-    {
-        //style is italic and bold italic and bold
+        this.textModelObj.style.fontSize = textFontSize;
 
     };
 
 
-    Text.prototype.setTextColor = function (text)
+    Text.prototype.setStyle = function (boldStyle)
     {
-
+        this.textModelObj.style.fontWeight = boldStyle;
     };
 
-    Text.prototype.setTextColor = function (text)
-    {
 
+    // Text.prototype.setStyle = function (italicStyle)
+    // {
+    //     //style is italic and bold italic and bold
+    //     this.textModelObj.style.fontStyle = italicStyle;
+    // };
+
+
+    Text.prototype.setTextColor = function (fillTextColor)
+    {
+        this.textModelObj.style.fill = fillTextColor;
+    };
+
+
+    Text.prototype.move = function(dx, dy)
+    {
+        this.textModelObj.setAttribute('dx', dx);
+        this.textModelObj.setAttribute('dx', dy);
     };
 
 
