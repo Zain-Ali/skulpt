@@ -77,6 +77,10 @@ var $builtinmodule = function(name){
         $loc.setBackground = new Sk.builtin.func(function (self, background) {
             self.modelObj.setBackground(background.v);
         });
+
+        $loc.getMouse = new Sk.builtin.func(function(self){
+            self.modelObj.getMouse();
+        });
     };
 
 
@@ -180,7 +184,11 @@ var $builtinmodule = function(name){
 
         $loc.move = new Sk.builtin.func(function (self, dx, dy) {
             self.modelObj.move(dx.v, dy.v);
+        });
 
+
+        $loc.clone = new Sk.builtin.func(function(self) {
+            return self.modelObj.clone();
         });
 
     };
@@ -307,10 +315,10 @@ var $builtinmodule = function(name){
 
 
     ovalClass = function($glb, $loc){
-        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius){
-            self.modelObj = new Oval(pointObj.modelObj, radius.v);
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, pointObj2){
+            self.modelObj = new Oval(pointObj.modelObj, pointObj2.modelObj);
             self.pointObj = pointObj;
-            self.radius = radius;
+            self.pointObj2 = pointObj2;
 
             return self;
         });
@@ -499,10 +507,10 @@ var $builtinmodule = function(name){
 
 
     imageClass = function($glb, $loc){
-        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, image){
-            self.modelObj = new Image(pointObj.modelObj, image.PImage);
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, imageSrc){
+            self.modelObj = new Image(pointObj.modelObj, imageSrc.v);
             self.pointObj = pointObj;
-            self.image = image;
+            self.imageSrc = imageSrc;
 
             return self;
         });

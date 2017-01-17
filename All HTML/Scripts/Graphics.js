@@ -24,7 +24,8 @@ function getHtmlTemplate()
 
 
 
-$(function(){
+$(function()
+{
     GraphWinJs = function(title, width, height)
     {
         //debugger;
@@ -77,7 +78,9 @@ $(function(){
 
     GraphWinJs.prototype.getMouse = function()
     {
-
+        window.addEventListener("click", function () {
+            console.log("log");
+        });
     };
 
 
@@ -274,7 +277,7 @@ $(function(){
 
     Circle.prototype.clone = function()
     {
-
+        //Circle.prototype.draw();
     };
 
 
@@ -297,7 +300,6 @@ $(function(){
 
     Rectangle.prototype.draw = function(graphWinObj)
     {
-        //debugger;
         this.recModelObj.setAttribute('width', this.width);
         this.recModelObj.setAttribute('height', this.height);
         this.__insertIfNeeded(this.recModelObj, graphWinObj);
@@ -447,9 +449,6 @@ $(function(){
 
         console.log(P1, P2);
         return (P1, P2);
-
-
-
     };
 
 
@@ -485,42 +484,36 @@ $(function(){
 
 
 
-    //not printing Oval but Circle.  it change the rx, and ry to 20 and not the user input
-    //It isn't reading radius and change the rx and ry value to 20 based on line 250 and 251
-    Oval = function(point,  radius)
+    Oval = function(point,  point2)
     {
-        console.log(point);
-        console.log(radius);
         if(point == undefined)
             throw ('A Ellipse needs cords');
-        if(radius == undefined)
-            radius = 20;
+        if(point2 == undefined)
+            point2 = new Point(20,20);
         this.point = point;
-        this.radius = radius;
+        this.point2 = point2;
         this.domObj = null;
 
         this.ovalModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'ellipse');
         this.ovalModelObj.style.stroke = '#000'; //black
         this.ovalModelObj.style.fill = 'transparent';
         this.ovalModelObj.style.strokeWidth = 1;
-
     };
 
 
     Oval.prototype.draw = function(graphWinObj)
     {
-        debugger;
         this.ovalModelObj.setAttribute('cx', this.point.x);
         this.ovalModelObj.setAttribute('cy', this.point.y);
-        this.ovalModelObj.setAttribute('rx', this.radius);
-        this.ovalModelObj.setAttribute('ry', this.radius);
+        this.ovalModelObj.setAttribute('rx', this.point2.x);
+        this.ovalModelObj.setAttribute('ry', this.point2.y);
 
         this.__insertIfNeeded(this.ovalModelObj, graphWinObj);
 
         console.log('cx', this.point.x);
         console.log('cy', this.point.y);
-        console.log('rx', this.radius);
-        console.log('ry', this.radius);
+        console.log('rx', this.point2.x);
+        console.log('ry', this.point2.y);
     };
 
 
@@ -614,8 +607,8 @@ $(function(){
         this.polygonModelObj.style.stroke = '#000';
         this.polygonModelObj.style.fill = 'transparent';
         this.polygonModelObj.style.strokeWidth = 1;
-
     };
+
 
     Polygon.prototype.draw = function(graphWinObj)
     {
@@ -700,10 +693,7 @@ $(function(){
         this.textModelObj.textContent = this.text;
         this.textModelObj.style.fill = 'black';
         this.textModelObj.style.fontFamily = "arial";
-        debugger;
         //this.textModelObj.style.fontSize = "normal";
-
-
     };
 
 
@@ -790,9 +780,9 @@ $(function(){
     };
 
 
-    Text.prototype.setStyle = function (boldStyle)
+    Text.prototype.setStyle = function (style)
     {
-        this.textModelObj.style.fontWeight = boldStyle;
+        this.textModelObj.style.fontWeight = style;
     };
 
 
@@ -817,12 +807,12 @@ $(function(){
 
 
 
-    Image = function (point, image)
+    Image = function (point, imageSrc)
     {
         if (point == undefined)
             throw ('A image needs points');
         this.point = point;
-        this.image = image;
+        this.imageSrc = imageSrc;
         //this.domObj = null;
     };
 
@@ -832,13 +822,11 @@ $(function(){
         var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
         img.setAttribute('width', this.point.x);
         img.setAttribute('height', this.point.y);
-
-
-        //no attribute for image so far (javascript attributes needed)
-        console.log(this.image);
+        img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', this.imageSrc);
 
         this.__insertIfNeeded(img, graphWinObj);
     };
+
 
     Image.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
@@ -848,6 +836,7 @@ $(function(){
             this.domObj = domElem;
         }
     };
+
 
     Image.prototype.undraw = function(graphWinObj)
     {
@@ -889,7 +878,7 @@ $(function(){
         text.innerHTML = "hello";
         this.entryModelObj.appendChild(text);
         //document.getElementById("#mySvg").appendChild(this.entryModelObj);
-
+        this.entryModelObj.setAttribute("text", this.textarea);
 
         this.__insertIfNeeded(this.entryModelObj, graphWinObj);
     };
