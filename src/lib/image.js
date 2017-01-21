@@ -122,7 +122,7 @@ $builtinmodule = function (name) {
                     i % self.image.width, Math.floor(i / self.image.width));
             }
             return new Sk.builtin.tuple(arr);
-        });
+        })
 
         $loc.getPixel = new Sk.builtin.func(function (self, x, y) {
             var red;

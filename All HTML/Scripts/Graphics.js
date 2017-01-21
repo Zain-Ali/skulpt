@@ -40,7 +40,6 @@ $(function()
         this.doc.write(getHtmlTemplate() + '<svg id="mySvg"></svg>');
         this.svg = $(this.doc).find('#mySvg').first();
         this.windw.document.close();
-
     };
 
 
@@ -54,7 +53,7 @@ $(function()
     //PlaceHolder for Future Interactive Functionality
     GraphWinJs.prototype.setBackground = function(background)
     {
-
+        this.windw.style.background('fill', 'pink');
     };
 
 
@@ -78,9 +77,9 @@ $(function()
 
     GraphWinJs.prototype.getMouse = function()
     {
-        window.addEventListener("click", function () {
-            console.log("log");
-        });
+        // window.addEventListener("click", function () {
+        //     console.log("log");
+        // });
     };
 
 
@@ -227,23 +226,25 @@ $(function()
 
     Circle.prototype.getP1 = function()
     {
-        this.circleModelObj.setAttribute('cx', this.point.x);
-        this.circleModelObj.setAttribute('cy', this.point.y);
-        this.circleModelObj.setAttribute('r', this.radius);
+        // Returns a clone of the corresponding endpoint of the segment.
 
-        console.log(this.point.x);
-        return this.point.x;
+        var P1x = this.point.x - this.radius;
+        var P1y = this.point.y - this.radius;
+
+        console.log("Point("+ P1x, "," + P1y + ")");
+        return P1x, P1y;
     };
 
 
     Circle.prototype.getP2 = function()
     {
-        this.circleModelObj.setAttribute('cx', this.point.x);
-        this.circleModelObj.setAttribute('cy', this.point.y);
-        this.circleModelObj.setAttribute('r', this.radius);
+        //Returns a clone of the corresponding endpoint of the segment.
+        debugger;
+        var P2x = this.point.x + this.radius;
+        var P2y = this.point.y + this.radius;
 
-        console.log(this.point.x);
-        return this.point.x;
+        console.log("Point("+ P2x, "," + P2y + ")");
+        return P2x, P2y;
     };
 
 
@@ -256,9 +257,10 @@ $(function()
 
     Circle.prototype.getCenter = function()
     {
+        // Returns a clone of the corresponding endpoint of the segment.
+
         console.log("Point ("+[this.point.x, this.point.y]+")");
         return ([this.point.x, this.point.y]);
-        //return "Point ("+[this.point.x, this.point.y]+")";
     };
 
 
@@ -278,16 +280,19 @@ $(function()
     Circle.prototype.clone = function()
     {
         //Circle.prototype.draw();
+        //Returns a duplicate of the object.  Clones are always created in an undrawn state.  Other
+        // than that, they are identical to the cloned object.
+
     };
 
 
 
-    Rectangle = function (width, height)
+    Rectangle = function (point1, point2)
     {
-        if (width == undefined || height == undefined)
+        if (point1 == undefined || point2 == undefined)
             throw ('A rectangle needs points');
-        this.width = width.x;
-        this.height = height.y;
+        this.point1 = point1;
+        this.point2 = point2;
         this.domObj = null;
 
         this.recModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
@@ -300,8 +305,14 @@ $(function()
 
     Rectangle.prototype.draw = function(graphWinObj)
     {
-        this.recModelObj.setAttribute('width', this.width);
-        this.recModelObj.setAttribute('height', this.height);
+        this.recModelObj.setAttribute('x', Math.min(this.point1.x, this.point2.x));
+        this.recModelObj.setAttribute('y', Math.min(this.point1.y, this.point2.y));
+
+        var width = Math.max(this.point1.x, this.point2.x) - Math.min(this.point1.x, this.point2.x);
+        var height = Math.max(this.point1.y, this.point2.y) - Math.min(this.point1.y, this.point2.y);
+
+        this.recModelObj.setAttribute('width', width);
+        this.recModelObj.setAttribute('height', height);
         this.__insertIfNeeded(this.recModelObj, graphWinObj);
     };
 
@@ -343,12 +354,17 @@ $(function()
 
     Rectangle.prototype.getP1 = function()
     {
+        // Returns a clone of the corresponding endpoint of the segment.
+        console.log(this.point1);
+        //return (this.width, this.height);
+
 
     };
 
 
     Rectangle.prototype.getP2 = function()
     {
+        // Returns a clone of the corresponding endpoint of the segment.
 
     };
 
@@ -382,6 +398,8 @@ $(function()
 
     Line = function(point1,  point2)
     {
+        //debugger;
+
         if(point1 == undefined)
             throw ('A  needs cords');
         if(point2 == undefined)
@@ -399,6 +417,7 @@ $(function()
 
     Line.prototype.draw = function(graphWinObj)
     {
+        //debugger;
         this.lineModelObj.setAttribute('x1', this.point1.x);
         this.lineModelObj.setAttribute('y1', this.point1.y);
         this.lineModelObj.setAttribute('x2', this.point2.x);
@@ -409,6 +428,8 @@ $(function()
 
     Line.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
+        //debugger;
+
         if($(graphWinObj.svg).find(domElem).length == 0)
         {
             //Dom obj not found inside window
@@ -454,13 +475,14 @@ $(function()
 
     Line.prototype.getP1 = function()
     {
-
+        // Returns a clone of the corresponding endpoint of the segment.
+        return new Point(this.point1.x, this.point1.y);
     };
 
 
     Line.prototype.getP2 = function()
     {
-
+        return new Point(this.point2.x, this.point2.y);
     };
 
 
@@ -477,10 +499,37 @@ $(function()
     };
 
 
+    //main
     Line.prototype.clone = function()
     {
-
+        debugger;
+        let lineCopy = {}; //Object.create(this.__proto__);
+        Object.setPrototypeOf(lineCopy, this.__proto__);
+        lineCopy = Object.assign(lineCopy, this);
+        lineCopy.domObj = null;
+        lineCopy.lineModelObj = null;
+        console.log("copy/clone", lineCopy);
+        return lineCopy;
     };
+
+
+
+    // Line.prototype.clone = function()
+    // {
+    //     debugger;
+    //     let lineCopy = {}; //Object.create(this.__proto__);
+    //     Object.setPrototypeOf(lineCopy, this.__proto__);
+    //     lineCopy = Object.assign(lineCopy, this);
+    //
+    //     lineCopy.domObj = null;
+    //     lineCopy.lineModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+    //     lineCopy.lineModelObj.style.stroke = '#000'; //black
+    //     lineCopy.lineModelObj.style.strokeWidth = 1;
+    //
+    //     console.log("copy/clone", lineCopy);
+    //
+    //     return lineCopy;
+    // };
 
 
 
@@ -554,17 +603,22 @@ $(function()
 
     Oval.prototype.getCenter = function()
     {
+        // Returns a clone of the corresponding endpoint of the segment.
 
     };
 
 
     Oval.prototype.getP1 = function()
     {
+        // Returns a clone of the corresponding endpoint of the segment.
+
     };
 
 
     Oval.prototype.getP2 = function()
     {
+        // Returns a clone of the corresponding endpoint of the segment.
+
     };
 
 
@@ -589,24 +643,27 @@ $(function()
 
 
     //Hard Coded for Now
-    Polygon = function(...points)
+    Polygon = function()
     {
-        points.forEach(point => console.log(point.getX(), point.getY() ));
-
-        //error checking
-        this.points = points;
-
-        this.points = this.points.map(point => `${point.getX()},${point.getY()} `);
-        // arrow function
-        // String interpolation (Template literals)
-        this.points = this.points.reduce( (acc, current) => acc + current);
-
+        this.points = [];
         this.domObj = null;
 
         this.polygonModelObj = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
         this.polygonModelObj.style.stroke = '#000';
         this.polygonModelObj.style.fill = 'transparent';
         this.polygonModelObj.style.strokeWidth = 1;
+
+        var args = Array.prototype.slice.call(arguments);
+        for(var i=0; i < args.length-1; i++) {
+            //debugger;
+            // console.log("a", this.points.push(args[i].getX()));
+            // console.log("b", this.points.push(args[i].getX));
+
+            this.points.push(args[i].getX());
+            this.points.push(args[i].getY());
+        }
+
+
     };
 
 
@@ -655,6 +712,8 @@ $(function()
 
     Polygon.prototype.getPoints = function ()
     {
+        // Returns a clone of the corresponding endpoint of the segment.
+
         console.log("Points (" + this.points + ")");
         return this.points;
     };
@@ -755,10 +814,10 @@ $(function()
     };
 
 
-    Text.prototype.setAnchor = function (text)
+    Text.prototype.getAnchor = function (text)
     {
-        this.textModelObj.setAttribute('x', this.point.x);
-        this.textModelObj.setAttribute('y', this.point.y);
+        // Returns a clone of the corresponding endpoint of the segment.
+
 
         console.log("Point ("+[this.point.x, this.point.y]+")");
         return "Point ("+[this.point.x, this.point.y]+")";
@@ -782,15 +841,15 @@ $(function()
 
     Text.prototype.setStyle = function (style)
     {
-        this.textModelObj.style.fontWeight = style;
+        if (style === "bold")
+        {
+            this.textModelObj.style.fontWeight = style;
+        }
+        else
+        {
+            this.textModelObj.style.fontStyle = style;
+        }
     };
-
-
-    // Text.prototype.setStyle = function (italicStyle)
-    // {
-    //     //style is italic and bold italic and bold
-    //     this.textModelObj.style.fontStyle = italicStyle;
-    // };
 
 
     Text.prototype.setTextColor = function (fillTextColor)
@@ -813,18 +872,18 @@ $(function()
             throw ('A image needs points');
         this.point = point;
         this.imageSrc = imageSrc;
-        //this.domObj = null;
+
+        this.imgModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+
+        this.domObj = null;
     };
 
     Image.prototype.draw = function(graphWinObj)
     {
-        var svg = graphWinObj.svg;
-        var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-        img.setAttribute('width', this.point.x);
-        img.setAttribute('height', this.point.y);
-        img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', this.imageSrc);
-
-        this.__insertIfNeeded(img, graphWinObj);
+        this.imgModelObj.setAttribute('width', this.point.x);
+        this.imgModelObj.setAttribute('height', this.point.y);
+        this.imgModelObj.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', this.imageSrc);
+        this.__insertIfNeeded(this.imgModelObj, graphWinObj);
     };
 
 
@@ -849,66 +908,66 @@ $(function()
     };
 
 
+    Image.prototype.getWidth = function ()
+    {
+        console.log("width ", this.point.x );
+        return this.point.x;
+    };
 
 
-    Entry = function(point,  radius)
+    Image.prototype.getHeight = function ()
+    {
+        console.log("height ", this.point.y);
+        return this.point.y;
+    };
+
+
+    Image.prototype.move = function()
+    {
+
+    };
+
+
+
+
+    Entry = function(point, width)
     {
         if(point == undefined || point.x == undefined)
-            throw ('A circle needs cords');
-        if(radius == undefined)
-            radius = 20;
+            throw ('A point needs cords');
+        if(width == undefined)
+            width = 20;
         this.point = point;
-        this.radius = radius;
+        this.width = width;
         this.domObj = null;
 
         this.entryModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
+
+
+        var textInput = document.createElement("input");
+        textInput.type = 'text';
+
+        textInput.innerHTML = "world";
+        this.entryModelObj.appendChild(textInput);
     };
 
 
     Entry.prototype.draw = function(graphWinObj)
     {
-        this.entryModelObj = document.createElement("input"); //input element, text
-        this.entryModelObj.setAttribute('cx', this.point.x);
-        this.entryModelObj.setAttribute('cy', this.point.y);
-        this.entryModelObj.setAttribute('r', this.radius);
+        this.entryModelObj.setAttribute("x", this.point.x);
+        this.entryModelObj.setAttribute("y", this.point.y);
+        this.entryModelObj.setAttribute("width", "300");
+        this.entryModelObj.setAttribute("height", "100");
 
-        //
-        //this.entryModelObj.setAttribute("type", "text");
-        var text = document.createElementNS("http://www.w3.org/1999/xhtml", "textarea");
-        text.innerHTML = "hello";
-        this.entryModelObj.appendChild(text);
-        //document.getElementById("#mySvg").appendChild(this.entryModelObj);
-        this.entryModelObj.setAttribute("text", this.textarea);
+        var textInput =  this.entryModelObj.getElementsByTagName('input')[0];
+        textInput.size = this.width;
+
+        console.log(textInput.offsetWidth, textInput.offsetHeight);
+
 
         this.__insertIfNeeded(this.entryModelObj, graphWinObj);
     };
 
-
     // http://stackoverflow.com/questions/29295322/javascript-to-create-a-textarea-with-foreign-object-in-svg-not-working
-    // var fo = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
-    // fo.setAttribute("id", "y");
-    // fo.setAttribute("x", "110");
-    // fo.setAttribute("y", "50");
-    // fo.setAttribute("width", "300");
-    // fo.setAttribute("height", "100");
-    // var ta = document.createElementNS("http://www.w3.org/1999/xhtml", "textarea");
-    // ta.rows = 3;
-    // ta.cols = 30;
-    // ta.innerHTML = "world";
-    // fo.appendChild(ta);
-    // document.getElementById("svg").appendChild(fo);
-
-
-    Entry.prototype.setFill = function(fill)
-    {
-        this.entryModelObj.style.fill = fill;
-    };
-
-
-    Entry.prototype.setOutline = function(stroke)
-    {
-        this.entryModelObj.style.stroke = stroke;
-    };
 
 
     Entry.prototype.__insertIfNeeded = function(domElem, graphWinObj)
@@ -932,6 +991,70 @@ $(function()
     };
 
 
+    Entry.prototype.setFill = function(fill)
+    {
+        this.entryModelObj.style.fill = fill;
+    };
+
+
+    Entry.prototype.setOutline = function(stroke)
+    {
+        this.entryModelObj.style.stroke = stroke;
+    };
+
+
+    Entry.prototype.getAnchor = function (text)
+    {
+        // Returns a clone of the corresponding endpoint of the segment.
+
+    };
+
+
+    // Entry.prototype.setText = function (text)
+    // {
+    //     this.entryModelObj.textContent = text;
+    // };
+    //
+    //
+    // Entry.prototype.getText = function ()
+    // {
+    //     //doesn't work, returning original text not new setText
+    //     console.log(this.text);
+    //     return this.text;
+    // };
+
+
+    Entry.prototype.setFace = function (fontFace)
+    {
+        this.textModelObj.style.fontFamily = fontFace;
+    };
+
+
+    Entry.prototype.setSize = function (textFontSize)
+    {
+        //size between 5 and 36
+        this.entryModelObj.style.fontSize = textFontSize;
+
+    };
+
+
+    Entry.prototype.setStyle = function (style)
+    {
+        if (style === "bold")
+        {
+            this.entryModelObj.style.fontWeight = style;
+        }
+        else
+        {
+            this.entryModelObj.style.fontStyle = style;
+        }
+    };
+
+
+    Entry.prototype.setTextColor = function (fillTextColor)
+    {
+        this.entryModelObj.style.fill = fillTextColor;
+    };
 
 
     // MouseEvent = function(point, event)

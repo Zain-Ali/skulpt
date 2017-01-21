@@ -2,10 +2,15 @@
  * Created by zain on 11/11/2016.
  */
 
+
+
+
 // This is a JavaScript and SVG wrapper class. Wrapping JS and SVG in Python
 
 var $builtinmodule = function(name){
     "use strict";
+    var mod = {};
+
     var graphicsClass = {};
     var pointClass = {};
     var circleClass = {};
@@ -16,9 +21,6 @@ var $builtinmodule = function(name){
     var polygonClass = {};
     var imageClass = {};
     var entryClass = {};
-
-
-    var mod = {};
 
 
     var reuseingGetterSetter = {
@@ -163,6 +165,7 @@ var $builtinmodule = function(name){
 
 
         $loc.getP2 = new Sk.builtin.func(function(self) {
+            debugger;
             return self.modelObj.getP2();
         });
 
@@ -259,6 +262,7 @@ var $builtinmodule = function(name){
 
     lineClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, point1, point2){
+
             self.modelObj = new Line(point1.modelObj, point2.modelObj);
             self.point1 = point1;
             self.point2 = point2;
@@ -272,6 +276,7 @@ var $builtinmodule = function(name){
 
 
         $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            console.log('Self from draw', self);
             self.modelObj.draw(graphWinObj.modelObj);
         });
 
@@ -287,12 +292,24 @@ var $builtinmodule = function(name){
 
 
         $loc.getP1 = new Sk.builtin.func(function(self) {
-            return self.modelObj.getP1();
+            var model = self.modelObj.getP1();
+
+            //clone to avoid reference issues....
+            var x = Sk.builtin.float_(model.getX());
+            var y = Sk.builtin.float_(model.getY());
+            var pyObj = Sk.misceval.callsim(mod.Point, x,y);
+            return pyObj;
         });
 
 
         $loc.getP2 = new Sk.builtin.func(function(self) {
-            return self.modelObj.getP2();
+            var model = self.modelObj.getP2();
+
+            //clone to avoid reference issues....
+            var x = Sk.builtin.float_(model.getX());
+            var y = Sk.builtin.float_(model.getY());
+            var pyObj = Sk.misceval.callsim(mod.Point, x,y);
+            return pyObj;
         });
 
 
@@ -308,7 +325,13 @@ var $builtinmodule = function(name){
 
         $loc.move = new Sk.builtin.func(function (self, dx, dy) {
             self.modelObj.move(dx.v, dy.v);
+        });
 
+        $loc.clone = new Sk.builtin.func(function (self) {
+            var p1 = Sk.misceval.callsim(self.getP1, self);
+            var p2 = Sk.misceval.callsim(self.getP2, self);
+            var pyObj = Sk.misceval.callsim(mod.Line, p1, p2);
+            return pyObj;
         });
     };
 
@@ -379,15 +402,17 @@ var $builtinmodule = function(name){
     polygonClass = function($glb, $loc){
         //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self){
-            self.modelObj = new Polygon(
-                new Point(10, 10),
-                new Point(50, 50),
-                new Point(100, 80)
-            );
-            // self.modelObj = new Polygon(point1.modelObj, point2.modelObj, point3.modelObj);
-            // self.point1 = point1;
-            // self.point2 = point2;
-            // self.point3 = point3;
+
+
+            self.points = [];
+            var modelObjs = [];
+            var args = Array.prototype.slice.call(arguments);
+            for(var i=1; i < args.length-1; i++) {
+                self.points.push(args[i]);
+                modelObjs.push(args[i].modelObj);
+            }
+
+            self.modelObj = new (Function.prototype.bind.apply(Polygon, args));
 
             return self;
 
@@ -482,8 +507,8 @@ var $builtinmodule = function(name){
         });
 
 
-        $loc.setAnchor = new Sk.builtin.func(function(self) {
-            self.modelObj.setAnchor();
+        $loc.getAnchor = new Sk.builtin.func(function(self) {
+            self.modelObj.getAnchor();
         });
 
 
@@ -494,6 +519,11 @@ var $builtinmodule = function(name){
 
         $loc.setStyle = new Sk.builtin.func(function(self, fontStyle) {
             self.modelObj.setStyle(fontStyle.v);
+        });
+
+        //doesn't work
+        $loc.setSize = new Sk.builtin.func(function(self, fontSize) {
+            self.modelObj.setSize(fontSize.v);
         });
 
 
@@ -528,10 +558,17 @@ var $builtinmodule = function(name){
         $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
             self.modelObj.undraw(graphWinObj.modelObj);
         });
+
+
+        $loc.getWidth = new Sk.builtin.func(function(self) {
+            self.modelObj.getWidth();
+        });
+
+
+        $loc.getHeight = new Sk.builtin.func(function(self) {
+            self.modelObj.getHeight();
+        });
     };
-
-
-
 
 
 
@@ -549,6 +586,17 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+
+        });
+
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
+
+
         $loc.setFill = new Sk.builtin.func(function(self, fill) {
             self.modelObj.setFill(fill.v);
         });
@@ -559,14 +607,38 @@ var $builtinmodule = function(name){
         });
 
 
-        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-            self.modelObj.draw(graphWinObj.modelObj);
-
+        $loc.setText = new Sk.builtin.func(function(self, text) {
+            self.modelObj.setText(text.v);
         });
 
 
-        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
-            self.modelObj.undraw(graphWinObj.modelObj);
+        $loc.setTextColor = new Sk.builtin.func(function(self, fillTextColor) {
+            self.modelObj.setTextColor(fillTextColor.v);
+        });
+
+
+        $loc.getText = new Sk.builtin.func(function(self) {
+            self.modelObj.getText();
+        });
+
+
+        $loc.getAnchor = new Sk.builtin.func(function(self) {
+            self.modelObj.getAnchor();
+        });
+
+
+        $loc.setFace = new Sk.builtin.func(function(self, fontFace) {
+            self.modelObj.setFace(fontFace.v);
+        });
+
+
+        $loc.setStyle = new Sk.builtin.func(function(self, fontStyle) {
+            self.modelObj.setStyle(fontStyle.v);
+        });
+
+        //doesn't work
+        $loc.setSize = new Sk.builtin.func(function(self, fontSize) {
+            self.modelObj.setSize(fontSize.v);
         });
 
     };
