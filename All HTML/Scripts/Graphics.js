@@ -499,7 +499,6 @@ $(function()
     };
 
 
-    //main
     Line.prototype.clone = function()
     {
         debugger;
@@ -654,8 +653,8 @@ $(function()
         this.polygonModelObj.style.strokeWidth = 1;
 
         var args = Array.prototype.slice.call(arguments);
-        for(var i=0; i < args.length-1; i++) {
-            //debugger;
+        for(var i=0; i < args.length; i++) {
+            debugger;
             // console.log("a", this.points.push(args[i].getX()));
             // console.log("b", this.points.push(args[i].getX));
 

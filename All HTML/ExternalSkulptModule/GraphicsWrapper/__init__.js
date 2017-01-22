@@ -402,21 +402,22 @@ var $builtinmodule = function(name){
     polygonClass = function($glb, $loc){
         //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self){
+            debugger;
 
 
             self.points = [];
-            var modelObjs = [];
+            var modelObjs = [""];
             var args = Array.prototype.slice.call(arguments);
-            for(var i=1; i < args.length-1; i++) {
+            for(var i=1; i < args.length; i++) {
                 self.points.push(args[i]);
                 modelObjs.push(args[i].modelObj);
             }
-
-            self.modelObj = new (Function.prototype.bind.apply(Polygon, args));
+            self.modelObj = new (Function.prototype.bind.apply(Polygon, modelObjs));
 
             return self;
 
         });
+
 
 
         $loc.__getattr__ = reuseingGetterSetter.__getattr__;
