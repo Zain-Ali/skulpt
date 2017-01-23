@@ -4,6 +4,7 @@
  */
 
 var GraphWinJs;
+var Radius;
 var Point;
 var Circle;
 var Rectangle;
@@ -13,8 +14,6 @@ var Polygon;
 var Text;
 var Entry;
 var Image;
-
-
 function getHtmlTemplate()
 {
     var txt = "";
@@ -26,6 +25,13 @@ function getHtmlTemplate()
 
 $(function()
 {
+    /**
+     *
+     * @param title
+     * @param width
+     * @param height
+     * @constructor
+     */
     GraphWinJs = function(title, width, height)
     {
         //debugger;
@@ -53,7 +59,7 @@ $(function()
     //PlaceHolder for Future Interactive Functionality
     GraphWinJs.prototype.setBackground = function(background)
     {
-        this.windw.style.background('fill', 'pink');
+        //this.windw.style.background('fill', 'pink');
     };
 
 
@@ -102,6 +108,30 @@ $(function()
 
 
 
+    /**
+     *
+     * @param radius
+     * @constructor
+     */
+    Radius = function(radius)
+    {
+        if(radius == undefined)
+            throw ("radius class needs radius");
+        this.radius = radius;
+        this.domObj = null;
+
+        this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'radius');
+    };
+
+
+
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @constructor
+     */
     Point = function(x, y)
     {
         if(x == undefined || y == undefined)
@@ -160,7 +190,140 @@ $(function()
 
 
 
+    /**
+     *
+     * @param point1
+     * @param point2
+     * @constructor
+     */
+    Line = function(point1,  point2)
+    {
+        if(point1 == undefined)
+            throw ('A  needs cords');
+        if(point2 == undefined)
+            point2 = 20;
+        this.point1 = point1;
+        this.point2 = point2;
+        this.domObj = null;
+
+        this.lineModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+
+        //custom default settings
+        this.lineModelObj.style.stroke = '#000'; //black
+        this.lineModelObj.style.strokeWidth = 1;
+    };
+
+
+    Line.prototype.draw = function(graphWinObj)
+    {
+        this.lineModelObj.setAttribute('x1', this.point1.x);
+        this.lineModelObj.setAttribute('y1', this.point1.y);
+        this.lineModelObj.setAttribute('x2', this.point2.x);
+        this.lineModelObj.setAttribute('y2', this.point2.y);
+        this.__insertIfNeeded(this.lineModelObj, graphWinObj);
+    };
+
+
+    Line.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    {
+        if($(graphWinObj.svg).find(domElem).length == 0)
+        {
+            //Dom obj not found inside window
+            $(graphWinObj.svg).append(domElem);
+            this.domObj = domElem;
+        }
+    };
+
+
+    Line.prototype.undraw = function(graphWinObj)
+    {
+        if(this.domObj != null)
+        {
+            if($(graphWinObj.svg).find(this.domObj).length == 1)
+            {
+                $(graphWinObj.svg).find(this.domObj).remove();
+            }
+        }
+    };
+
+
+    Line.prototype.setArrow = function()
+    {
+
+    };
+
+
+    Line.prototype.getCenter = function()
+    {
+        /**
+         *
+         * Formula to get Mid Point of Line using Points
+         */
+        var P1 = ((this.point1.x + this.point2. x) / 2);
+        var P2 = ((this.point1.y + this.point2. y) / 2);
+        console.log(P1);
+        console.log(P2);
+
+        console.log(P1, P2);
+        return (P1, P2);
+    };
+
+
+    Line.prototype.getP1 = function()
+    {
+        // Returns a clone of the corresponding endpoint of the segment.
+        console.log(new Point(this.point1.x, this.point1.y));
+        return new Point(this.point1.x, this.point1.y);
+    };
+
+
+    Line.prototype.getP2 = function()
+    {
+        // Returns a clone of the corresponding endpoint of the segment.
+        console.log(new Point(this.point2.x, this.point2.y));
+        return new Point(this.point2.x, this.point2.y);
+    };
+
+
+    Line.prototype.setOutline = function(stroke)
+    {
+        this.lineModelObj.style.stroke = stroke;
+    };
+
+
+    Line.prototype.setWidth = function(width)
+    {
+        this.lineModelObj.style.strokeWidth = width;
+    };
+
+
+    Line.prototype.move = function(dx, dy)
+    {
+        this.lineModelObj.setAttribute('x1', dx);
+        this.lineModelObj.setAttribute('x2', dy);
+    };
+
+
+    Line.prototype.clone = function()
+    {
+        let lineCopy = {};
+        Object.setPrototypeOf(lineCopy, this.__proto__);
+        lineCopy = Object.assign(lineCopy, this);
+        lineCopy.domObj = null;
+        lineCopy.lineModelObj = null;
+        console.log("copy/clone", lineCopy);
+        return lineCopy;
+    };
+
+
+
     //modelOBJ name is used because its generic and can be used for super class
+    /**
+     *
+     * @param point
+     * @param radius
+     * @constructor
+     */
     Circle = function(point,  radius)
     {
         if(point == undefined || point.x == undefined)
@@ -173,11 +336,10 @@ $(function()
 
         this.circleModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
 
-        //custom default setting of colours
+        //custom default settings
         this.circleModelObj.style.stroke = '#000'; //black
         this.circleModelObj.style.fill = 'transparent';
         this.circleModelObj.style.strokeWidth = 1;
-
     };
 
 
@@ -212,6 +374,54 @@ $(function()
     };
 
 
+    Circle.prototype.getCenter = function()
+    {
+        // Returns a clone of the center point of the circle
+
+        console.log(new Point(this.point.x, this.point.y));
+        return new Point(this.point.x, this.point.y);
+    };
+
+
+    Circle.prototype.getRadius = function()
+    {
+         console.log(new Radius (this.radius));
+         return new Radius (this.radius);
+    };
+
+
+    Circle.prototype.getP1 = function()
+    {
+        // Returns a clone of the corresponding corner of the circle's bounding box.
+        // These are opposite corner points of a square that circumscribes the circle.
+
+        // var P1x = this.point.x - this.radius;
+        // var P1y = this.point.y - this.radius;
+
+        var P1x = this.point.x;
+        var P1y = this.point.y;
+
+        console.log("P1 of Circle",new Point(P1x, P1y));
+        return new Point(P1x, P1y);
+    };
+
+
+    Circle.prototype.getP2 = function()
+    {
+        // Returns a clone of the corresponding corner of the circle's bounding box.
+        // These are opposite corner points of a square that circumscribes the circle.
+
+        // var P2x = this.point.x + this.radius;
+        // var P2y = this.point.y + this.radius;
+
+        var P2x = this.point.x;
+        var P2y = this.point.y;
+
+        console.log("P2 of Circle", new Point(P2x, P2y));
+        return new Point(P2x, P2y);
+    };
+
+
     Circle.prototype.setFill = function(fill)
     {
         this.circleModelObj.style.fill = fill;
@@ -221,46 +431,6 @@ $(function()
     Circle.prototype.setOutline = function(stroke)
     {
         this.circleModelObj.style.stroke = stroke;
-    };
-
-
-    Circle.prototype.getP1 = function()
-    {
-        // Returns a clone of the corresponding endpoint of the segment.
-
-        var P1x = this.point.x - this.radius;
-        var P1y = this.point.y - this.radius;
-
-        console.log("Point("+ P1x, "," + P1y + ")");
-        return P1x, P1y;
-    };
-
-
-    Circle.prototype.getP2 = function()
-    {
-        //Returns a clone of the corresponding endpoint of the segment.
-        debugger;
-        var P2x = this.point.x + this.radius;
-        var P2y = this.point.y + this.radius;
-
-        console.log("Point("+ P2x, "," + P2y + ")");
-        return P2x, P2y;
-    };
-
-
-    Circle.prototype.getRadius = function()
-    {
-        console.log(this.radius);
-        return this.radius;
-    };
-
-
-    Circle.prototype.getCenter = function()
-    {
-        // Returns a clone of the corresponding endpoint of the segment.
-
-        console.log("Point ("+[this.point.x, this.point.y]+")");
-        return ([this.point.x, this.point.y]);
     };
 
 
@@ -279,14 +449,23 @@ $(function()
 
     Circle.prototype.clone = function()
     {
-        //Circle.prototype.draw();
-        //Returns a duplicate of the object.  Clones are always created in an undrawn state.  Other
-        // than that, they are identical to the cloned object.
-
+        let circleCopy = {};
+        Object.setPrototypeOf(circleCopy, this.__proto__);
+        circleCopy = Object.assign(circleCopy, this);
+        circleCopy.domObj = null;
+        circleCopy.circleModelObj = null;
+        console.log("copy/clone", circleCopy);
+        return circleCopy;
     };
 
 
 
+    /**
+     *
+     * @param point1
+     * @param point2
+     * @constructor
+     */
     Rectangle = function (point1, point2)
     {
         if (point1 == undefined || point2 == undefined)
@@ -296,7 +475,8 @@ $(function()
         this.domObj = null;
 
         this.recModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
-        //custom default setting of colours
+
+        //custom default settings
         this.recModelObj.style.stroke = '#000'; //black
         this.recModelObj.style.fill = 'transparent';
         this.recModelObj.style.strokeWidth = 1;
@@ -340,6 +520,42 @@ $(function()
     };
 
 
+    Rectangle.prototype.getCenter = function()
+    {
+        /**
+         *
+         * Formula to get Mid Point of Rectangle using Points
+         */
+
+        var P1 = ((this.point1.x + this.point2.x) / 2);
+        var P2 = ((this.point1.y + this.point2.y) / 2);
+        console.log(P1);
+        console.log(P2);
+
+        console.log(new Point(P1, P2));
+        return new Point(P1, P2);
+
+    };
+
+
+    Rectangle.prototype.getP1 = function()
+    {
+        // Returns a clone of the corresponding endpoint of the segment.
+        console.log(new Point (this.point1.x, this.point1.y));
+        return new Point(this.point1.x, this.point1.y);
+
+
+    };
+
+
+    Rectangle.prototype.getP2 = function()
+    {
+        // Returns a clone of the corresponding endpoint of the segment.
+        console.log(new Point (this.point2.x, this.point2.y));
+        return new Point(this.point2.x, this.point2.y);
+    };
+
+
     Rectangle.prototype.setFill = function(fill)
     {
         this.recModelObj.style.fill = fill;
@@ -349,29 +565,6 @@ $(function()
     Rectangle.prototype.setOutline = function(stroke)
     {
         this.recModelObj.style.stroke = stroke;
-    };
-
-
-    Rectangle.prototype.getP1 = function()
-    {
-        // Returns a clone of the corresponding endpoint of the segment.
-        console.log(this.point1);
-        //return (this.width, this.height);
-
-
-    };
-
-
-    Rectangle.prototype.getP2 = function()
-    {
-        // Returns a clone of the corresponding endpoint of the segment.
-
-    };
-
-
-    Rectangle.prototype.getCenter = function()
-    {
-
     };
 
 
@@ -391,147 +584,24 @@ $(function()
 
     Rectangle.prototype.clone = function()
     {
-
+        let rectangleCopy = {};
+        Object.setPrototypeOf(rectangleCopy, this.__proto__);
+        rectangleCopy = Object.assign(rectangleCopy, this);
+        rectangleCopy.domObj = null;
+        rectangleCopy.rectangleModelObj = null;
+        console.log("copy/clone", rectangleCopy);
+        return rectangleCopy;
     };
 
 
 
-    Line = function(point1,  point2)
-    {
-        //debugger;
 
-        if(point1 == undefined)
-            throw ('A  needs cords');
-        if(point2 == undefined)
-            point2 = 20;
-        this.point1 = point1;
-        this.point2 = point2;
-        this.domObj = null;
-
-        this.lineModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'line');
-        this.lineModelObj.style.stroke = '#000'; //black
-        this.lineModelObj.style.strokeWidth = 1;
-
-    };
-
-
-    Line.prototype.draw = function(graphWinObj)
-    {
-        //debugger;
-        this.lineModelObj.setAttribute('x1', this.point1.x);
-        this.lineModelObj.setAttribute('y1', this.point1.y);
-        this.lineModelObj.setAttribute('x2', this.point2.x);
-        this.lineModelObj.setAttribute('y2', this.point2.y);
-        this.__insertIfNeeded(this.lineModelObj, graphWinObj);
-    };
-
-
-    Line.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        //debugger;
-
-        if($(graphWinObj.svg).find(domElem).length == 0)
-        {
-            //Dom obj not found inside window
-            $(graphWinObj.svg).append(domElem);
-            this.domObj = domElem;
-        }
-    };
-
-
-    Line.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1)
-            {
-                $(graphWinObj.svg).find(this.domObj).remove();
-            }
-        }
-    };
-
-
-    Line.prototype.setOutline = function(stroke)
-    {
-        this.lineModelObj.style.stroke = stroke;
-    };
-
-
-    Line.prototype.getCenter = function()
-    {
-        /**
-         *
-         * Formula to get Mid Point of Line using Points
-         */
-        var P1 = ((this.point1.x + this.point2. x) / 2);
-        var P2 = ((this.point1.y + this.point2. y) / 2);
-        console.log(P1);
-        console.log(P2);
-
-        console.log(P1, P2);
-        return (P1, P2);
-    };
-
-
-    Line.prototype.getP1 = function()
-    {
-        // Returns a clone of the corresponding endpoint of the segment.
-        return new Point(this.point1.x, this.point1.y);
-    };
-
-
-    Line.prototype.getP2 = function()
-    {
-        return new Point(this.point2.x, this.point2.y);
-    };
-
-
-    Line.prototype.setWidth = function(width)
-    {
-        this.lineModelObj.style.strokeWidth = width;
-    };
-
-
-    Line.prototype.move = function(dx, dy)
-    {
-        this.lineModelObj.setAttribute('x1', dx);
-        this.lineModelObj.setAttribute('x2', dy);
-    };
-
-
-    Line.prototype.clone = function()
-    {
-        debugger;
-        let lineCopy = {}; //Object.create(this.__proto__);
-        Object.setPrototypeOf(lineCopy, this.__proto__);
-        lineCopy = Object.assign(lineCopy, this);
-        lineCopy.domObj = null;
-        lineCopy.lineModelObj = null;
-        console.log("copy/clone", lineCopy);
-        return lineCopy;
-    };
-
-
-
-    // Line.prototype.clone = function()
-    // {
-    //     debugger;
-    //     let lineCopy = {}; //Object.create(this.__proto__);
-    //     Object.setPrototypeOf(lineCopy, this.__proto__);
-    //     lineCopy = Object.assign(lineCopy, this);
-    //
-    //     lineCopy.domObj = null;
-    //     lineCopy.lineModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'line');
-    //     lineCopy.lineModelObj.style.stroke = '#000'; //black
-    //     lineCopy.lineModelObj.style.strokeWidth = 1;
-    //
-    //     console.log("copy/clone", lineCopy);
-    //
-    //     return lineCopy;
-    // };
-
-
-
+    /**
+     *
+     * @param point
+     * @param point2
+     * @constructor
+     */
     Oval = function(point,  point2)
     {
         if(point == undefined)
@@ -588,18 +658,6 @@ $(function()
     };
 
 
-    Oval.prototype.setFill = function(fill)
-    {
-        this.ovalModelObj.style.fill = fill;
-    };
-
-
-    Oval.prototype.setOutline = function(stroke)
-    {
-        this.ovalModelObj.style.stroke = stroke;
-    };
-
-
     Oval.prototype.getCenter = function()
     {
         // Returns a clone of the corresponding endpoint of the segment.
@@ -618,6 +676,18 @@ $(function()
     {
         // Returns a clone of the corresponding endpoint of the segment.
 
+    };
+
+
+    Oval.prototype.setFill = function(fill)
+    {
+        this.ovalModelObj.style.fill = fill;
+    };
+
+
+    Oval.prototype.setOutline = function(stroke)
+    {
+        this.ovalModelObj.style.stroke = stroke;
     };
 
 
@@ -641,7 +711,10 @@ $(function()
 
 
 
-    //Hard Coded for Now
+    /**
+     *
+     * @constructor
+     */
     Polygon = function()
     {
         this.points = [];
@@ -672,18 +745,6 @@ $(function()
         this.polygonModelObj.setAttribute('points', this.points);
         this.__insertIfNeeded(this.polygonModelObj, graphWinObj);
 
-    };
-
-
-    Polygon.prototype.setFill = function(fill)
-    {
-        this.polygonModelObj.style.fill = fill;
-    };
-
-
-    Polygon.prototype.setOutline = function(stroke)
-    {
-        this.polygonModelObj.style.stroke = stroke;
     };
 
 
@@ -718,6 +779,18 @@ $(function()
     };
 
 
+    Polygon.prototype.setFill = function(fill)
+    {
+        this.polygonModelObj.style.fill = fill;
+    };
+
+
+    Polygon.prototype.setOutline = function(stroke)
+    {
+        this.polygonModelObj.style.stroke = stroke;
+    };
+
+
     Polygon.prototype.setWidth = function(width)
     {
         this.polygonModelObj.style.strokeWidth = width;
@@ -738,6 +811,12 @@ $(function()
 
 
 
+    /**
+     *
+     * @param point
+     * @param text
+     * @constructor
+     */
     Text = function(point, text)
     {
         if(point == undefined)
@@ -818,8 +897,8 @@ $(function()
         // Returns a clone of the corresponding endpoint of the segment.
 
 
-        console.log("Point ("+[this.point.x, this.point.y]+")");
-        return "Point ("+[this.point.x, this.point.y]+")";
+        // console.log("Point ("+[this.point.x, this.point.y]+")");
+        // return "Point ("+[this.point.x, this.point.y]+")";
 
     };
 
@@ -864,7 +943,12 @@ $(function()
     };
 
 
-
+    /**
+     *
+     * @param point
+     * @param imageSrc
+     * @constructor
+     */
     Image = function (point, imageSrc)
     {
         if (point == undefined)
@@ -927,8 +1011,12 @@ $(function()
     };
 
 
-
-
+    /**
+     *
+     * @param point
+     * @param width
+     * @constructor
+     */
     Entry = function(point, width)
     {
         if(point == undefined || point.x == undefined)
