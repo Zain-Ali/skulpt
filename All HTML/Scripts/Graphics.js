@@ -14,6 +14,14 @@ var Polygon;
 var Text;
 var Entry;
 var Image;
+
+
+
+//modelOBJ name is used because its generic and can be used for super class
+
+
+
+
 function getHtmlTemplate()
 {
     var txt = "";
@@ -34,7 +42,6 @@ $(function()
      */
     GraphWinJs = function(title, width, height)
     {
-        //debugger;
         if(width == undefined)
             this.width = 300;
         if(height)
@@ -51,7 +58,7 @@ $(function()
 
     GraphWinJs.prototype.close = function()
     {
-        //remove svg obj from dom using jquery
+        //remove svg window obj from dom
         this.windw.close();
     };
 
@@ -121,6 +128,13 @@ $(function()
         this.domObj = null;
 
         this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'radius');
+    };
+
+
+    Radius.prototype.getRadius = function()
+    {
+        console.log(this.radius);
+        return this.radius;
     };
 
 
@@ -317,7 +331,6 @@ $(function()
 
 
 
-    //modelOBJ name is used because its generic and can be used for super class
     /**
      *
      * @param point
@@ -598,21 +611,23 @@ $(function()
 
     /**
      *
-     * @param point
+     * @param point1
      * @param point2
      * @constructor
      */
-    Oval = function(point,  point2)
+    Oval = function(point1,  point2)
     {
-        if(point == undefined)
+        if(point1 == undefined)
             throw ('A Ellipse needs cords');
         if(point2 == undefined)
             point2 = new Point(20,20);
-        this.point = point;
+        this.point1 = point1;
         this.point2 = point2;
         this.domObj = null;
 
         this.ovalModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'ellipse');
+
+        //custom default settings
         this.ovalModelObj.style.stroke = '#000'; //black
         this.ovalModelObj.style.fill = 'transparent';
         this.ovalModelObj.style.strokeWidth = 1;
@@ -621,17 +636,12 @@ $(function()
 
     Oval.prototype.draw = function(graphWinObj)
     {
-        this.ovalModelObj.setAttribute('cx', this.point.x);
-        this.ovalModelObj.setAttribute('cy', this.point.y);
+        this.ovalModelObj.setAttribute('cx', this.point1.x);
+        this.ovalModelObj.setAttribute('cy', this.point1.y);
         this.ovalModelObj.setAttribute('rx', this.point2.x);
         this.ovalModelObj.setAttribute('ry', this.point2.y);
 
         this.__insertIfNeeded(this.ovalModelObj, graphWinObj);
-
-        console.log('cx', this.point.x);
-        console.log('cy', this.point.y);
-        console.log('rx', this.point2.x);
-        console.log('ry', this.point2.y);
     };
 
 
@@ -661,7 +671,19 @@ $(function()
     Oval.prototype.getCenter = function()
     {
         // Returns a clone of the corresponding endpoint of the segment.
+        /**
+         *
+         * formula to get center
+         * var V = $V( [ (x1+x2)/2, (y1+y2)/2 ] );
+         */
 
+        var Px = ((this.point1.x + this.point2.x) / 2);
+        var Py = ((this.point1.y + this.point2.y) / 2);
+        console.log("Px", Px);
+        console.log("Py", Py);
+
+        console.log(new Point(Px, Py));
+        return new Point(Px, Py);
     };
 
 
@@ -669,13 +691,16 @@ $(function()
     {
         // Returns a clone of the corresponding endpoint of the segment.
 
+        console.log(new Point(this.point1.x, this.point1.y));
+        return new Point(this.point1.x, this.point1.y);
     };
 
 
     Oval.prototype.getP2 = function()
     {
         // Returns a clone of the corresponding endpoint of the segment.
-
+        console.log(new Point(this.point2.x, this.point2.y));
+        return new Point(this.point2.x, this.point2.y);
     };
 
 
@@ -706,7 +731,13 @@ $(function()
 
     Oval.prototype.clone = function()
     {
-
+        let ovalCopy = {};
+        Object.setPrototypeOf(ovalCopy, this.__proto__);
+        ovalCopy = Object.assign(ovalCopy, this);
+        ovalCopy.domObj = null;
+        ovalCopy.ovalModelObj = null;
+        console.log("copy/clone", ovalCopy);
+        return ovalCopy;
     };
 
 
@@ -727,10 +758,6 @@ $(function()
 
         var args = Array.prototype.slice.call(arguments);
         for(var i=0; i < args.length; i++) {
-            debugger;
-            // console.log("a", this.points.push(args[i].getX()));
-            // console.log("b", this.points.push(args[i].getX));
-
             this.points.push(args[i].getX());
             this.points.push(args[i].getY());
         }
@@ -741,10 +768,8 @@ $(function()
 
     Polygon.prototype.draw = function(graphWinObj)
     {
-        //debugger;
         this.polygonModelObj.setAttribute('points', this.points);
         this.__insertIfNeeded(this.polygonModelObj, graphWinObj);
-
     };
 
 
@@ -774,8 +799,8 @@ $(function()
     {
         // Returns a clone of the corresponding endpoint of the segment.
 
-        console.log("Points (" + this.points + ")");
-        return this.points;
+        console.log(new Point(this.points));
+        return new Point(this.points);
     };
 
 

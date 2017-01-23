@@ -47,6 +47,7 @@ var $builtinmodule = function(name){
 
     //P stand for Python
     mod.PGraphics = {};
+    mod.PRadiusClass = {};
     mod.PPointClass = {};
     mod.PCircleClass = {};
     mod.PRectangleClass = {};
@@ -56,8 +57,6 @@ var $builtinmodule = function(name){
     mod.PTextClass = {};
     mod.PImageClass = {};
     mod.PEntryClass = {};
-
-    mod.PRadiusClass = {};
 
 
 
@@ -93,7 +92,7 @@ var $builtinmodule = function(name){
 
     radiusClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, radius){
-            self.modelObj = new Point(radius.v);
+            self.modelObj = new Radius(radius.v);
             self.radius = radius;
 
             return self;
@@ -102,6 +101,11 @@ var $builtinmodule = function(name){
 
         $loc.__getattr__ = reuseingGetterSetter.__getattr__;
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        $loc.getRadius = new Sk.builtin.func(function (self) {
+            return self.modelObj.getRadius();
+        });
 
     };
 
@@ -211,6 +215,7 @@ var $builtinmodule = function(name){
             self.modelObj.move(dx.v, dy.v);
         });
 
+
         $loc.clone = new Sk.builtin.func(function (self) {
             var p1 = Sk.misceval.callsim(self.getP1, self);
             var p2 = Sk.misceval.callsim(self.getP2, self);
@@ -280,13 +285,13 @@ var $builtinmodule = function(name){
 
         $loc.getRadius = new Sk.builtin.func(function(self) {
             //return self.modelObj.getRadius();
+
             var model = self.modelObj.getRadius();
 
             //clone to avoid reference issues....
-
-            var pyObj = Sk.misceval.callsim(mod.Radius);
+            var radius = Sk.builtin.float_(model.getRadius());
+            var pyObj = Sk.misceval.callsim(mod.Radius, radius);
             return pyObj;
-
         });
 
 
@@ -306,10 +311,10 @@ var $builtinmodule = function(name){
 
 
         $loc.clone = new Sk.builtin.func(function(self) {
-
             var p1 = Sk.misceval.callsim(self.getP1, self);
-            var p2 = Sk.misceval.callsim(self.getP2, self);
-            var pyObj = Sk.misceval.callsim(mod.Circle, p1, p2);
+            var radius = Sk.misceval.callsim(self.getRadius, self);
+
+            var pyObj = Sk.misceval.callsim(mod.Circle, p1, radius.radius);
 
             return pyObj;
         });
@@ -402,9 +407,9 @@ var $builtinmodule = function(name){
 
 
     ovalClass = function($glb, $loc){
-        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, pointObj2){
-            self.modelObj = new Oval(pointObj.modelObj, pointObj2.modelObj);
-            self.pointObj = pointObj;
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj1, pointObj2){
+            self.modelObj = new Oval(pointObj1.modelObj, pointObj2.modelObj);
+            self.pointObj1 = pointObj1;
             self.pointObj2 = pointObj2;
 
             return self;
@@ -436,12 +441,26 @@ var $builtinmodule = function(name){
 
 
         $loc.getP1 = new Sk.builtin.func(function(self) {
-            return self.modelObj.getP1();
+            var model = self.modelObj.getP1();
+
+            //clone to avoid reference issues....
+            var x = Sk.builtin.float_(model.getX());
+            var y = Sk.builtin.float_(model.getY());
+            var pyObj = Sk.misceval.callsim(mod.Point, x,y);
+            console.log("this is pyOBJ", pyObj);
+            return pyObj;
         });
 
 
         $loc.getP2 = new Sk.builtin.func(function(self) {
-            return self.modelObj.getP2();
+            var model = self.modelObj.getP2();
+
+            //clone to avoid reference issues....
+            var x = Sk.builtin.float_(model.getX());
+            var y = Sk.builtin.float_(model.getY());
+            var pyObj = Sk.misceval.callsim(mod.Point, x,y);
+            console.log("this is pyOBJ", pyObj);
+            return pyObj;
         });
 
 
@@ -457,18 +476,22 @@ var $builtinmodule = function(name){
 
         $loc.move = new Sk.builtin.func(function (self, dx, dy) {
             self.modelObj.move(dx.v, dy.v);
-
         });
+
+
+        $loc.clone = new Sk.builtin.func(function (self) {
+            var p1 = Sk.misceval.callsim(self.getP1, self);
+            var p2 = Sk.misceval.callsim(self.getP2, self);
+            var pyObj = Sk.misceval.callsim(mod.Oval, p1, p2);
+            return pyObj;
+        });
+
     };
 
 
 
     polygonClass = function($glb, $loc){
-        //debugger;
         $loc.__init__ = new Sk.builtin.func(function(self){
-            debugger;
-
-
             self.points = [];
             var modelObjs = [""];
             var args = Array.prototype.slice.call(arguments);
@@ -710,6 +733,7 @@ var $builtinmodule = function(name){
 
 
     mod.GraphWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
+    mod.Radius = Sk.misceval.buildClass(mod, radiusClass, "PRadiusClass", []);
     mod.Point  = Sk.misceval.buildClass(mod, pointClass, "PPointClass", []);
     mod.Circle = Sk.misceval.buildClass(mod, circleClass, "PCircleClass", []);
     mod.Rectangle = Sk.misceval.buildClass(mod, rectangleClass, "PRectangleClass", []);
@@ -719,9 +743,6 @@ var $builtinmodule = function(name){
     mod.Text = Sk.misceval.buildClass(mod, textClass, "PTextClass", []);
     mod.Image = Sk.misceval.buildClass(mod, imageClass, "PImageClass", []);
     mod.Entry = Sk.misceval.buildClass(mod, entryClass, "PEntryClass", []);
-
-
-    mod.Radius = Sk.misceval.buildClass(mod, radiusClass, "PRadiusClass", []);
 
 
     return mod;
