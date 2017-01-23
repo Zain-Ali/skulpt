@@ -6,7 +6,11 @@
 
 
 // This is a JavaScript and SVG wrapper class. Wrapping JS and SVG in Python
-
+/**
+ *
+ * @param name
+ * @returns {{}}
+ */
 var $builtinmodule = function(name){
     "use strict";
     var mod = {};
@@ -60,6 +64,11 @@ var $builtinmodule = function(name){
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     graphicsClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, title, width, height){
             self.title = title;
@@ -90,6 +99,11 @@ var $builtinmodule = function(name){
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     radiusClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, radius){
             self.modelObj = new Radius(radius.v);
@@ -111,6 +125,11 @@ var $builtinmodule = function(name){
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     pointClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, x, y){
             self.modelObj = new Point(x.v, y.v);
@@ -148,6 +167,11 @@ var $builtinmodule = function(name){
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     lineClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, point1, point2){
 
@@ -226,6 +250,11 @@ var $builtinmodule = function(name){
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     circleClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius){
             self.modelObj = new Circle(pointObj.modelObj, radius.v);
@@ -323,6 +352,11 @@ var $builtinmodule = function(name){
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     rectangleClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, TopLeftCorner, BottomRightCorner ){
             self.modelObj = new Rectangle(TopLeftCorner.modelObj, BottomRightCorner.modelObj);
@@ -406,6 +440,11 @@ var $builtinmodule = function(name){
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     ovalClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, pointObj1, pointObj2){
             self.modelObj = new Oval(pointObj1.modelObj, pointObj2.modelObj);
@@ -490,6 +529,11 @@ var $builtinmodule = function(name){
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     polygonClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self){
             self.points = [];
@@ -550,6 +594,11 @@ var $builtinmodule = function(name){
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     textClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, pointObj, text ){
             self.modelObj = new Text(pointObj.modelObj, text.v);
@@ -595,7 +644,13 @@ var $builtinmodule = function(name){
 
 
         $loc.getAnchor = new Sk.builtin.func(function(self) {
-            self.modelObj.getAnchor();
+            var model = self.modelObj.getAnchor();
+
+            //clone to avoid reference issues....
+            var x = Sk.builtin.float_(model.getX());
+            var y = Sk.builtin.float_(model.getY());
+            var pyObj = Sk.misceval.callsim(mod.Point, x,y);
+            return pyObj;
         });
 
 
@@ -619,46 +674,20 @@ var $builtinmodule = function(name){
 
         });
 
-    };
 
-
-
-    imageClass = function($glb, $loc){
-        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, imageSrc){
-            self.modelObj = new Image(pointObj.modelObj, imageSrc.v);
-            self.pointObj = pointObj;
-            self.imageSrc = imageSrc;
-
-            return self;
-        });
-
-
-        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
-        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
-
-
-        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
-            self.modelObj.draw(graphWinObj.modelObj);
-        });
-
-
-        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
-            self.modelObj.undraw(graphWinObj.modelObj);
-        });
-
-
-        $loc.getWidth = new Sk.builtin.func(function(self) {
-            self.modelObj.getWidth();
-        });
-
-
-        $loc.getHeight = new Sk.builtin.func(function(self) {
-            self.modelObj.getHeight();
+        //Need to do
+        $loc.clone = new Sk.builtin.func(function (self) {
+            self.modelObj.clone();
         });
     };
 
 
 
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
     entryClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius){
             self.modelObj = new Entry(pointObj.modelObj, radius.v);
@@ -710,7 +739,25 @@ var $builtinmodule = function(name){
 
 
         $loc.getAnchor = new Sk.builtin.func(function(self) {
-            self.modelObj.getAnchor();
+            var model = self.modelObj.getAnchor();
+
+            //clone to avoid reference issues....
+            var x = Sk.builtin.float_(model.getX());
+            var y = Sk.builtin.float_(model.getY());
+            var pyObj = Sk.misceval.callsim(mod.Point, x,y);
+            return pyObj;
+        });
+
+
+        $loc.getRadius = new Sk.builtin.func(function(self) {
+            //return self.modelObj.getRadius();
+
+            var model = self.modelObj.getRadius();
+
+            //clone to avoid reference issues....
+            var radius = Sk.builtin.float_(model.getRadius());
+            var pyObj = Sk.misceval.callsim(mod.Radius, radius);
+            return pyObj;
         });
 
 
@@ -728,8 +775,81 @@ var $builtinmodule = function(name){
             self.modelObj.setSize(fontSize.v);
         });
 
+
+        $loc.move = new Sk.builtin.func(function (self, dx, dy) {
+            self.modelObj.move(dx.v, dy.v);
+        });
+
+
+        //Need to do
+        $loc.clone = new Sk.builtin.func(function (self) {
+            var p1 = Sk.misceval.callsim(self.getAnchor, self);
+            var radius = Sk.misceval.callsim(self.getRadius, self);
+
+            var pyObj = Sk.misceval.callsim(mod.Entry, p1, radius.radius);
+
+            return pyObj;
+        });
+
     };
 
+
+
+
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
+    imageClass = function($glb, $loc){
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, imageSrc){
+            self.modelObj = new Image(pointObj.modelObj, imageSrc.v);
+            self.pointObj = pointObj;
+            self.imageSrc = imageSrc;
+
+            return self;
+        });
+
+
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        $loc.draw = new Sk.builtin.func(function (self, graphWinObj) {
+            self.modelObj.draw(graphWinObj.modelObj);
+        });
+
+
+        $loc.undraw = new Sk.builtin.func(function(self, graphWinObj) {
+            self.modelObj.undraw(graphWinObj.modelObj);
+        });
+
+
+        $loc.getWidth = new Sk.builtin.func(function(self) {
+            self.modelObj.getWidth();
+        });
+
+
+        $loc.getHeight = new Sk.builtin.func(function(self) {
+            self.modelObj.getHeight();
+        });
+
+
+        $loc.getAnchor = new Sk.builtin.func(function(self) {
+            var model = self.modelObj.getAnchor();
+
+            //clone to avoid reference issues....
+            var x = Sk.builtin.float_(model.getX());
+            var y = Sk.builtin.float_(model.getY());
+            var pyObj = Sk.misceval.callsim(mod.Point, x,y);
+            return pyObj;
+        });
+
+
+        $loc.move = new Sk.builtin.func(function (self, x, y) {
+            self.modelObj.move(x.v, y.v);
+        });
+    };
 
 
     mod.GraphWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);

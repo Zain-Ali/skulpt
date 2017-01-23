@@ -556,8 +556,6 @@ $(function()
         // Returns a clone of the corresponding endpoint of the segment.
         console.log(new Point (this.point1.x, this.point1.y));
         return new Point(this.point1.x, this.point1.y);
-
-
     };
 
 
@@ -605,7 +603,6 @@ $(function()
         console.log("copy/clone", rectangleCopy);
         return rectangleCopy;
     };
-
 
 
 
@@ -752,17 +749,18 @@ $(function()
         this.domObj = null;
 
         this.polygonModelObj = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+
+        //custom default settings
         this.polygonModelObj.style.stroke = '#000';
         this.polygonModelObj.style.fill = 'transparent';
         this.polygonModelObj.style.strokeWidth = 1;
 
+        //Adding Multiple Points (should take up to 12)
         var args = Array.prototype.slice.call(arguments);
         for(var i=0; i < args.length; i++) {
             this.points.push(args[i].getX());
             this.points.push(args[i].getY());
         }
-
-
     };
 
 
@@ -799,8 +797,8 @@ $(function()
     {
         // Returns a clone of the corresponding endpoint of the segment.
 
-        console.log(new Point(this.points));
-        return new Point(this.points);
+        // console.log(new Point(this.points));
+        // return (this.points);
     };
 
 
@@ -831,7 +829,14 @@ $(function()
 
     Polygon.prototype.clone = function()
     {
-
+        //not working (need to do getPoints method first)
+        let polygonCopy = {};
+        Object.setPrototypeOf(polygonCopy, this.__proto__);
+        polygonCopy = Object.assign(polygonCopy, this);
+        polygonCopy.domObj = null;
+        polygonCopy.polygonModelObj = null;
+        console.log("copy/clone", polygonCopy);
+        return polygonCopy;
     };
 
 
@@ -852,6 +857,8 @@ $(function()
         this.domObj = null;
 
         this.textModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+
+        //custom default settings
         this.textModelObj.textContent = this.text;
         this.textModelObj.style.fill = 'black';
         this.textModelObj.style.fontFamily = "arial";
@@ -921,10 +928,8 @@ $(function()
     {
         // Returns a clone of the corresponding endpoint of the segment.
 
-
-        // console.log("Point ("+[this.point.x, this.point.y]+")");
-        // return "Point ("+[this.point.x, this.point.y]+")";
-
+        console.log(new Point(this.point.x, this.point.y));
+        return new Point(this.point.x, this.point.y);
     };
 
 
@@ -936,6 +941,7 @@ $(function()
 
     Text.prototype.setSize = function (textFontSize)
     {
+        //doesn't work
         //size between 5 and 36
         this.textModelObj.style.fontSize = textFontSize;
 
@@ -966,6 +972,179 @@ $(function()
         this.textModelObj.setAttribute('dx', dx);
         this.textModelObj.setAttribute('dx', dy);
     };
+
+
+    Text.prototype.clone = function()
+    {
+        //not working (need to do getPoints method first)
+        let TextCopy = {};
+        Object.setPrototypeOf(TextCopy, this.__proto__);
+        TextCopy = Object.assign(TextCopy, this);
+        TextCopy.domObj = null;
+        TextCopy.textModelObj = null;
+        console.log("copy/clone", TextCopy);
+        return TextCopy;
+    };
+
+
+
+    /**
+     *
+     * @param point
+     * @param width
+     * @constructor
+     */
+    Entry = function(point, width)
+    {
+        if(point == undefined || point.x == undefined)
+            throw ('A point needs cords');
+        if(width == undefined)
+            width = 20;
+        this.point = point;
+        this.width = width;
+        this.domObj = null;
+
+        this.entryModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
+
+        //custom default settings
+        this.entryModelObj.setAttribute("width", "300");
+        this.entryModelObj.setAttribute("height", "100");
+        this.entryModelObj.textContent = this.text;
+        this.entryModelObj.style.fill = 'black';
+        this.entryModelObj.style.fontFamily = "arial";
+        //this.textModelObj.style.fontSize = "normal";
+        var textInput = document.createElement("input");
+        this.entryModelObj.appendChild(textInput);
+    };
+
+
+    Entry.prototype.draw = function(graphWinObj)
+    {
+        this.entryModelObj.setAttribute("x", this.point.x);
+        this.entryModelObj.setAttribute("y", this.point.y);
+
+        var textInput =  this.entryModelObj.getElementsByTagName('input');//[0];
+        textInput.size = this.width;
+
+        this.__insertIfNeeded(this.entryModelObj, graphWinObj);
+    };
+
+
+    Entry.prototype.__insertIfNeeded = function(domElem, graphWinObj)
+    {
+        if($(graphWinObj.svg).find(domElem).length == 0) {
+            //Dom obj not found inside window
+            $(graphWinObj.svg).append(domElem);
+            this.domObj = domElem;
+        }
+    };
+
+
+    Entry.prototype.undraw = function(graphWinObj)
+    {
+        if(this.domObj != null)
+        {
+            if($(graphWinObj.svg).find(this.domObj).length == 1) {
+                $(graphWinObj.svg).find(this.domObj).remove();
+            }
+        }
+    };
+
+
+    Entry.prototype.setFill = function(fill)
+    {
+        this.entryModelObj.style.fill = fill;
+    };
+
+
+    Entry.prototype.setOutline = function(stroke)
+    {
+        this.entryModelObj.style.stroke = stroke;
+    };
+
+
+    Entry.prototype.getAnchor = function (text)
+    {
+        // Returns a clone of the corresponding endpoint of the segment.
+        console.log(new Point(this.point.x, this.point.y));
+        return new Point(this.point.x, this.point.y);
+    };
+
+
+    Entry.prototype.getRadius = function()
+    {
+        console.log(new Radius (this.radius));
+        return new Radius (this.radius);
+    };
+
+
+    Entry.prototype.setText = function (text)
+    {
+        this.entryModelObj.textContent = text;
+    };
+
+
+    Entry.prototype.getText = function ()
+    {
+        //doesn't work, returning original text not new setText
+        console.log(this.text);
+        return this.text;
+    };
+
+
+    Entry.prototype.setFace = function (fontFace)
+    {
+        this.textModelObj.style.fontFamily = fontFace;
+    };
+
+
+    Entry.prototype.setSize = function (textFontSize)
+    {
+        //doesn't work
+        //size between 5 and 36
+        this.entryModelObj.style.fontSize = textFontSize;
+
+    };
+
+
+    Entry.prototype.setStyle = function (style)
+    {
+        if (style === "bold")
+        {
+            this.entryModelObj.style.fontWeight = style;
+        }
+        else
+        {
+            this.entryModelObj.style.fontStyle = style;
+        }
+    };
+
+
+    Entry.prototype.setTextColor = function (fillTextColor)
+    {
+        this.entryModelObj.style.fill = fillTextColor;
+    };
+
+
+    Entry.prototype.move = function(dx, dy)
+    {
+        this.entryModelObj.setAttribute('x', dx);
+        this.entryModelObj.setAttribute('y', dy);
+    };
+
+
+    Entry.prototype.clone = function()
+    {
+        //not working (need to do getPoints method first)
+        let EntryCopy = {};
+        Object.setPrototypeOf(EntryCopy, this.__proto__);
+        EntryCopy = Object.assign(EntryCopy, this);
+        EntryCopy.domObj = null;
+        EntryCopy.entryModelObj = null;
+        console.log("copy/clone", EntryCopy);
+        return EntryCopy;
+    };
+
 
 
     /**
@@ -1030,142 +1209,19 @@ $(function()
     };
 
 
-    Image.prototype.move = function()
-    {
-
-    };
-
-
-    /**
-     *
-     * @param point
-     * @param width
-     * @constructor
-     */
-    Entry = function(point, width)
-    {
-        if(point == undefined || point.x == undefined)
-            throw ('A point needs cords');
-        if(width == undefined)
-            width = 20;
-        this.point = point;
-        this.width = width;
-        this.domObj = null;
-
-        this.entryModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
-
-
-        var textInput = document.createElement("input");
-        textInput.type = 'text';
-
-        textInput.innerHTML = "world";
-        this.entryModelObj.appendChild(textInput);
-    };
-
-
-    Entry.prototype.draw = function(graphWinObj)
-    {
-        this.entryModelObj.setAttribute("x", this.point.x);
-        this.entryModelObj.setAttribute("y", this.point.y);
-        this.entryModelObj.setAttribute("width", "300");
-        this.entryModelObj.setAttribute("height", "100");
-
-        var textInput =  this.entryModelObj.getElementsByTagName('input')[0];
-        textInput.size = this.width;
-
-        console.log(textInput.offsetWidth, textInput.offsetHeight);
-
-
-        this.__insertIfNeeded(this.entryModelObj, graphWinObj);
-    };
-
-    // http://stackoverflow.com/questions/29295322/javascript-to-create-a-textarea-with-foreign-object-in-svg-not-working
-
-
-    Entry.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        if($(graphWinObj.svg).find(domElem).length == 0) {
-            //Dom obj not found inside window
-            $(graphWinObj.svg).append(domElem);
-            this.domObj = domElem;
-        }
-    };
-
-
-    Entry.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1) {
-                $(graphWinObj.svg).find(this.domObj).remove();
-            }
-        }
-    };
-
-
-    Entry.prototype.setFill = function(fill)
-    {
-        this.entryModelObj.style.fill = fill;
-    };
-
-
-    Entry.prototype.setOutline = function(stroke)
-    {
-        this.entryModelObj.style.stroke = stroke;
-    };
-
-
-    Entry.prototype.getAnchor = function (text)
+    Image.prototype.getAnchor = function (text)
     {
         // Returns a clone of the corresponding endpoint of the segment.
 
+        console.log(new Point(this.point.x, this.point.y));
+        return new Point(this.point.x, this.point.y);
     };
 
 
-    // Entry.prototype.setText = function (text)
-    // {
-    //     this.entryModelObj.textContent = text;
-    // };
-    //
-    //
-    // Entry.prototype.getText = function ()
-    // {
-    //     //doesn't work, returning original text not new setText
-    //     console.log(this.text);
-    //     return this.text;
-    // };
-
-
-    Entry.prototype.setFace = function (fontFace)
+    Entry.prototype.move = function(dx, dy)
     {
-        this.textModelObj.style.fontFamily = fontFace;
-    };
-
-
-    Entry.prototype.setSize = function (textFontSize)
-    {
-        //size between 5 and 36
-        this.entryModelObj.style.fontSize = textFontSize;
-
-    };
-
-
-    Entry.prototype.setStyle = function (style)
-    {
-        if (style === "bold")
-        {
-            this.entryModelObj.style.fontWeight = style;
-        }
-        else
-        {
-            this.entryModelObj.style.fontStyle = style;
-        }
-    };
-
-
-    Entry.prototype.setTextColor = function (fillTextColor)
-    {
-        this.entryModelObj.style.fill = fillTextColor;
+        this.imgModelObj.setAttribute('x', dx);
+        this.imgModelObj.setAttribute('y', dy);
     };
 
 
