@@ -1,0 +1,179 @@
+
+
+
+
+header {
+    -webkit-border-radius:1em;    
+    -moz-border-radius: 1em;
+    border-radius: 0px;
+    padding-top: 50px;
+    margin: auto;
+    width: 85%;
+}
+
+
+h1 {
+    color: black;
+    font-size: 50px;
+    margin: auto;
+    text-align: center;
+	height: 40px;;
+
+}
+
+h2 {
+    color: black;
+    margin: auto;
+    text-align: center;
+    font-size: 30px;
+}
+
+
+h3 {
+    color: black;
+    margin-left: 50px;
+	margin-bottom: 1px;
+    text-align: left;
+    font-size: 25px;
+}
+
+nav  {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+	float: middle;
+	margin: auto;
+	text-align:center;
+}
+
+nav ul {
+    margin: 80px 0 20px 0;
+    padding: .7em;
+    float: left;
+    list-style: none;
+    background: #444;
+    background: rgba(0,0,0,.2);
+    border-radius: .5em;    
+    box-shadow: 0 1px 0 rgba(255,255,255,.2), 0 2px 1px rgba(0,0,0,.8) inset; 
+}
+
+nav li {
+    float:left;
+	 display:inline;
+}
+
+nav a {
+    float:left;
+    padding: .8em 1.5em;
+    text-decoration: none;
+    color: #555;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    font: bold 1.1em/1 'trebuchet MS', Arial, Helvetica;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #fff #ccc #999 #eee;
+    background: #c1c1c1;
+    background: linear-gradient(#f5f5f5, #c1c1c1);            
+ }
+ 
+nav a:hover, nav a:focus {
+    outline: 0;
+    color: green;
+    text-shadow: 0 1px 0 rgba(0,0,0,.2);
+    background: #fac754;
+}
+
+ 
+nav li:first-child a {
+    border-left: 0;
+    border-radius: 4px 0 0 4px;            
+}
+
+nav li:last-child a {
+    border-right: 0;
+    border-radius: 0 4px 4px 0;            
+}
+
+
+textarea {
+  margin-top: 10px;
+  margin-left: 50px;
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.07);
+	border-color: -moz-use-text-color #FFFFFF #FFFFFF -moz-use-text-color;
+	border-image: none;
+	border-radius: 6px 6px 6px 6px;
+	border-style: none solid solid none;
+	border-width: medium 1px 1px medium;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+	color: #555555;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 1em;
+	line-height: 1.4em;
+	padding: 5px 8px;
+	transition: background-color 0.2s ease 0s;
+}
+
+textarea:focus {
+    background: none repeat scroll 0 0 #FFFFFF;
+    outline-width: 0;
+}
+
+textarea #placeholder {
+	margin-top: 100px;
+	margin-left: 150px;
+}
+
+
+.button-success {
+    background: rgb(28, 184, 65); /* this is a green */
+}
+
+.button-success  a:hover, .button-success  a:focus {
+    outline: 0;
+    color: green;
+    text-shadow: 0 1px 0 rgba(0,0,0,.2);
+    background: #fac754;
+}
+
+.button {
+	display: inline-block;
+	line-height: 50px;
+	color:rgb(255,255,255);
+	background-color:rgb(41,127,184);
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+    padding: 10px;
+	margin-left: 50px;
+    display: block;
+    text-align: right;
+    width: 100px;
+    height: 70px;
+}
+
+.container {
+    width:100%;
+    border:1px solid #d3d3d3;
+}
+.container div {
+    width:100%;
+}
+.container .header {
+    background-color:#d3d3d3;
+    padding: 2px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.container .content {
+    display: none;
+    padding : 5px;
+}
+
+.no-bullets {
+    list-style-type: none;
+}
+
+
+

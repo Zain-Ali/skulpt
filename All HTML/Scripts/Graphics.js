@@ -26,6 +26,8 @@ function getHtmlTemplate()
 {
     var txt = "";
     txt += "<Style> svg, body{width: 100%; height: 100%;} </style>";
+    //    txt += "<Style> svg, body{width: 100%; height: 100%; background-color: #0C5404} </style>";
+
     return txt;
 }
 
@@ -88,11 +90,14 @@ $(function()
     };
 
 
-    GraphWinJs.prototype.getMouse = function()
-    {
+    GraphWinJs.prototype.getMouse = function() {
         // window.addEventListener("click", function () {
+        //     setTimeout(function(){ alert("Hello"); }, 5000);
+        //
         //     console.log("log");
         // });
+        // //setTimeout(function(){ alert("Hello"); }, 5000);
+
     };
 
 

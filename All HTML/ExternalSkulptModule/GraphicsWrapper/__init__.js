@@ -16,6 +16,7 @@ var $builtinmodule = function(name){
     var mod = {};
 
     var graphicsClass = {};
+    var radiusClass = {};
     var pointClass = {};
     var circleClass = {};
     var rectangleClass = {};
@@ -25,9 +26,6 @@ var $builtinmodule = function(name){
     var polygonClass = {};
     var imageClass = {};
     var entryClass = {};
-
-    var radiusClass = {};
-
 
     var reuseingGetterSetter = {
         __getattr__ : new Sk.builtin.func(function (self, key) {

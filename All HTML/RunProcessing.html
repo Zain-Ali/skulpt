@@ -13,18 +13,25 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
         <script src="http://www.skulpt.org/static/python.min.js" type="text/javascript"></script>
         <script src="Scripts/Graphics.js" type="text/javascript"></script>
+
+        <link rel="stylesheet" type="text/css" href="CSS/main.css">
+
+        <!--->
+        <a href="https://github.com/zain-ali"><img style="position: absolute; top: 0; right: 0; border: 0;"
+                                                   src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+        <!--->
+
     </head>
 
     <body>
-
+        <h1>Skulpt Project</h1>
         <header>
-            <a href="MyFirstModule.html">1. My Module</a>
-            <br>
-            <a href="RunTurtle.html">2. Turtle Module</a>
-            <br>
-            <a href="RunProcessing.html">3. Processing Module</a>
-            <br>
-            <a href="RunGraphics.html">4. Graphics Module</a>
+            <nav>
+                <li><a href="RunGraphics.html">1. Graphics Module </a></li>
+                <li><a href="RunTurtle.html">2. Turtle Module</a></li>
+                <li><a href="RunProcessing.html">3. Processing Module</a></li>
+                </li><a href="MyFirstModule.html">4. My Module</a></li>
+            </nav>
         </header>
 
         <script type="text/javascript">
@@ -86,7 +93,7 @@ run()
 
             </textarea>
             <br />
-            <button type="button" onclick="runit()">Run</button>
+            <button class="button" onclick="runit()" type="button">Run</button>
         </form>
 
         <pre id="output" ></pre>
@@ -95,4 +102,8 @@ run()
         <!-- If you want turtle graphics include a canvas -->
 
     </body>
+
+    <footer>
+
+    </footer>
 </html>
