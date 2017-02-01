@@ -1,6 +1,8 @@
 
 
-
+body {
+    font-family: 'Open Sans', sans-serif;
+}
 
 header {
     -webkit-border-radius:1em;    
@@ -17,7 +19,7 @@ h1 {
     font-size: 50px;
     margin: auto;
     text-align: center;
-	height: 40px;;
+	height: 40px;
 
 }
 
@@ -173,6 +175,16 @@ textarea #placeholder {
 
 .no-bullets {
     list-style-type: none;
+}
+
+footer {
+    border-style: solid;
+    margin: auto;
+    padding: 2em;
+    width: 85%;
+    margin-top: 20px;
+    bottom: 5px;
+
 }
 
 

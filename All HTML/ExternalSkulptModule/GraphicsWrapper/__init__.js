@@ -91,8 +91,9 @@ var $builtinmodule = function(name){
         });
 
         $loc.getMouse = new Sk.builtin.func(function(self){
-            self.modelObj.getMouse();
+            //self.modelObj.getMouse();
         });
+
     };
 
 
@@ -850,6 +851,10 @@ var $builtinmodule = function(name){
     };
 
 
+
+    /**
+     *
+     */
     mod.GraphWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
     mod.Radius = Sk.misceval.buildClass(mod, radiusClass, "PRadiusClass", []);
     mod.Point  = Sk.misceval.buildClass(mod, pointClass, "PPointClass", []);
@@ -863,6 +868,10 @@ var $builtinmodule = function(name){
     mod.Entry = Sk.misceval.buildClass(mod, entryClass, "PEntryClass", []);
 
 
+
     return mod;
+
+
+
 //End of Main Function
 };

@@ -17,17 +17,10 @@ var Image;
 
 
 
-//modelOBJ name is used because its generic and can be used for super class
-
-
-
-
 function getHtmlTemplate()
 {
     var txt = "";
     txt += "<Style> svg, body{width: 100%; height: 100%;} </style>";
-    //    txt += "<Style> svg, body{width: 100%; height: 100%; background-color: #0C5404} </style>";
-
     return txt;
 }
 
@@ -45,13 +38,21 @@ $(function()
     GraphWinJs = function(title, width, height)
     {
         if(width == undefined)
+        {
             this.width = 300;
+        }
         if(height)
+        {
             this.height = 300;
+        }
 
-        this.windw = window.open('about:blank', title, "height=300, width=300, top=400, left=400");
+        //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals (interpolation)
+        let windowOptions = `height=${height}, width=${width}, top=400, left=400`;
+        this.windw = window.open('about:blank', title, windowOptions);
+
+        this.windw.title = title;
+
         this.doc = this.windw.document;
-
         this.doc.write(getHtmlTemplate() + '<svg id="mySvg"></svg>');
         this.svg = $(this.doc).find('#mySvg').first();
         this.windw.document.close();
@@ -65,38 +66,24 @@ $(function()
     };
 
 
-    //PlaceHolder for Future Interactive Functionality
     GraphWinJs.prototype.setBackground = function(background)
     {
-        //this.windw.style.background('fill', 'pink');
+        // console.log("1", this.windw);
+        // let svg = this.windw.getElementsByTagNameNS("http://www.w3.org/2000/svg", 'svg');
+        // console.log("2", svg);
+        // svg.style.backgroundColor = 'red';
+
+
+        var svg = this.windw.getElementsByTagName('svg')[0]; //Get svg element
+        var newElement = this.windw.createElementNS("http://www.w3.org/2000/svg", "svg");
+        newElement.style.backgroundColor = "red";
+        svg.appendChild(newElement);
     };
 
 
-    GraphWinJs.prototype.plot = function()
+    //PlaceHolder for Future Interactive Functionality
+    GraphWinJs.prototype.getMouse = function()
     {
-
-    };
-
-
-    GraphWinJs.prototype.plotPixel = function()
-    {
-
-    };
-
-
-    GraphWinJs.prototype.setCoords = function()
-    {
-
-    };
-
-
-    GraphWinJs.prototype.getMouse = function() {
-        // window.addEventListener("click", function () {
-        //     setTimeout(function(){ alert("Hello"); }, 5000);
-        //
-        //     console.log("log");
-        // });
-        // //setTimeout(function(){ alert("Hello"); }, 5000);
 
     };
 
@@ -118,6 +105,25 @@ $(function()
 
     };
 
+
+    //Least Important
+    GraphWinJs.prototype.plot = function()
+    {
+
+    };
+
+
+    GraphWinJs.prototype.plotPixel = function()
+    {
+
+    };
+
+
+    GraphWinJs.prototype.setCoords = function()
+    {
+
+    };
+    //Least Important
 
 
     /**
@@ -924,8 +930,8 @@ $(function()
     Text.prototype.getText = function ()
     {
         //doesn't work, returning original text not new setText
-        console.log(this.text);
-        return this.text;
+        console.log(this.textModelObj.textContent);
+        return this.textModelObj.textContent;
     };
 
 
@@ -1085,15 +1091,16 @@ $(function()
 
     Entry.prototype.setText = function (text)
     {
-        this.entryModelObj.textContent = text;
+        this.entryModelObj.getElementsByTagName('input')[0].value = text;
     };
 
 
     Entry.prototype.getText = function ()
     {
         //doesn't work, returning original text not new setText
-        console.log(this.text);
-        return this.text;
+
+        console.log(this.entryModelObj.getElementsByTagName('input')[0].value);
+        return this.entryModelObj.getElementsByTagName('input')[0].value;
     };
 
 
@@ -1148,6 +1155,13 @@ $(function()
         EntryCopy.entryModelObj = null;
         console.log("copy/clone", EntryCopy);
         return EntryCopy;
+    };
+
+
+    Entry.prototype.move = function(dx, dy)
+    {
+        this.imgModelObj.setAttribute('x', dx);
+        this.imgModelObj.setAttribute('y', dy);
     };
 
 
@@ -1223,11 +1237,7 @@ $(function()
     };
 
 
-    Entry.prototype.move = function(dx, dy)
-    {
-        this.imgModelObj.setAttribute('x', dx);
-        this.imgModelObj.setAttribute('y', dy);
-    };
+
 
 
     // MouseEvent = function(point, event)

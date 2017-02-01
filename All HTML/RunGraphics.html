@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 
-<>
-
     <head>
         <meta charset="utf-8"/>
         <title>Skulpt Project For Graphics</title>
@@ -89,7 +87,8 @@ from graphics import*
 
 def main():
 	win = GraphWin ("Title", 500, 500)
-	p = Circle(Point(100, 100), 50)
+    win.setBackground('red')
+    p = Circle(Point(100, 100), 50)
 	p.draw(win)
 	#win.close()
 main()
@@ -181,6 +180,11 @@ main()
     </body>
 
     <footer>
+        <a href="http://www.skulpt.org/">SKULPT</a>
+        <br>
+        <a href="https://github.com/skulpt/skulpt">SKULPT GitHub</a>
+        <br>
+        <a href="http://mcsp.wartburg.edu/zelle/python/graphics/graphics.pdf">Graphics py Documentation</a>
 
     </footer>
 </html>
