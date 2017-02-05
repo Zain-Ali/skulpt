@@ -36,7 +36,8 @@
         <script type="text/javascript">
             Sk.externalLibraries = {
                 graphics: {
-                    path: '/MAIN PROJECT/skulpt/All HTML/ExternalSkulptModule/GraphicsWrapper/__init__.js',
+                    //path: '/MAIN PROJECT/skulpt/All HTML/ExternalSkulptModule/GraphicsWrapper/__init__.js'
+                    path: 'ExternalSkulptModule/GraphicsWrapper/__init__.js',
                     dependencies: []
                 }
             };
@@ -87,8 +88,7 @@ from graphics import*
 
 def main():
 	win = GraphWin ("Title", 500, 500)
-    win.setBackground('red')
-    p = Circle(Point(100, 100), 50)
+	p = Polygon(Point(60,20), Point(100,40), Point(100,80), Point(60,100), Point(20,80), Point(20,40))
 	p.draw(win)
 	#win.close()
 main()

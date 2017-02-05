@@ -21,6 +21,7 @@ function getHtmlTemplate()
 {
     var txt = "";
     txt += "<Style> svg, body{width: 100%; height: 100%;} </style>";
+
     return txt;
 }
 
@@ -84,7 +85,11 @@ $(function()
     //PlaceHolder for Future Interactive Functionality
     GraphWinJs.prototype.getMouse = function()
     {
-
+        function printMousePos(event) {
+            document.body.textContent =
+                "clientX: " + event.clientX +
+                " - clientY: " + event.clientY;
+        }
     };
 
 
@@ -698,7 +703,6 @@ $(function()
     Oval.prototype.getP1 = function()
     {
         // Returns a clone of the corresponding endpoint of the segment.
-
         console.log(new Point(this.point1.x, this.point1.y));
         return new Point(this.point1.x, this.point1.y);
     };
@@ -807,9 +811,9 @@ $(function()
     Polygon.prototype.getPoints = function ()
     {
         // Returns a clone of the corresponding endpoint of the segment.
+        console.log(new Point(this.points, this.points));
+        return new Point(this.points, this.points);
 
-        // console.log(new Point(this.points));
-        // return (this.points);
     };
 
 
@@ -837,7 +841,7 @@ $(function()
         this.polygonModelObj.setAttribute('dx', dy);
     };
 
-
+    //DOES NOT WORK
     Polygon.prototype.clone = function()
     {
         //not working (need to do getPoints method first)
@@ -861,7 +865,7 @@ $(function()
     Text = function(point, text)
     {
         if(point == undefined)
-            throw ('A  needs cords');
+            throw ('A  Text needs cords');
 
         this.point = point;
         this.text = text;
@@ -873,7 +877,7 @@ $(function()
         this.textModelObj.textContent = this.text;
         this.textModelObj.style.fill = 'black';
         this.textModelObj.style.fontFamily = "arial";
-        //this.textModelObj.style.fontSize = "normal";
+        this.textModelObj.style.fontSize = 100;
     };
 
 
@@ -927,11 +931,11 @@ $(function()
     };
 
 
+    //DOES NOT WORK
     Text.prototype.getText = function ()
     {
-        //doesn't work, returning original text not new setText
-        console.log(this.textModelObj.textContent);
-        return this.textModelObj.textContent;
+        console.log(new Text(this.textModelObj.textContent));
+        return new Text(this.textModelObj.textContent);
     };
 
 
@@ -952,10 +956,7 @@ $(function()
 
     Text.prototype.setSize = function (textFontSize)
     {
-        //doesn't work
-        //size between 5 and 36
-        this.textModelObj.style.fontSize = textFontSize;
-
+        this.textModelObj.style.fontSize = textFontSize + "px";
     };
 
 
@@ -985,6 +986,7 @@ $(function()
     };
 
 
+    //DOES NOT WORK
     Text.prototype.clone = function()
     {
         //not working (need to do getPoints method first)
@@ -1005,14 +1007,17 @@ $(function()
      * @param width
      * @constructor
      */
-    Entry = function(point, width)
+    Entry = function(point, radius)
     {
+        debugger;
         if(point == undefined || point.x == undefined)
             throw ('A point needs cords');
-        if(width == undefined)
-            width = 20;
+        if(radius == undefined)
+            radius = 20;
         this.point = point;
-        this.width = width;
+        //this.width = width;
+        this.radius = radius;
+
         this.domObj = null;
 
         this.entryModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
@@ -1031,11 +1036,14 @@ $(function()
 
     Entry.prototype.draw = function(graphWinObj)
     {
+        debugger;
         this.entryModelObj.setAttribute("x", this.point.x);
         this.entryModelObj.setAttribute("y", this.point.y);
+        this.entryModelObj.setAttribute('r', this.radius);
 
-        var textInput =  this.entryModelObj.getElementsByTagName('input');//[0];
-        textInput.size = this.width;
+
+        var textInput =  this.entryModelObj.getElementsByTagName('input')[0];
+        //textInput.size = this.width;
 
         this.__insertIfNeeded(this.entryModelObj, graphWinObj);
     };
@@ -1097,8 +1105,6 @@ $(function()
 
     Entry.prototype.getText = function ()
     {
-        //doesn't work, returning original text not new setText
-
         console.log(this.entryModelObj.getElementsByTagName('input')[0].value);
         return this.entryModelObj.getElementsByTagName('input')[0].value;
     };
@@ -1112,10 +1118,7 @@ $(function()
 
     Entry.prototype.setSize = function (textFontSize)
     {
-        //doesn't work
-        //size between 5 and 36
-        this.entryModelObj.style.fontSize = textFontSize;
-
+        this.entryModelObj.style.fontSize = textFontSize + "px";
     };
 
 
@@ -1155,13 +1158,6 @@ $(function()
         EntryCopy.entryModelObj = null;
         console.log("copy/clone", EntryCopy);
         return EntryCopy;
-    };
-
-
-    Entry.prototype.move = function(dx, dy)
-    {
-        this.imgModelObj.setAttribute('x', dx);
-        this.imgModelObj.setAttribute('y', dy);
     };
 
 
@@ -1236,26 +1232,12 @@ $(function()
         return new Point(this.point.x, this.point.y);
     };
 
+    Image.prototype.move = function(dx, dy)
+    {
+        this.imgModelObj.setAttribute('x', dx);
+        this.imgModelObj.setAttribute('y', dy);
+    };
 
-
-
-
-    // MouseEvent = function(point, event)
-    // {
-    //
-    //     this.point = point;
-    //     this.event = event;
-    // };
-    //
-    //
-    // MouseEvent.prototype.getMouse = function(graphWinObj)
-    // {
-    //
-    //     var x = this.point.getAttribute(this.point.x);
-    //     var y = this.point.getAttribute(this.point.y);
-    //     var coords = "X coords: " + x + ", Y coords: " + y;
-    //     return coords;
-    // };
 
 
 //End of Main Function
