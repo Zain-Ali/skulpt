@@ -648,9 +648,9 @@ var $builtinmodule = function(name){
 
         //DOES NOT WORK
         $loc.getText = new Sk.builtin.func(function(self) {
-            //self.modelObj.getText();
+            self.modelObj.getText();
 
-            debugger;
+            // debugger;
             var model = self.Text.getText();
 
             var text = Sk.builtin.str(model.getText);
@@ -819,7 +819,6 @@ var $builtinmodule = function(name){
 
 
 
-
     /**
      *
      * @param $glb
@@ -850,12 +849,12 @@ var $builtinmodule = function(name){
 
 
         $loc.getWidth = new Sk.builtin.func(function(self) {
-            self.modelObj.getWidth();
+            return self.modelObj.getWidth();
         });
 
 
         $loc.getHeight = new Sk.builtin.func(function(self) {
-            self.modelObj.getHeight();
+            return self.modelObj.getHeight();
         });
 
 
@@ -869,9 +868,24 @@ var $builtinmodule = function(name){
             return pyObj;
         });
 
+        $loc.getImage = new Sk.builtin.func(function(self) {
+            return self.modelObj.getImage();
+        });
+
 
         $loc.move = new Sk.builtin.func(function (self, x, y) {
             self.modelObj.move(x.v, y.v);
+        });
+
+
+        $loc.clone = new Sk.builtin.func(function (self) {
+            debugger;
+            var getIma = Sk.misceval.callsim(self.getImage, self);
+            var p1 = Sk.misceval.callsim(self.getAnchor, self);
+
+            var pyObj = Sk.misceval.callsim(mod.Image, p1, getIma);
+
+            return pyObj;
         });
     };
 

@@ -49,16 +49,20 @@ $(function()
 
         //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals (interpolation)
         let windowOptions = `height=${height}, width=${width}, top=400, left=400`;
-        this.windw = window.open('about:blank', title, windowOptions);
-
-        this.windw.title = title;
+        this.windw = window.open('about:blank', Math.random(), windowOptions);
 
         this.doc = this.windw.document;
         this.doc.write(getHtmlTemplate() + '<svg id="mySvg"></svg>');
+        this.setTitle(title);
         this.svg = $(this.doc).find('#mySvg').first();
         this.windw.document.close();
     };
 
+
+    GraphWinJs.prototype.setTitle = function(title){
+        $(this.doc).find('Head').append('<title>'+ title +'</title>')
+
+    }
 
     GraphWinJs.prototype.close = function()
     {
@@ -152,7 +156,6 @@ $(function()
         console.log(this.radius);
         return this.radius;
     };
-
 
 
 
@@ -934,15 +937,19 @@ $(function()
     //DOES NOT WORK
     Text.prototype.getText = function ()
     {
+        // console.log(new Text((this.point.x, this.point.y), this.textModelObj.textContent));
+        // return new Text((this.point.x, this.point.y), this.textModelObj.textContent);
+
         console.log(new Text(this.textModelObj.textContent));
         return new Text(this.textModelObj.textContent);
+
     };
+
 
 
     Text.prototype.getAnchor = function (text)
     {
-        // Returns a clone of the corresponding endpoint of the segment.
-
+        //Returns a clone of the corresponding endpoint of the segment.
         console.log(new Point(this.point.x, this.point.y));
         return new Point(this.point.x, this.point.y);
     };
@@ -956,7 +963,14 @@ $(function()
 
     Text.prototype.setSize = function (textFontSize)
     {
-        this.textModelObj.style.fontSize = textFontSize + "px";
+        if(textFontSize >= 5 && textFontSize <= 35)
+        {
+            this.textModelObj.style.fontSize = textFontSize + "px";
+        }
+        else
+        {
+            console.log("Please enter a number between 5 and 35");
+        }
     };
 
 
@@ -1004,12 +1018,11 @@ $(function()
     /**
      *
      * @param point
-     * @param width
+     * @param radius
      * @constructor
      */
     Entry = function(point, radius)
     {
-        debugger;
         if(point == undefined || point.x == undefined)
             throw ('A point needs cords');
         if(radius == undefined)
@@ -1036,7 +1049,6 @@ $(function()
 
     Entry.prototype.draw = function(graphWinObj)
     {
-        debugger;
         this.entryModelObj.setAttribute("x", this.point.x);
         this.entryModelObj.setAttribute("y", this.point.y);
         this.entryModelObj.setAttribute('r', this.radius);
@@ -1082,7 +1094,7 @@ $(function()
     };
 
 
-    Entry.prototype.getAnchor = function (text)
+    Entry.prototype.getAnchor = function ()
     {
         // Returns a clone of the corresponding endpoint of the segment.
         console.log(new Point(this.point.x, this.point.y));
@@ -1174,11 +1186,11 @@ $(function()
             throw ('A image needs points');
         this.point = point;
         this.imageSrc = imageSrc;
-
         this.imgModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'image');
 
         this.domObj = null;
     };
+
 
     Image.prototype.draw = function(graphWinObj)
     {
@@ -1210,13 +1222,15 @@ $(function()
     };
 
 
+    //DOES NOT WORK
     Image.prototype.getWidth = function ()
     {
-        console.log("width ", this.point.x );
+        console.log((this.point.x));
         return this.point.x;
     };
 
 
+    //DOES NOT WORK
     Image.prototype.getHeight = function ()
     {
         console.log("height ", this.point.y);
@@ -1224,13 +1238,23 @@ $(function()
     };
 
 
-    Image.prototype.getAnchor = function (text)
+    Image.prototype.getAnchor = function ()
     {
         // Returns a clone of the corresponding endpoint of the segment.
-
         console.log(new Point(this.point.x, this.point.y));
         return new Point(this.point.x, this.point.y);
     };
+
+
+    //DOES NOT WORK
+    Image.prototype.getImage = function ()
+    {
+        // Returns a clone of the corresponding endpoint of the segment.
+        console.log((this.imageSrc));
+        return this.imageSrc;
+    };
+
+
 
     Image.prototype.move = function(dx, dy)
     {
@@ -1238,6 +1262,19 @@ $(function()
         this.imgModelObj.setAttribute('y', dy);
     };
 
+
+    //DOES NOT WORK
+    Image.prototype.clone = function()
+    {
+        //not working (need to do getPoints method first)
+        let ImageCopy = {};
+        Object.setPrototypeOf(ImageCopy, this.__proto__);
+        ImageCopy = Object.assign(ImageCopy, this);
+        ImageCopy.domObj = null;
+        ImageCopy.imgModelObj = null;
+        console.log("copy/clone", ImageCopy);
+        return ImageCopy;
+    };
 
 
 //End of Main Function
