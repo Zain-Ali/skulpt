@@ -16,6 +16,10 @@ var Entry;
 var Image;
 
 
+/*
+*
+*
+*/
 
 function getHtmlTemplate()
 {
@@ -38,6 +42,10 @@ $(function()
      */
     GraphWinJs = function(title, width, height)
     {
+        if(title == undefined)
+        {
+            this.title = "Graphics Window";
+        }
         if(width == undefined)
         {
             this.width = 300;
@@ -56,13 +64,28 @@ $(function()
         this.setTitle(title);
         this.svg = $(this.doc).find('#mySvg').first();
         this.windw.document.close();
+
+
+
+
+        /**
+         *
+         * @param e
+         * @constructor
+         * keep track of mouse position in !other! window!
+         */
+        $(this.windw).mousedown(function(e){
+            this.mousePosition = {};
+            this.mousePosition.X = e.pageX;
+            this.mousePosition.Y = e.pageY;
+            console.log(this.mousePosition);
+        });
     };
 
 
     GraphWinJs.prototype.setTitle = function(title){
         $(this.doc).find('Head').append('<title>'+ title +'</title>')
-
-    }
+    };
 
     GraphWinJs.prototype.close = function()
     {
@@ -78,31 +101,41 @@ $(function()
         // console.log("2", svg);
         // svg.style.backgroundColor = 'red';
 
-
-        var svg = this.windw.getElementsByTagName('svg')[0]; //Get svg element
-        var newElement = this.windw.createElementNS("http://www.w3.org/2000/svg", "svg");
-        newElement.style.backgroundColor = "red";
-        svg.appendChild(newElement);
+        // var svg = this.windw.getElementsByTagName('svg')[0]; //Get svg element
+        // var newElement = this.windw.createElementNS("http://www.w3.org/2000/svg", "svg");
+        // newElement.style.backgroundColor = "red";
+        // svg.appendChild(newElement);
     };
 
 
-    //PlaceHolder for Future Interactive Functionality
     GraphWinJs.prototype.getMouse = function()
     {
-        function printMousePos(event) {
-            document.body.textContent =
-                "clientX: " + event.clientX +
-                " - clientY: " + event.clientY;
-        }
+        var handleClick = function(){
+            this.resolve(this._this.windw.mousePosition);
+        };
+
+        var asyncPromiseFunc = function(resolve, reject) {
+            try{
+                var boundToPromise = handleClick.bind({resolve: resolve, reject:reject, _this:this});
+                $(this.windw.document.body).click(boundToPromise);
+            }
+            catch(e)
+            {
+                reject(e);
+            }
+        };
+
+        return new Promise(asyncPromiseFunc.bind(this));
     };
 
 
     GraphWinJs.prototype.checkMouse = function()
     {
-
+        return this.windw.mousePosition;
     };
 
 
+    //PlaceHolder for Future Interactive Functionality
     GraphWinJs.prototype.getKey = function()
     {
 
@@ -111,7 +144,7 @@ $(function()
 
     GraphWinJs.prototype.checkKey = function()
     {
-
+        //return this.windw.keyNum;
     };
 
 
@@ -940,9 +973,13 @@ $(function()
         // console.log(new Text((this.point.x, this.point.y), this.textModelObj.textContent));
         // return new Text((this.point.x, this.point.y), this.textModelObj.textContent);
 
+
+        //console.log(this.textModelObj.textContent);
+        //return this.textModelObj.textContent;
+
+
         console.log(new Text(this.textModelObj.textContent));
         return new Text(this.textModelObj.textContent);
-
     };
 
 
@@ -1186,8 +1223,8 @@ $(function()
             throw ('A image needs points');
         this.point = point;
         this.imageSrc = imageSrc;
-        this.imgModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'image');
 
+        this.imgModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'image');
         this.domObj = null;
     };
 
@@ -1197,17 +1234,26 @@ $(function()
         this.imgModelObj.setAttribute('width', this.point.x);
         this.imgModelObj.setAttribute('height', this.point.y);
         this.imgModelObj.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', this.imageSrc);
+
         this.__insertIfNeeded(this.imgModelObj, graphWinObj);
     };
 
 
     Image.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
-        if($(graphWinObj.svg).find(domElem).length == 0) {
+        // //debugger;
+        var $svg = $(graphWinObj.windw.document).find('svg');
+        if($svg.find(domElem).length == 0) {
             //Dom obj not found inside window
-            $(graphWinObj.svg).append(domElem);
+            $svg.append(domElem);
             this.domObj = domElem;
         }
+
+        // if($(graphWinObj.svg).find(domElem).length == 0) {
+        //     //Dom obj not found inside window
+        //     $(graphWinObj.svg).append(domElem);
+        //     this.domObj = domElem;
+        // }
     };
 
 

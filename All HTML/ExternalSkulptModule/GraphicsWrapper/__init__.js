@@ -91,9 +91,38 @@ var $builtinmodule = function(name){
         });
 
         $loc.getMouse = new Sk.builtin.func(function(self){
-            self.modelObj.getMouse();
+            var susp = new Sk.misceval.Suspension();
+
+            var promise = self.modelObj.getMouse();
+
+            susp.resume = function () {
+                if (susp.data["error"]) {
+                    throw new Sk.builtin.IOError(susp.data["error"].message);
+                } else {
+                    var x = Sk.builtin.float_(susp.data["result"].X);
+                    var y = Sk.builtin.float_(susp.data["result"].Y);
+                    return Sk.misceval.callsim(mod.Point, x,y);
+                }
+            }
+
+            susp.data = {
+                type: "Sk.promise",
+                promise: promise
+            };
+
+            return susp;
         });
 
+        $loc.checkMouse = new Sk.builtin.func(function (self)
+        {
+            return self.modelObj.checkMouse();
+        });
+
+
+        $loc.checkKey = new Sk.builtin.func(function (self)
+        {
+            return self.modelObj.checkKey();
+        });
     };
 
 
@@ -588,6 +617,7 @@ var $builtinmodule = function(name){
         $loc.getPoints = new Sk.builtin.func(function(self) {
             return self.modelObj.getPoints();
             //do stuff here
+
         });
 
 
@@ -648,14 +678,14 @@ var $builtinmodule = function(name){
 
         //DOES NOT WORK
         $loc.getText = new Sk.builtin.func(function(self) {
-            self.modelObj.getText();
+            return self.modelObj.getText();
 
             // debugger;
-            var model = self.Text.getText();
-
-            var text = Sk.builtin.str(model.getText);
-            var pyObj = Sk.misceval.callsim(mod.Text, text);
-            return pyObj;
+            // var model = self.Text.getText();
+            //
+            // var text = Sk.builtin.str(model.getText);
+            // var pyObj = Sk.misceval.callsim(mod.Text, text);
+            // return pyObj;
         });
 
 
@@ -695,9 +725,10 @@ var $builtinmodule = function(name){
         $loc.clone = new Sk.builtin.func(function (self) {
             //self.modelObj.clone();
             var p1 = Sk.misceval.callsim(self.getAnchor, self);
+            console.log(self);
             var text = Sk.misceval.callsim(self.getText, self);
 
-            var pyObj = Sk.misceval.callsim(mod.Text, p1, text.text);
+            var pyObj = Sk.misceval.callsim(mod.Text, p1, text);
 
             return pyObj;
         });
