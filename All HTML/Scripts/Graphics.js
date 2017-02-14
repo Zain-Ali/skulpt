@@ -15,7 +15,6 @@ var Text;
 var Entry;
 var Image;
 
-
 /*
 *
 *
@@ -29,6 +28,24 @@ function getHtmlTemplate()
     return txt;
 }
 
+/*
+* Temporary Supporting Function for KeyPress (To be Deleted)
+*/
+function KeyHandler() {
+    var self = this;
+    this._target   = getTarget();
+    this._managers = {};
+    this._handlers =
+        {
+            keypress : function(e)
+            {
+                self.onEvent("keypress", e);
+            }
+        };
+    for (var key in this._handlers) {
+        this._target.addEventListener(key, this._handlers[key]);
+    }
+}
 
 
 $(function()
@@ -80,6 +97,26 @@ $(function()
             this.mousePosition.Y = e.pageY;
             console.log(this.mousePosition);
         });
+
+
+        /**
+         *
+         * @param e
+         * @constructor
+         * keep track of Key Pressed in !other! window!
+         */
+        $(this.windw).keypress(function(e){
+            this.keyPressed = {};
+            //For Firefox/ Opera
+            if (e.which)
+            {
+                this.keyPressed = e.which;
+            }
+            console.log(String.fromCharCode(this.keyPressed));
+
+            return String.fromCharCode(this.keyPressed);
+        });
+
     };
 
 
@@ -144,7 +181,7 @@ $(function()
 
     GraphWinJs.prototype.checkKey = function()
     {
-        //return this.windw.keyNum;
+        return this.windw.keyPressed;
     };
 
 

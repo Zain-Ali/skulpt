@@ -70,10 +70,9 @@ var $builtinmodule = function(name){
     graphicsClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, title, width, height){
             self.title = title;
-            self.height = height;
             self.width = width;
-            self.modelObj = new GraphWinJs(title.v, height.v, width.v);
-
+            self.height = height;
+            self.modelObj = new GraphWinJs(title.v, width.v, height.v);
             return self;
         });
 
@@ -103,7 +102,7 @@ var $builtinmodule = function(name){
                     var y = Sk.builtin.float_(susp.data["result"].Y);
                     return Sk.misceval.callsim(mod.Point, x,y);
                 }
-            }
+            };
 
             susp.data = {
                 type: "Sk.promise",
