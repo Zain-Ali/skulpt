@@ -99,30 +99,13 @@ $(function()
         });
 
 
-        /**
-         *
-         * @param e
-         * @constructor
-         * keep track of Key Pressed in !other! window!
-         */
-        $(this.windw).keypress(function(e){
-            this.keyPressed = {};
-            //For Firefox/ Opera
-            if (e.which)
-            {
-                this.keyPressed = e.which;
-            }
-            console.log(String.fromCharCode(this.keyPressed));
-
-            return String.fromCharCode(this.keyPressed);
-        });
-
     };
 
 
     GraphWinJs.prototype.setTitle = function(title){
         $(this.doc).find('Head').append('<title>'+ title +'</title>')
     };
+
 
     GraphWinJs.prototype.close = function()
     {
@@ -172,11 +155,28 @@ $(function()
     };
 
 
-    //PlaceHolder for Future Interactive Functionality
+    //not working
     GraphWinJs.prototype.getKey = function()
     {
+        var handleKey = function(eventData){
+            this.resolve(eventData.key);
+            console.log(eventData.key);
+        };
 
+        var asyncPromiseFunc = function(resolve, reject) {
+            try{
+                var boundToPromise = handleKey.bind({resolve: resolve, reject:reject, _this:this});
+                $(this.windw).keypress(boundToPromise);
+            }
+            catch(e)
+            {
+                reject(e);
+            }
+        };
+
+        return new Promise(asyncPromiseFunc.bind(this));
     };
+
 
 
     GraphWinJs.prototype.checkKey = function()
@@ -226,6 +226,7 @@ $(function()
         console.log(this.radius);
         return this.radius;
     };
+
 
 
 
@@ -1275,7 +1276,7 @@ $(function()
         this.__insertIfNeeded(this.imgModelObj, graphWinObj);
     };
 
-
+    //needs fixing for multiple window option
     Image.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
         // //debugger;
@@ -1318,6 +1319,7 @@ $(function()
     {
         console.log("height ", this.point.y);
         return this.point.y;
+
     };
 
 
@@ -1362,3 +1364,5 @@ $(function()
 
 //End of Main Function
 });
+
+

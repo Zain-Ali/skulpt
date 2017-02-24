@@ -85,9 +85,11 @@ var $builtinmodule = function(name){
             self.modelObj.close();
         });
 
+
         $loc.setBackground = new Sk.builtin.func(function (self, background) {
             self.modelObj.setBackground(background.v);
         });
+
 
         $loc.getMouse = new Sk.builtin.func(function(self){
             var susp = new Sk.misceval.Suspension();
@@ -111,6 +113,30 @@ var $builtinmodule = function(name){
 
             return susp;
         });
+
+        ////////////////////////// ////////////////////////// ////////////////////////// //////////////////////////
+        $loc.getKey = new Sk.builtin.func(function(self){
+            var susp = new Sk.misceval.Suspension();
+
+            var promise = self.modelObj.getKey();
+
+            susp.resume = function () {
+                if (susp.data["error"]) {
+                    throw new Sk.builtin.IOError(susp.data["error"].message);
+                } else {
+                    var pressedKey = Sk.builtin.str(susp.data["result"]);
+                    return pressedKey;
+                }
+            };
+
+            susp.data = {
+                type: "Sk.promise",
+                promise: promise
+            };
+
+            return susp;
+        });
+        ////////////////////////// ////////////////////////// ////////////////////////// //////////////////////////
 
         $loc.checkMouse = new Sk.builtin.func(function (self)
         {
