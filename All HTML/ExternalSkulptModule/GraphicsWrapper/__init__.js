@@ -26,6 +26,8 @@ var $builtinmodule = function(name){
     var polygonClass = {};
     var imageClass = {};
     var entryClass = {};
+    var getTextClass = {};
+
 
     var reuseingGetterSetter = {
         __getattr__ : new Sk.builtin.func(function (self, key) {
@@ -59,6 +61,7 @@ var $builtinmodule = function(name){
     mod.PTextClass = {};
     mod.PImageClass = {};
     mod.PEntryClass = {};
+    mod.PGetTextClass = {};
 
 
 
@@ -72,6 +75,22 @@ var $builtinmodule = function(name){
             self.title = title;
             self.width = width;
             self.height = height;
+
+            if(title == undefined)
+            {
+                self.title = "Graphics Window";
+            }
+            if(width == undefined)
+            {
+                self.width = 300;
+            }
+            if(height == undefined)
+            {
+                self.height = 300;
+            }
+            console.log(self);
+
+
             self.modelObj = new GraphWinJs(title.v, width.v, height.v);
             return self;
         });
@@ -172,6 +191,31 @@ var $builtinmodule = function(name){
 
         $loc.getRadius = new Sk.builtin.func(function (self) {
             return self.modelObj.getRadius();
+        });
+
+    };
+
+
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
+    getTextClass = function($glb, $loc){
+        $loc.__init__ = new Sk.builtin.func(function(self, text){
+            self.modelObj = new GetText(text.v);
+            self.text = text;
+
+            return self;
+        });
+
+
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+
+        $loc.getText = new Sk.builtin.func(function (self) {
+            return self.modelObj.getText();
         });
 
     };
@@ -703,14 +747,14 @@ var $builtinmodule = function(name){
 
         //DOES NOT WORK
         $loc.getText = new Sk.builtin.func(function(self) {
-            return self.modelObj.getText();
+            // return self.modelObj.getText();
 
-            // debugger;
-            // var model = self.Text.getText();
-            //
-            // var text = Sk.builtin.str(model.getText);
-            // var pyObj = Sk.misceval.callsim(mod.Text, text);
-            // return pyObj;
+             debugger;
+            var model = self.modelObj.getText();
+
+            var text = Sk.builtin.str(model.getText);
+            var pyObj = Sk.misceval.callsim(mod.Text, text);
+            return pyObj;
         });
 
 
@@ -734,7 +778,6 @@ var $builtinmodule = function(name){
             self.modelObj.setStyle(fontStyle.v);
         });
 
-        //doesn't work
         $loc.setSize = new Sk.builtin.func(function(self, fontSize) {
             self.modelObj.setSize(fontSize.v);
         });
@@ -962,6 +1005,7 @@ var $builtinmodule = function(name){
     mod.Image = Sk.misceval.buildClass(mod, imageClass, "PImageClass", []);
     mod.Entry = Sk.misceval.buildClass(mod, entryClass, "PEntryClass", []);
 
+    mod.GetText = Sk.misceval.buildClass(mod, getTextClass, "PGetTextClass", []);
 
 
     return mod;

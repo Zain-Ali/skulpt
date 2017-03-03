@@ -14,6 +14,36 @@ var Polygon;
 var Text;
 var Entry;
 var Image;
+var GetText;
+
+
+function getCanvases() {
+    //let canvases = JSON.parse(localStorage.getItem('canvases'));
+    let canvases = JSON.parse(sessionStorage.getItem('canvases'));
+    canvases = canvases || [];
+    return canvases;
+}
+
+function setCanvases(canvases) {
+    //localStorage.setItem('canvases', JSON.stringify(canvases));
+    sessionStorage.setItem('canvases', JSON.stringify(canvases));
+}
+
+function removeCurrentWindow(toRemove) {
+    let canvases = getCanvases();
+    console.log('preSplice', canvases);
+    let isIndex = function (currentId) {
+        console.log(`To remove ${toRemove} Current: ${currentId} Equal ${toRemove === currentId}`);
+        return toRemove === currentId;
+    };
+    let index = canvases.findIndex(isIndex);
+    if (index >= 0){
+        canvases.splice(index, 1);
+        console.log('afterSplice', canvases);
+        setCanvases(canvases);
+    }
+}
+
 
 /*
 *
@@ -59,6 +89,10 @@ $(function()
      */
     GraphWinJs = function(title, width, height)
     {
+        let canvases = getCanvases();
+        console.log('prePush', canvases);
+
+        console.log(title, width, height);
         if(title == undefined)
         {
             this.title = "Graphics Window";
@@ -74,7 +108,14 @@ $(function()
 
         //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals (interpolation)
         let windowOptions = `height=${height}, width=${width}, top=400, left=400`;
-        this.windw = window.open('about:blank', Math.random(), windowOptions);
+        let tabId = Math.random();
+        this.tabId = tabId;
+        this.windw = window.open('about:blank', tabId, windowOptions);
+
+
+        canvases.push(tabId);
+        console.log('wasPushed', canvases);
+        setCanvases(canvases);
 
         this.doc = this.windw.document;
         this.doc.write(getHtmlTemplate() + '<svg id="mySvg"></svg>');
@@ -82,8 +123,16 @@ $(function()
         this.svg = $(this.doc).find('#mySvg').first();
         this.windw.document.close();
 
+        console.log("this.windw", this.windw);
+        this.windw.addEventListener("beforeunload", function (e) {
+            console.log(e);
+            removeCurrentWindow(this.tabId);
+            // e.preventDefault();
+        });
 
-
+        this.windw.onbeforeunload = function() {
+            window.sessionStorage.clear();
+        };
 
         /**
          *
@@ -109,22 +158,15 @@ $(function()
 
     GraphWinJs.prototype.close = function()
     {
-        //remove svg window obj from dom
+        removeCurrentWindow(this.tabId);
         this.windw.close();
     };
 
 
     GraphWinJs.prototype.setBackground = function(background)
     {
-        // console.log("1", this.windw);
-        // let svg = this.windw.getElementsByTagNameNS("http://www.w3.org/2000/svg", 'svg');
-        // console.log("2", svg);
-        // svg.style.backgroundColor = 'red';
-
-        // var svg = this.windw.getElementsByTagName('svg')[0]; //Get svg element
-        // var newElement = this.windw.createElementNS("http://www.w3.org/2000/svg", "svg");
-        // newElement.style.backgroundColor = "red";
-        // svg.appendChild(newElement);
+        var svg = this.doc.getElementsByTagName('svg')[0]; //Get svg element
+        svg.style.backgroundColor = background;
     };
 
 
@@ -227,7 +269,27 @@ $(function()
         return this.radius;
     };
 
+    /**
+     *
+     * @param text
+     * @constructor
+     */
+    GetText = function(text)
+    {
+        if(text == undefined)
+            throw ("radius class needs text");
+        this.text = text;
+        this.domObj = null;
 
+        this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+    };
+
+
+    // GetText.prototype.getText = function()
+    // {
+    //     console.log(this.text);
+    //     return this.text;
+    // };
 
 
     /**
@@ -1016,8 +1078,8 @@ $(function()
         //return this.textModelObj.textContent;
 
 
-        console.log(new Text(this.textModelObj.textContent));
-        return new Text(this.textModelObj.textContent);
+        console.log(new GetText(this.textModelObj.textContent));
+        return new GetText(this.textModelObj.textContent);
     };
 
 
