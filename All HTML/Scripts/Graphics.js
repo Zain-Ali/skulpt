@@ -31,15 +31,15 @@ function setCanvases(canvases) {
 
 function removeCurrentWindow(toRemove) {
     let canvases = getCanvases();
-    console.log('preSplice', canvases);
+    // console.log('preSplice', canvases);
     let isIndex = function (currentId) {
-        console.log(`To remove ${toRemove} Current: ${currentId} Equal ${toRemove === currentId}`);
+        // console.log(`To remove ${toRemove} Current: ${currentId} Equal ${toRemove === currentId}`);
         return toRemove === currentId;
     };
     let index = canvases.findIndex(isIndex);
     if (index >= 0){
         canvases.splice(index, 1);
-        console.log('afterSplice', canvases);
+        // console.log('afterSplice', canvases);
         setCanvases(canvases);
     }
 }
@@ -90,9 +90,9 @@ $(function()
     GraphWinJs = function(title, width, height)
     {
         let canvases = getCanvases();
-        console.log('prePush', canvases);
+        // console.log('prePush', canvases);
 
-        console.log(title, width, height);
+        // console.log(title, width, height);
         if(title == undefined)
         {
             this.title = "Graphics Window";
@@ -114,7 +114,7 @@ $(function()
 
 
         canvases.push(tabId);
-        console.log('wasPushed', canvases);
+        // console.log('wasPushed', canvases);
         setCanvases(canvases);
 
         this.doc = this.windw.document;
@@ -123,9 +123,8 @@ $(function()
         this.svg = $(this.doc).find('#mySvg').first();
         this.windw.document.close();
 
-        console.log("this.windw", this.windw);
         this.windw.addEventListener("beforeunload", function (e) {
-            console.log(e);
+            // console.log(e);
             removeCurrentWindow(this.tabId);
             // e.preventDefault();
         });
@@ -1180,7 +1179,9 @@ $(function()
         this.entryModelObj.style.fontFamily = "arial";
         //this.textModelObj.style.fontSize = "normal";
         var textInput = document.createElement("input");
+        //textInput.value = "hello";
         this.entryModelObj.appendChild(textInput);
+
     };
 
 
@@ -1195,6 +1196,7 @@ $(function()
         //textInput.size = this.width;
 
         this.__insertIfNeeded(this.entryModelObj, graphWinObj);
+        textInput.focus();
     };
 
 
@@ -1248,12 +1250,14 @@ $(function()
 
     Entry.prototype.setText = function (text)
     {
+        console.log(this.entryModelObj);
         this.entryModelObj.getElementsByTagName('input')[0].value = text;
     };
 
 
     Entry.prototype.getText = function ()
     {
+        console.log(this.entryModelObj);
         console.log(this.entryModelObj.getElementsByTagName('input')[0].value);
         return this.entryModelObj.getElementsByTagName('input')[0].value;
     };
@@ -1426,5 +1430,3 @@ $(function()
 
 //End of Main Function
 });
-
-

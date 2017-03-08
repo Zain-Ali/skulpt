@@ -48,12 +48,16 @@
 
             // output functions are configurable.  This one just appends some text
             // to a pre element.
-            function outf(text) {
+            function outf(text)
+            {
                 var mypre = document.getElementById("output");
+                //new line below
                 mypre.innerHTML = mypre.innerHTML + text;
+
             }
 
-            function builtinRead(x) {
+            function builtinRead(x)
+            {
                 if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
                     throw "File not found: '" + x + "'";
                 return Sk.builtinFiles["files"][x];
@@ -64,29 +68,48 @@
             // get a reference to your pre element for output
             // configure the output function
             // call Sk.importMainWithBody()
-            function runit() {
+            function runit()
+            {
+
                 let canvases = getCanvases();
-                if(canvases.length > 0){
+                if(canvases.length > 0)
+                {
                     console.log('Still have existing windows');
                     alert('Close existing graphics windows before continuing');
                     return;
                 }
 
+
                 var prog = document.getElementById("yourcode").value;
                 var mypre = document.getElementById("output");
                 mypre.innerHTML = '';
                 Sk.pre = "output";
-                Sk.configure({output:outf, read:builtinRead});
+//                Sk.configure({output:outf, read:builtinRead});
+                Sk.configure({
+                    inputfun: function (prompt)
+                    {
+                        return window.prompt(prompt);
+                    },
+                    inputfunTakesPrompt: true,
+                    output: outf,
+                    read: builtinRead
+                });
+
+
                 Sk.canvas = 'mycanvas';
                 var myPromise = Sk.misceval.asyncToPromise(function() {
                     return Sk.importMainWithBody("<stdin>", false, prog, true);
                 });
-                myPromise.then(function(mod) {
-                            console.log('SUCCESS');
-                        },
-                        function(err) {
-                            console.error(err.toString(), err);
-                        });
+
+
+                myPromise.then(function(mod)
+                    {
+                        console.log('SUCCESS');
+                    },
+                    function(err)
+                    {
+                        console.error(err.toString(), err);
+                    });
             }
 
         </script>
@@ -99,9 +122,9 @@ from graphics import*
 
 def main():
 	win = GraphWin ("Title", 500, 500)
-	p = Image(Point(100, 100), "imgExample.jpeg")
+	p = Entry(Point(100, 100), 60)
 	p.draw(win)
-	win.getKey()
+	win.getMouse()
 	win.close()
 main()
 

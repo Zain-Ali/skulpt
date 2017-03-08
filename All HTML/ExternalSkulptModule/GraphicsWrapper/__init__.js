@@ -76,21 +76,6 @@ var $builtinmodule = function(name){
             self.width = width;
             self.height = height;
 
-            if(title == undefined)
-            {
-                self.title = "Graphics Window";
-            }
-            if(width == undefined)
-            {
-                self.width = 300;
-            }
-            if(height == undefined)
-            {
-                self.height = 300;
-            }
-            console.log(self);
-
-
             self.modelObj = new GraphWinJs(title.v, width.v, height.v);
             return self;
         });
@@ -811,7 +796,7 @@ var $builtinmodule = function(name){
      */
     entryClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self, pointObj, radius){
-            debugger;
+            //debugger;
             self.modelObj = new Entry(pointObj.modelObj, radius.v);
             self.pointObj = pointObj;
             self.radius = radius;
