@@ -101,7 +101,7 @@ $(function()
         {
             this.width = 300;
         }
-        if(height)
+        if(height == undefined)
         {
             this.height = 300;
         }
@@ -906,7 +906,10 @@ $(function()
         this.polygonModelObj.style.strokeWidth = 1;
 
         //Adding Multiple Points (should take up to 12)
+        debugger;
+
         var args = Array.prototype.slice.call(arguments);
+        console.log("this is arg", args);
         for(var i=0; i < args.length; i++) {
             this.points.push(args[i].getX());
             this.points.push(args[i].getY());
@@ -999,6 +1002,7 @@ $(function()
      */
     Text = function(point, text)
     {
+        debugger;
         if(point == undefined)
             throw ('A  Text needs cords');
 
@@ -1026,6 +1030,7 @@ $(function()
 
     Text.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
+        debugger;
         if($(graphWinObj.svg).find(domElem).length == 0)
         {
             //Dom obj not found inside window
@@ -1037,6 +1042,7 @@ $(function()
 
     Text.prototype.undraw = function(graphWinObj)
     {
+
         if(this.domObj != null)
         {
             if($(graphWinObj.svg).find(this.domObj).length == 1)
@@ -1062,6 +1068,8 @@ $(function()
 
     Text.prototype.setText = function (text)
     {
+        debugger;
+        console.log(this.textModelObj.textContent = text);
         this.textModelObj.textContent = text;
     };
 
@@ -1250,7 +1258,7 @@ $(function()
 
     Entry.prototype.setText = function (text)
     {
-        console.log(this.entryModelObj);
+        console.log("1", this.entryModelObj, text);
         this.entryModelObj.getElementsByTagName('input')[0].value = text;
     };
 

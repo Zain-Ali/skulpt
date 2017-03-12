@@ -71,12 +71,27 @@ var $builtinmodule = function(name){
      * @param $loc
      */
     graphicsClass = function($glb, $loc){
-        $loc.__init__ = new Sk.builtin.func(function(self, title, width, height){
+        $loc.__init__ = new Sk.builtin.func(function(self, title, width, height)
+        {
             self.title = title;
             self.width = width;
             self.height = height;
+            debugger;
+            if (title == undefined)
+            {
+                title = "Graphics Window";
+            }
+            if(width == undefined)
+            {
+                width = 300;
+            }
+            if(height == undefined)
+            {
+                height = 300;
+            }
 
             self.modelObj = new GraphWinJs(title.v, width.v, height.v);
+
             return self;
         });
 
@@ -621,6 +636,7 @@ var $builtinmodule = function(name){
             self.points = [];
             var modelObjs = [""];
             var args = Array.prototype.slice.call(arguments);
+            debugger;
             for(var i=1; i < args.length; i++) {
                 self.points.push(args[i]);
                 modelObjs.push(args[i].modelObj);
@@ -669,14 +685,25 @@ var $builtinmodule = function(name){
 
         //DOES NOT WORK
         $loc.getPoints = new Sk.builtin.func(function(self) {
-            return self.modelObj.getPoints();
+            //return self.modelObj.getPoints();
             //do stuff here
+
+            var model = self.modelObj.getPoints();
+            debugger;
+
+            //clone to avoid reference issues....
+            console.log("this is x", (model.getX()));
+            var x = Sk.builtin.float_(model.getX());
+            var pyObj = Sk.misceval.callsim(mod.Point, x);
+            console.log("this is pyOBJ Polygon get Points", pyObj);
+            return pyObj;
 
         });
 
 
         //DOES NOT WORK
         $loc.clone = new Sk.builtin.func(function (self) {
+            debugger;
             var gPoints = Sk.misceval.callsim(self.getPoints, self);
             var pyObj = Sk.misceval.callsim(mod.Polygon, gPoints);
             return pyObj;
@@ -721,6 +748,7 @@ var $builtinmodule = function(name){
 
 
         $loc.setText = new Sk.builtin.func(function(self, text) {
+            debugger;
             self.modelObj.setText(text.v);
         });
 
@@ -732,14 +760,14 @@ var $builtinmodule = function(name){
 
         //DOES NOT WORK
         $loc.getText = new Sk.builtin.func(function(self) {
-            // return self.modelObj.getText();
+            return self.modelObj.getText();
 
-             debugger;
-            var model = self.modelObj.getText();
-
-            var text = Sk.builtin.str(model.getText);
-            var pyObj = Sk.misceval.callsim(mod.Text, text);
-            return pyObj;
+            //  debugger;
+            // var model = self.modelObj.getText();
+            //
+            // var text = Sk.builtin.str(model.getText);
+            // var pyObj = Sk.misceval.callsim(mod.Text, text);
+            // return pyObj;
         });
 
 
@@ -763,6 +791,7 @@ var $builtinmodule = function(name){
             self.modelObj.setStyle(fontStyle.v);
         });
 
+
         $loc.setSize = new Sk.builtin.func(function(self, fontSize) {
             self.modelObj.setSize(fontSize.v);
         });
@@ -775,16 +804,16 @@ var $builtinmodule = function(name){
 
 
         //DOES NOT WORK
-        $loc.clone = new Sk.builtin.func(function (self) {
-            //self.modelObj.clone();
-            var p1 = Sk.misceval.callsim(self.getAnchor, self);
-            console.log(self);
-            var text = Sk.misceval.callsim(self.getText, self);
-
-            var pyObj = Sk.misceval.callsim(mod.Text, p1, text);
-
-            return pyObj;
-        });
+        // $loc.clone = new Sk.builtin.func(function (self) {
+        //     //self.modelObj.clone();
+        //     var p1 = Sk.misceval.callsim(self.getAnchor, self);
+        //     console.log(self);
+        //     var text = Sk.misceval.callsim(self.getText, self);
+        //
+        //     var pyObj = Sk.misceval.callsim(mod.Text, p1, text);
+        //
+        //     return pyObj;
+        // });
     };
 
 
