@@ -142,7 +142,7 @@ $(function()
             this.mousePosition = {};
             this.mousePosition.X = e.pageX;
             this.mousePosition.Y = e.pageY;
-            console.log(this.mousePosition);
+            console.log("This is mouse X and Y ",this.mousePosition);
         });
 
 
@@ -344,7 +344,10 @@ $(function()
 
     Point.prototype.getX = function()
     {
+
+        console.log("This.x", this.x);
         return this.x;
+
     };
 
 

@@ -259,12 +259,17 @@ var $builtinmodule = function(name){
 
 
         $loc.getX = new Sk.builtin.func(function(self) {
-            return self.modelObj.getX();
+            debugger;
+            var x = self.modelObj.getX();
+            var skulptX = Sk.builtin.float_(x);
+            return skulptX;
         });
 
 
         $loc.getY = new Sk.builtin.func(function(self) {
-            return self.modelObj.getY();
+            var y = self.modelObj.getY();
+            var skulptY = Sk.builtin.float_(y);
+            return skulptY;
         });
 
     };
@@ -520,18 +525,14 @@ var $builtinmodule = function(name){
 
 
         $loc.getCenter = new Sk.builtin.func(function(self) {
-            //return self.modelObj.getCenter();
 
-            //////
             var model = self.modelObj.getCenter();
-            //
+
             //clone to avoid reference issues....
             var x = Sk.builtin.float_(model.getX());
             var y = Sk.builtin.float_(model.getY());
             var pyObj = Sk.misceval.callsim(mod.Point, x,y);
-            console.log("this is pyOBJ P2", pyObj);
             return pyObj;
-            // //////
         });
 
 
@@ -541,7 +542,7 @@ var $builtinmodule = function(name){
 
 
         $loc.move = new Sk.builtin.func(function (self, dx, dy) {
-            debugger;
+            //debugger;
             self.modelObj.move(dx.v, dy.v);
         });
 
