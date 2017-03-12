@@ -77,6 +77,7 @@ var $builtinmodule = function(name){
             self.width = width;
             self.height = height;
 
+
             if (title == undefined)
             {
                 title = "Graphics Window";
@@ -519,7 +520,18 @@ var $builtinmodule = function(name){
 
 
         $loc.getCenter = new Sk.builtin.func(function(self) {
-            return self.modelObj.getCenter();
+            //return self.modelObj.getCenter();
+
+            //////
+            var model = self.modelObj.getCenter();
+            //
+            //clone to avoid reference issues....
+            var x = Sk.builtin.float_(model.getX());
+            var y = Sk.builtin.float_(model.getY());
+            var pyObj = Sk.misceval.callsim(mod.Point, x,y);
+            console.log("this is pyOBJ P2", pyObj);
+            return pyObj;
+            // //////
         });
 
 
@@ -529,6 +541,7 @@ var $builtinmodule = function(name){
 
 
         $loc.move = new Sk.builtin.func(function (self, dx, dy) {
+            debugger;
             self.modelObj.move(dx.v, dy.v);
         });
 
@@ -766,7 +779,6 @@ var $builtinmodule = function(name){
         });
 
 
-        //DOES NOT WORK
         $loc.getText = new Sk.builtin.func(function(self)
         {
             var getText = self.modelObj.getText();
@@ -808,16 +820,15 @@ var $builtinmodule = function(name){
 
 
         //DOES NOT WORK
-        // $loc.clone = new Sk.builtin.func(function (self) {
-        //     //self.modelObj.clone();
-        //     var p1 = Sk.misceval.callsim(self.getAnchor, self);
-        //     console.log(self);
-        //     var text = Sk.misceval.callsim(self.getText, self);
-        //
-        //     var pyObj = Sk.misceval.callsim(mod.Text, p1, text);
-        //
-        //     return pyObj;
-        // });
+        $loc.clone = new Sk.builtin.func(function (self) {
+            //self.modelObj.clone();
+            var p1 = Sk.misceval.callsim(self.getAnchor, self);
+            var text = Sk.misceval.callsim(self.getText, self);
+
+            var pyObj = Sk.misceval.callsim(mod.Text, p1, text);
+
+            return pyObj;
+        });
     };
 
 
@@ -1031,7 +1042,6 @@ var $builtinmodule = function(name){
 
 
     return mod;
-
 
 
 //End of Main Function

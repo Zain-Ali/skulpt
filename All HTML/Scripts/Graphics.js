@@ -90,24 +90,23 @@ $(function()
     GraphWinJs = function(title, width, height)
     {
         let canvases = getCanvases();
-        // console.log('prePush', canvases);
 
-        // console.log(title, width, height);
+
         if(title == undefined)
         {
-            this.title = "Graphics Window";
+            title = "Graphics Window";
         }
         if(width == undefined)
         {
-            this.width = 300;
+            width = 300;
         }
         if(height == undefined)
         {
-            this.height = 300;
+            height = 300;
         }
 
         //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals (interpolation)
-        let windowOptions = `height=${height}, width=${width}, top=400, left=400`;
+        let windowOptions = `width=${width}, height=${height},  top=400, left=400`;
         let tabId = Math.random();
         this.tabId = tabId;
         this.windw = window.open('about:blank', tabId, windowOptions);
@@ -151,6 +150,7 @@ $(function()
 
 
     GraphWinJs.prototype.setTitle = function(title){
+
         $(this.doc).find('Head').append('<title>'+ title +'</title>')
     };
 
@@ -649,8 +649,8 @@ $(function()
 
     Rectangle.prototype.draw = function(graphWinObj)
     {
-        this.recModelObj.setAttribute('x', Math.min(this.point1.x, this.point2.x));
-        this.recModelObj.setAttribute('y', Math.min(this.point1.y, this.point2.y));
+        this.recModelObj.setAttribute('x', (this.point1.x, this.point2.x));
+        this.recModelObj.setAttribute('y', (this.point1.y, this.point2.y));
 
         var width = Math.max(this.point1.x, this.point2.x) - Math.min(this.point1.x, this.point2.x);
         var height = Math.max(this.point1.y, this.point2.y) - Math.min(this.point1.y, this.point2.y);
@@ -693,11 +693,12 @@ $(function()
 
         var P1 = ((this.point1.x + this.point2.x) / 2);
         var P2 = ((this.point1.y + this.point2.y) / 2);
-        console.log(P1);
-        console.log(P2);
 
-        console.log(new Point(P1, P2));
-        return new Point(P1, P2);
+        var point1 = P1;
+        var point2 = P2;
+
+        //console.log(new Point(P1, P2));
+        return new Point(point1, point2);
 
     };
 
@@ -994,6 +995,7 @@ $(function()
 
 
 
+
     /**
      *
      * @param point
@@ -1072,21 +1074,12 @@ $(function()
     };
 
 
-    //DOES NOT WORK
     Text.prototype.getText = function ()
     {
-        // console.log(new Text((this.point.x, this.point.y), this.textModelObj.textContent));
-        // return new Text((this.point.x, this.point.y), this.textModelObj.textContent);
-
-
-        //console.log(this.textModelObj.textContent);
-        //return this.textModelObj.textContent;
-
 
         console.log(new GetText(this.textModelObj.textContent));
         return new GetText(this.textModelObj.textContent);
     };
-
 
 
     Text.prototype.getAnchor = function (text)
