@@ -76,7 +76,7 @@ var $builtinmodule = function(name){
             self.title = title;
             self.width = width;
             self.height = height;
-            debugger;
+
             if (title == undefined)
             {
                 title = "Graphics Window";
@@ -100,17 +100,20 @@ var $builtinmodule = function(name){
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
 
-        $loc.close = new Sk.builtin.func(function(self){
+        $loc.close = new Sk.builtin.func(function(self)
+        {
             self.modelObj.close();
         });
 
 
-        $loc.setBackground = new Sk.builtin.func(function (self, background) {
+        $loc.setBackground = new Sk.builtin.func(function (self, background)
+        {
             self.modelObj.setBackground(background.v);
         });
 
 
-        $loc.getMouse = new Sk.builtin.func(function(self){
+        $loc.getMouse = new Sk.builtin.func(function(self)
+        {
             var susp = new Sk.misceval.Suspension();
 
             var promise = self.modelObj.getMouse();
@@ -134,13 +137,16 @@ var $builtinmodule = function(name){
         });
 
         ////////////////////////// ////////////////////////// ////////////////////////// //////////////////////////
-        $loc.getKey = new Sk.builtin.func(function(self){
+        $loc.getKey = new Sk.builtin.func(function(self)
+        {
             var susp = new Sk.misceval.Suspension();
 
             var promise = self.modelObj.getKey();
 
-            susp.resume = function () {
-                if (susp.data["error"]) {
+            susp.resume = function ()
+            {
+                if (susp.data["error"])
+                {
                     throw new Sk.builtin.IOError(susp.data["error"].message);
                 } else {
                     var pressedKey = Sk.builtin.str(susp.data["result"]);
@@ -636,7 +642,6 @@ var $builtinmodule = function(name){
             self.points = [];
             var modelObjs = [""];
             var args = Array.prototype.slice.call(arguments);
-            debugger;
             for(var i=1; i < args.length; i++) {
                 self.points.push(args[i]);
                 modelObjs.push(args[i].modelObj);
@@ -669,6 +674,7 @@ var $builtinmodule = function(name){
 
         $loc.setOutline = new Sk.builtin.func(function(self, stroke) {
             self.modelObj.setOutline(stroke.v);
+            Sk.misceval.str(f)
         });
 
 
@@ -718,8 +724,10 @@ var $builtinmodule = function(name){
      * @param $glb
      * @param $loc
      */
-    textClass = function($glb, $loc){
-        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, text ){
+    textClass = function($glb, $loc)
+    {
+        $loc.__init__ = new Sk.builtin.func(function(self, pointObj, text )
+        {
             self.modelObj = new Text(pointObj.modelObj, text.v);
             self.pointObj = pointObj;
             self.text = text;
@@ -759,15 +767,11 @@ var $builtinmodule = function(name){
 
 
         //DOES NOT WORK
-        $loc.getText = new Sk.builtin.func(function(self) {
-            return self.modelObj.getText();
-
-            //  debugger;
-            // var model = self.modelObj.getText();
-            //
-            // var text = Sk.builtin.str(model.getText);
-            // var pyObj = Sk.misceval.callsim(mod.Text, text);
-            // return pyObj;
+        $loc.getText = new Sk.builtin.func(function(self)
+        {
+            var getText = self.modelObj.getText();
+            var getTextStr = Sk.builtins.str(getText);
+            return getTextStr;
         });
 
 
@@ -870,8 +874,13 @@ var $builtinmodule = function(name){
 
 
         //DOES NOT WORK
-        $loc.getText = new Sk.builtin.func(function(self) {
-            self.modelObj.getText();
+        $loc.getText = new Sk.builtin.func(function(self)
+        {
+            debugger;
+
+            var getText = self.modelObj.getText();
+            var getTextStr = Sk.builtins.str(getText);
+            return getTextStr;
         });
 
 
@@ -992,7 +1001,6 @@ var $builtinmodule = function(name){
 
 
         $loc.clone = new Sk.builtin.func(function (self) {
-            debugger;
             var getIma = Sk.misceval.callsim(self.getImage, self);
             var p1 = Sk.misceval.callsim(self.getAnchor, self);
 

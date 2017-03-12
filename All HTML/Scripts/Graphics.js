@@ -1002,7 +1002,6 @@ $(function()
      */
     Text = function(point, text)
     {
-        debugger;
         if(point == undefined)
             throw ('A  Text needs cords');
 
@@ -1030,7 +1029,6 @@ $(function()
 
     Text.prototype.__insertIfNeeded = function(domElem, graphWinObj)
     {
-        debugger;
         if($(graphWinObj.svg).find(domElem).length == 0)
         {
             //Dom obj not found inside window
