@@ -3,18 +3,18 @@
  * Created by zain on 11/11/2016.
  */
 
-var GraphWinJs;
-var Radius;
-var Point;
-var Circle;
-var Rectangle;
-var Line;
-var Oval;
-var Polygon;
-var Text;
-var Entry;
-var Image;
-var GetText;
+let GraphWinJs;
+let Radius;
+let Point;
+let Circle;
+let Rectangle;
+let Line;
+let Oval;
+let Polygon;
+let Text;
+let Entry;
+let Image;
+let GetText;
 
 
 function getCanvases() {
@@ -301,6 +301,8 @@ $(function()
     {
         if(x == undefined || y == undefined)
             throw ("Point class needs x and y cords");
+        else if(x instanceof Array)
+            debugger;
         this.x = x;
         this.y = y;
         this.domObj = null;
@@ -345,7 +347,7 @@ $(function()
     Point.prototype.getX = function()
     {
 
-        console.log("This.x", this.x);
+        // console.log("This.x", this.x);
         return this.x;
 
     };
@@ -938,6 +940,7 @@ $(function()
         }
     };
 
+
     Polygon.prototype.undraw = function(graphWinObj)
     {
         if(this.domObj != null)
@@ -952,9 +955,12 @@ $(function()
 
     Polygon.prototype.getPoints = function ()
     {
+        debugger;
         // Returns a clone of the corresponding endpoint of the segment.
-        console.log(new Point(this.points, this.points));
-        return new Point(this.points, this.points);
+        // console.log(new Point(this.points.x, this.points.y));
+        // return new Point(this.points.x, this.points.y);
+
+    //    change
 
     };
 
@@ -986,6 +992,7 @@ $(function()
     //DOES NOT WORK
     Polygon.prototype.clone = function()
     {
+        debugger;
         //not working (need to do getPoints method first)
         let polygonCopy = {};
         Object.setPrototypeOf(polygonCopy, this.__proto__);
@@ -1079,9 +1086,12 @@ $(function()
 
     Text.prototype.getText = function ()
     {
+        // debugger;
+        // console.log(Text(this.textModelObj.textContent));
+        // return new Text((this.textModelObj.point.x) ,this.textModelObj.textContent);
+        console.log(this.textModelObj.textContent);
+        return this.textModelObj.textContent;
 
-        console.log(new GetText(this.textModelObj.textContent));
-        return new GetText(this.textModelObj.textContent);
     };
 
 

@@ -653,6 +653,7 @@ var $builtinmodule = function(name){
      */
     polygonClass = function($glb, $loc){
         $loc.__init__ = new Sk.builtin.func(function(self){
+            debugger;
             self.points = [];
             var modelObjs = [""];
             var args = Array.prototype.slice.call(arguments);
@@ -707,14 +708,13 @@ var $builtinmodule = function(name){
         $loc.getPoints = new Sk.builtin.func(function(self) {
             //return self.modelObj.getPoints();
             //do stuff here
-
-            var model = self.modelObj.getPoints();
             debugger;
+            var model = self.modelObj.getPoints();
 
             //clone to avoid reference issues....
-            console.log("this is x", (model.getX()));
             var x = Sk.builtin.float_(model.getX());
-            var pyObj = Sk.misceval.callsim(mod.Point, x);
+            var y = Sk.builtin.float_(model.getY());
+            var pyObj = Sk.misceval.callsim(mod.Point, x, y);
             console.log("this is pyOBJ Polygon get Points", pyObj);
             return pyObj;
 
@@ -782,8 +782,9 @@ var $builtinmodule = function(name){
 
         $loc.getText = new Sk.builtin.func(function(self)
         {
+            debugger;
             var getText = self.modelObj.getText();
-            var getTextStr = Sk.builtins.str(getText);
+            var getTextStr = Sk.builtins.str(getText.v);
             return getTextStr;
         });
 
@@ -888,7 +889,7 @@ var $builtinmodule = function(name){
         //DOES NOT WORK
         $loc.getText = new Sk.builtin.func(function(self)
         {
-            debugger;
+         //   debugger;
 
             var getText = self.modelObj.getText();
             var getTextStr = Sk.builtins.str(getText);
