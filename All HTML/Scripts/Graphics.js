@@ -3,6 +3,8 @@
  * Created by zain on 11/11/2016.
  */
 
+
+
 let GraphWinJs;
 let Radius;
 let Point;
@@ -14,94 +16,62 @@ let Polygon;
 let Text;
 let Entry;
 let Image;
-let GetText;
 
 
-function getCanvases() {
-    //let canvases = JSON.parse(localStorage.getItem('canvases'));
-    let canvases = JSON.parse(sessionStorage.getItem('canvases'));
-    canvases = canvases || [];
-    return canvases;
-}
 
-function setCanvases(canvases) {
-    //localStorage.setItem('canvases', JSON.stringify(canvases));
-    sessionStorage.setItem('canvases', JSON.stringify(canvases));
-}
-
-function removeCurrentWindow(toRemove) {
-    let canvases = getCanvases();
-    // console.log('preSplice', canvases);
-    let isIndex = function (currentId) {
-        // console.log(`To remove ${toRemove} Current: ${currentId} Equal ${toRemove === currentId}`);
-        return toRemove === currentId;
-    };
-    let index = canvases.findIndex(isIndex);
-    if (index >= 0){
-        canvases.splice(index, 1);
-        // console.log('afterSplice', canvases);
-        setCanvases(canvases);
-    }
-}
-
-
-/*
-*
-*
-*/
-
-function getHtmlTemplate()
-{
-    var txt = "";
+/**
+ *
+ * @returns {string} txt
+ */
+function getHtmlTemplate() {
+    let txt = "";
     txt += "<Style> svg, body{width: 100%; height: 100%;} </style>";
-
     return txt;
 }
 
-/*
-* Temporary Supporting Function for KeyPress (To be Deleted)
-*/
-function KeyHandler() {
-    var self = this;
-    this._target   = getTarget();
-    this._managers = {};
-    this._handlers =
-        {
-            keypress : function(e)
-            {
-                self.onEvent("keypress", e);
-            }
-        };
-    for (var key in this._handlers) {
-        this._target.addEventListener(key, this._handlers[key]);
+
+
+/**
+ *
+ * @type {{new(title?, width?, height?)=>{setCoords: (()), height, height, checkMouse: (()), checkKey: (()),
+ * width, width, plot: (()), getMouse: (()), close: (()), title, title, plotPixel: (()), getKey: (()),
+ * setTitle: ((title)), setBackground: ((background))}}}
+ */
+GraphWinJs = class {
+
+    get title() {
+        return this._title;
     }
-}
 
+    set title(value) {
+        this._title = value;
+    }
 
-$(function()
-{
-    /**
-     *
-     * @param title
-     * @param width
-     * @param height
-     * @constructor
-     */
-    GraphWinJs = function(title, width, height)
-    {
-        let canvases = getCanvases();
+    get width() {
+        return this._width;
+    }
 
+    set width(value) {
+        this._width = value;
+    }
 
-        if(title == undefined)
-        {
+    get height() {
+        return this._height;
+    }
+
+    set height(value) {
+        this._height = value;
+    }
+
+    constructor (title, width, height) {
+
+        if (title === undefined) {
             title = "Graphics Window";
         }
-        if(width == undefined)
-        {
+        if (width === undefined) {
             width = 300;
         }
-        if(height == undefined)
-        {
+        if (height === undefined) {
             height = 300;
         }
 
@@ -109,28 +79,14 @@ $(function()
         let windowOptions = `width=${width}, height=${height},  top=400, left=400`;
         let tabId = Math.random();
         this.tabId = tabId;
-        this.windw = window.open('about:blank', tabId, windowOptions);
+        this.windw = window.open("about:blank", tabId, windowOptions);
 
-
-        canvases.push(tabId);
-        // console.log('wasPushed', canvases);
-        setCanvases(canvases);
 
         this.doc = this.windw.document;
-        this.doc.write(getHtmlTemplate() + '<svg id="mySvg"></svg>');
+        this.doc.write(getHtmlTemplate() + "<svg id=\"mySvg\"></svg>");
         this.setTitle(title);
-        this.svg = $(this.doc).find('#mySvg').first();
+        this.svg = $(this.doc).find("#mySvg").first();
         this.windw.document.close();
-
-        this.windw.addEventListener("beforeunload", function (e) {
-            // console.log(e);
-            removeCurrentWindow(this.tabId);
-            // e.preventDefault();
-        });
-
-        this.windw.onbeforeunload = function() {
-            window.sessionStorage.clear();
-        };
 
         /**
          *
@@ -138,344 +94,329 @@ $(function()
          * @constructor
          * keep track of mouse position in !other! window!
          */
-        $(this.windw).mousedown(function(e){
+        $(this.windw).mousedown(function (e) {
             this.mousePosition = {};
             this.mousePosition.X = e.pageX;
             this.mousePosition.Y = e.pageY;
-            console.log("This is mouse X and Y ",this.mousePosition);
+            console.log("This is mouse X and Y ", this.mousePosition);
         });
 
+    }
 
-    };
+    setTitle (title) {
+        $(this.doc).find("Head").append("<title>" + title + "</title>");
+    }
 
-
-    GraphWinJs.prototype.setTitle = function(title){
-
-        $(this.doc).find('Head').append('<title>'+ title +'</title>')
-    };
-
-
-    GraphWinJs.prototype.close = function()
-    {
-        removeCurrentWindow(this.tabId);
+    close () {
         this.windw.close();
-    };
+    }
 
-
-    GraphWinJs.prototype.setBackground = function(background)
-    {
-        var svg = this.doc.getElementsByTagName('svg')[0]; //Get svg element
+    setBackground (background) {
+        let svg = this.doc.getElementsByTagName("svg")[0]; //Get svg element
         svg.style.backgroundColor = background;
-    };
+    }
 
-
-    GraphWinJs.prototype.getMouse = function()
-    {
-        var handleClick = function(){
+    getMouse () {
+        let handleClick = function () {
             this.resolve(this._this.windw.mousePosition);
         };
 
-        var asyncPromiseFunc = function(resolve, reject) {
-            try{
-                var boundToPromise = handleClick.bind({resolve: resolve, reject:reject, _this:this});
+        let asyncPromiseFunc = function (resolve, reject) {
+            try {
+                let boundToPromise = handleClick.bind({resolve: resolve, reject: reject, _this: this});
                 $(this.windw.document.body).click(boundToPromise);
             }
-            catch(e)
-            {
+            catch (e) {
                 reject(e);
             }
         };
 
         return new Promise(asyncPromiseFunc.bind(this));
-    };
+    }
 
-
-    GraphWinJs.prototype.checkMouse = function()
-    {
+    checkMouse () {
+        console.log(this.windw.mousePosition);
         return this.windw.mousePosition;
-    };
+    }
 
-
-    //not working
-    GraphWinJs.prototype.getKey = function()
-    {
-        var handleKey = function(eventData){
+    getKey  () {
+        let handleKey = function (eventData) {
             this.resolve(eventData.key);
             console.log(eventData.key);
         };
 
-        var asyncPromiseFunc = function(resolve, reject) {
-            try{
-                var boundToPromise = handleKey.bind({resolve: resolve, reject:reject, _this:this});
+        let asyncPromiseFunc = function (resolve, reject) {
+            try {
+                let boundToPromise = handleKey.bind({resolve: resolve, reject: reject, _this: this});
                 $(this.windw).keypress(boundToPromise);
             }
-            catch(e)
-            {
+            catch (e) {
                 reject(e);
             }
         };
 
         return new Promise(asyncPromiseFunc.bind(this));
-    };
+    }
 
-
-
-    GraphWinJs.prototype.checkKey = function()
-    {
+    checkKey () {
+        console.log(this.windw.keyPressed);
         return this.windw.keyPressed;
-    };
-
+    }
 
     //Least Important
-    GraphWinJs.prototype.plot = function()
-    {
+    plot () {
+    }
 
-    };
+    plotPixel () {
+    }
 
+    setCoords () {
+    }
 
-    GraphWinJs.prototype.plotPixel = function()
-    {
-
-    };
-
-
-    GraphWinJs.prototype.setCoords = function()
-    {
-
-    };
-    //Least Important
+};
 
 
-    /**
-     *
-     * @param radius
-     * @constructor
-     */
-    Radius = function(radius)
-    {
-        if(radius == undefined)
-            throw ("radius class needs radius");
+
+
+/**
+ *
+ * @type {{new(radius?)=>{radius, radius}}}
+ */
+Radius = class {
+
+    get radius() {
+        return this._radius;
+    }
+
+    set radius(value) {
+        this._radius = value;
+    }
+
+    constructor(radius) {
+
+        if (radius === undefined) {
+            throw ("Radius needs radius");
+        }
         this.radius = radius;
         this.domObj = null;
 
-        this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'radius');
-    };
+        this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", "radius");
+    }
+
+};
 
 
-    Radius.prototype.getRadius = function()
-    {
-        console.log(this.radius);
-        return this.radius;
-    };
 
-    /**
-     *
-     * @param text
-     * @constructor
-     */
-    GetText = function(text)
-    {
-        if(text == undefined)
-            throw ("radius class needs text");
-        this.text = text;
+/**
+ *
+ * @type {{new(x?, y?)=>{getY: (()), __insertIfNeeded: ((domElem?, graphWinObj)),
+ * draw: ((graphWinObj?)), getX: (()), undraw: ((graphWinObj)), x, x, y, y}}}
+ */
+Point = class {
+
+    get x() {
+        return this._x;
+    }
+
+    set x(value) {
+        this._x = value;
+    }
+
+    get y() {
+        return this._y;
+    }
+
+    set y(value) {
+        this._y = value;
+    }
+
+    constructor(x, y) {
+
+        if (x === undefined || y === undefined) {
+            throw ("Point needs x and y coordinates");
+        }
+
+        else if(x instanceof Array) {
+        }
+
+        this._x = x;
+        this._y = y;
         this.domObj = null;
+        this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", "point");
+    }
 
-        this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-    };
-
-
-    // GetText.prototype.getText = function()
-    // {
-    //     console.log(this.text);
-    //     return this.text;
-    // };
-
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @constructor
-     */
-    Point = function(x, y)
-    {
-        if(x == undefined || y == undefined)
-            throw ("Point class needs x and y cords");
-        else if(x instanceof Array)
-            debugger;
-        this.x = x;
-        this.y = y;
-        this.domObj = null;
-
-        this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'point');
-    };
-
-
-    //Does not draw on SVG Window
-    Point.prototype.draw = function(graphWinObj)
-    {
-        this.pointModelObj.setAttribute('x1', this.x);
-        this.pointModelObj.setAttribute('y1', this.y);
-
+    draw(graphWinObj) {
+        this.pointModelObj.setAttribute("x1", this._x);
+        this.pointModelObj.setAttribute("y1", this._y);
         this.__insertIfNeeded(this.pointModelObj, graphWinObj);
-    };
+    }
 
-
-    Point.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        if($(graphWinObj.svg).find(domElem).length == 0)
-        {
+    __insertIfNeeded(domElem, graphWinObj) {
+        if ($(graphWinObj.svg).find(domElem).length === 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
             this.domObj = domElem;
         }
-    };
+    }
 
-
-    Point.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1)
-            {
+    undraw(graphWinObj) {
+        if (this.domObj != null) {
+            if ($(graphWinObj.svg).find(this.domObj).length == 1) {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
-    };
+    }
 
-
-    Point.prototype.getX = function()
-    {
-
-        // console.log("This.x", this.x);
+    getX() {
         return this.x;
+    }
 
-    };
-
-
-    Point.prototype.getY = function()
-    {
+    getY() {
         return this.y;
-    };
+    }
+
+    setFill(fill) {
+        this.pointModelObj.style.fill = fill;
+    }
+
+    setOutline (stroke) {
+        this.pointModelObj.style.stroke = stroke;
+    }
+
+    setWidth (width) {
+        this.pointModelObj.style.strokeWidth = width;
+    }
+
+    move (dx, dy) {
+        this.pointModelObj.setAttribute("x1", dx);
+        this.pointModelObj.setAttribute("x2", dy);
+    }
+
+    clone() {
+        let pointCopy = {};
+        Object.setPrototypeOf(pointCopy, this.__proto__);
+        pointCopy = Object.assign(pointCopy, this);
+        pointCopy.domObj = null;
+        pointCopy.pointModelObj = null;
+        console.log("copy/clone", pointCopy);
+        return pointCopy;
+    }
+
+};
 
 
 
-    /**
-     *
-     * @param point1
-     * @param point2
-     * @constructor
-     */
-    Line = function(point1,  point2)
-    {
-        if(point1 == undefined)
-            throw ('A  needs cords');
-        if(point2 == undefined)
-            point2 = 20;
+/**
+ *
+ * @type {{new(point1?, point2?)=>{point2, point2, point1, point1, getCenter: (()),
+ * draw: ((graphWinObj?)), _insertIfNeeded: ((domElem?, graphWinObj)), setOutline: ((stroke)), getP1: (()),
+ * clone: (()), setWidth: ((width)), getP2: (()), move: ((dx?, dy?)), setArrow: (()), undraw: ((graphWinObj))}}}
+ */
+Line = class {
+
+    get point1() {
+        return this._point1;
+    }
+
+    set point1(value) {
+        this._point1 = value;
+    }
+
+    get point2() {
+        return this._point2;
+    }
+
+    set point2(value) {
+        this._point2 = value;
+    }
+
+    constructor (point1, point2) {
+
+        if (point1 === undefined) {
+            throw ("A  Line needs coordinates");
+        }
+        if (point2 === undefined) {
+            throw ("A  Line needs coordinates");
+        }
+
         this.point1 = point1;
         this.point2 = point2;
         this.domObj = null;
 
-        this.lineModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+        this.lineModelObj = document.createElementNS("http://www.w3.org/2000/svg", "line");
 
         //custom default settings
-        this.lineModelObj.style.stroke = '#000'; //black
+        this.lineModelObj.style.stroke = "#000"; //black
         this.lineModelObj.style.strokeWidth = 1;
-    };
+    }
 
-
-    Line.prototype.draw = function(graphWinObj)
-    {
-        this.lineModelObj.setAttribute('x1', this.point1.x);
-        this.lineModelObj.setAttribute('y1', this.point1.y);
-        this.lineModelObj.setAttribute('x2', this.point2.x);
-        this.lineModelObj.setAttribute('y2', this.point2.y);
+    draw (graphWinObj) {
+        this.lineModelObj.setAttribute("x1", this.point1.x);
+        this.lineModelObj.setAttribute("y1", this.point1.y);
+        this.lineModelObj.setAttribute("x2", this.point2.x);
+        this.lineModelObj.setAttribute("y2", this.point2.y);
         this.__insertIfNeeded(this.lineModelObj, graphWinObj);
-    };
+    }
 
-
-    Line.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        if($(graphWinObj.svg).find(domElem).length == 0)
-        {
+    __insertIfNeeded(domElem, graphWinObj) {
+        if ($(graphWinObj.svg).find(domElem).length === 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
             this.domObj = domElem;
         }
-    };
+    }
 
-
-    Line.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1)
-            {
+    undraw (graphWinObj) {
+        if (this.domObj != null) {
+            if ($(graphWinObj.svg).find(this.domObj).length == 1) {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
-    };
+    }
 
+    //need to do
+    setArrow () {
+    }
 
-    Line.prototype.setArrow = function()
-    {
-
-    };
-
-
-    Line.prototype.getCenter = function()
-    {
+    getCenter () {
         /**
          *
          * Formula to get Mid Point of Line using Points
          */
-        var P1 = ((this.point1.x + this.point2. x) / 2);
-        var P2 = ((this.point1.y + this.point2. y) / 2);
-        console.log(P1);
-        console.log(P2);
+        let P1 = ((this.point1.x + this.point2.x) / 2);
+        let P2 = ((this.point1.y + this.point2.y) / 2);
 
-        console.log(P1, P2);
-        return (P1, P2);
-    };
+        return new Point(P1, P2);
+    }
 
-
-    Line.prototype.getP1 = function()
-    {
+    getP1 () {
         // Returns a clone of the corresponding endpoint of the segment.
-        console.log(new Point(this.point1.x, this.point1.y));
         return new Point(this.point1.x, this.point1.y);
-    };
+    }
 
-
-    Line.prototype.getP2 = function()
-    {
+    getP2 () {
         // Returns a clone of the corresponding endpoint of the segment.
-        console.log(new Point(this.point2.x, this.point2.y));
         return new Point(this.point2.x, this.point2.y);
-    };
+    }
 
+    setFill(fill) {
+        this.lineModelObj.style.fill = fill;
+    }
 
-    Line.prototype.setOutline = function(stroke)
-    {
+    setOutline (stroke) {
         this.lineModelObj.style.stroke = stroke;
-    };
+    }
 
-
-    Line.prototype.setWidth = function(width)
-    {
+    setWidth (width) {
         this.lineModelObj.style.strokeWidth = width;
-    };
+    }
 
+    move (dx, dy) {
+        this.lineModelObj.setAttribute("x1", dx);
+        this.lineModelObj.setAttribute("x2", dy);
+    }
 
-    Line.prototype.move = function(dx, dy)
-    {
-        this.lineModelObj.setAttribute('x1', dx);
-        this.lineModelObj.setAttribute('x2', dy);
-    };
-
-
-    Line.prototype.clone = function()
-    {
+    clone() {
         let lineCopy = {};
         Object.setPrototypeOf(lineCopy, this.__proto__);
         lineCopy = Object.assign(lineCopy, this);
@@ -483,141 +424,130 @@ $(function()
         lineCopy.lineModelObj = null;
         console.log("copy/clone", lineCopy);
         return lineCopy;
-    };
+    }
+
+};
 
 
 
-    /**
-     *
-     * @param point
-     * @param radius
-     * @constructor
-     */
-    Circle = function(point,  radius)
-    {
-        if(point == undefined || point.x == undefined)
-            throw ('A circle needs cords');
-        if(radius == undefined)
-            radius = 20;
+/**
+ *
+ * @type {{new(point?, radius?)=>{getCenter: (()), draw: ((graphWinObj?)), setOutline: ((stroke)),
+ * point, point, getP1: (()), getP2: (()), setWidth: ((width)), __insertIfNeeded: ((domElem?, graphWinObj)),
+ * move: ((dx?, dy?)), getRadius: (()), undraw: ((graphWinObj)), clone: (()), radius, radius, setFill: ((fill))}}}
+ */
+Circle = class {
+
+    get point() {
+
+        return this._point;
+    }
+
+    set point(value) {
+        this._point = value;
+    }
+
+    get radius() {
+        return this._radius;
+    }
+
+    set radius(value) {
+        this._radius = value;
+    }
+
+    constructor(point, radius) {
+
+        if (point === undefined || point.x === undefined || point.y === undefined)
+            throw ("A circle needs Point x and Point y coordinates");
+        if (radius === undefined) {
+            throw ("A circle needs radius");
+        }
+
         this.point = point;
         this.radius = radius;
         this.domObj = null;
 
-        this.circleModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+        this.circleModelObj = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 
         //custom default settings
-        this.circleModelObj.style.stroke = '#000'; //black
-        this.circleModelObj.style.fill = 'transparent';
+        this.circleModelObj.style.stroke = "#000"; //black
+        this.circleModelObj.style.fill = "transparent";
         this.circleModelObj.style.strokeWidth = 1;
-    };
+    }
 
-
-    Circle.prototype.draw = function(graphWinObj)
-    {
-        this.circleModelObj.setAttribute('cx', this.point.x);
-        this.circleModelObj.setAttribute('cy', this.point.y);
-        this.circleModelObj.setAttribute('r', this.radius);
+    draw(graphWinObj) {
+        this.circleModelObj.setAttribute("cx", this.point.x);
+        this.circleModelObj.setAttribute("cy", this.point.y);
+        this.circleModelObj.setAttribute("r", this.radius);
 
         this.__insertIfNeeded(this.circleModelObj, graphWinObj);
-    };
+    }
 
-
-    Circle.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        if($(graphWinObj.svg).find(domElem).length == 0) {
+    __insertIfNeeded(domElem, graphWinObj) {
+        if ($(graphWinObj.svg).find(domElem).length === 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
             this.domObj = domElem;
         }
-    };
+    }
 
-
-    Circle.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1) {
+    undraw(graphWinObj) {
+        if (this.domObj != null) {
+            if ($(graphWinObj.svg).find(this.domObj).length == 1) {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
-    };
+    }
 
-
-    Circle.prototype.getCenter = function()
-    {
+    getCenter() {
         // Returns a clone of the center point of the circle
-
-        console.log(new Point(this.point.x, this.point.y));
         return new Point(this.point.x, this.point.y);
-    };
+    }
 
+    // does not work
+    getRadius() {
+        console.log("This is radius", new Radius(this.radius));
+        return new Radius(this.radius);
+    }
 
-    Circle.prototype.getRadius = function()
-    {
-         console.log(new Radius (this.radius));
-         return new Radius (this.radius);
-    };
-
-
-    Circle.prototype.getP1 = function()
-    {
+    getP1() {
         // Returns a clone of the corresponding corner of the circle's bounding box.
         // These are opposite corner points of a square that circumscribes the circle.
 
-        // var P1x = this.point.x - this.radius;
-        // var P1y = this.point.y - this.radius;
+        let P1x = this.point.x - 10;
+        let P1y = this.point.y - 10;
 
-        var P1x = this.point.x;
-        var P1y = this.point.y;
-
-        console.log("P1 of Circle",new Point(P1x, P1y));
         return new Point(P1x, P1y);
-    };
+    }
 
-
-    Circle.prototype.getP2 = function()
-    {
+    getP2() {
         // Returns a clone of the corresponding corner of the circle's bounding box.
         // These are opposite corner points of a square that circumscribes the circle.
 
-        // var P2x = this.point.x + this.radius;
-        // var P2y = this.point.y + this.radius;
+        let P2x = this.point.x + 10;
+        let P2y = this.point.y + 10;
 
-        var P2x = this.point.x;
-        var P2y = this.point.y;
-
-        console.log("P2 of Circle", new Point(P2x, P2y));
         return new Point(P2x, P2y);
-    };
+    }
 
-
-    Circle.prototype.setFill = function(fill)
-    {
+    setFill(fill) {
         this.circleModelObj.style.fill = fill;
-    };
+    }
 
-
-    Circle.prototype.setOutline = function(stroke)
-    {
+    setOutline(stroke) {
         this.circleModelObj.style.stroke = stroke;
-    };
+    }
 
-
-    Circle.prototype.setWidth = function(width)
-    {
+    setWidth(width) {
         this.circleModelObj.style.strokeWidth = width;
-    };
+    }
 
+    move(dx, dy) {
+        this.circleModelObj.setAttribute("cx", dx);
+        this.circleModelObj.setAttribute("cx", dy);
+    }
 
-    Circle.prototype.move = function(dx, dy)
-    {
-        this.circleModelObj.setAttribute('cx', dx);
-        this.circleModelObj.setAttribute('cx', dy);
-    };
-
-
-    Circle.prototype.clone = function()
-    {
+    clone() {
         let circleCopy = {};
         Object.setPrototypeOf(circleCopy, this.__proto__);
         circleCopy = Object.assign(circleCopy, this);
@@ -625,133 +555,125 @@ $(function()
         circleCopy.circleModelObj = null;
         console.log("copy/clone", circleCopy);
         return circleCopy;
-    };
+    }
+
+};
 
 
 
-    /**
-     *
-     * @param point1
-     * @param point2
-     * @constructor
-     */
-    Rectangle = function (point1, point2)
-    {
-        if (point1 == undefined || point2 == undefined)
-            throw ('A rectangle needs points');
+/**
+ *
+ * @type {{new(point1?, point2?)=>{point2, point2, point1, point1, getCenter: (()), draw: ((graphWinObj?)),
+ * setOutline: ((stroke)), getP1: (()), getP2: (()), setWidth: ((width)), __insertIfNeeded: ((domElem?, graphWinObj)),
+ * move: ((dx?, dy?)), undraw: ((graphWinObj)), clone: (()), setFill: ((fill))}}}
+ */
+Rectangle = class {
+
+    get point1() {
+        return this._point1;
+    }
+
+    set point1(value) {
+        this._point1 = value;
+    }
+
+    get point2() {
+        return this._point2;
+    }
+
+    set point2(value) {
+        this._point2 = value;
+    }
+
+    constructor (point1, point2) {
+
+        if (point1 === undefined) {
+            throw ("A rectangle needs points");
+        }
+        if (point2 === undefined) {
+            throw ("A rectangle needs points");
+        }
+
         this.point1 = point1;
         this.point2 = point2;
         this.domObj = null;
 
-        this.recModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+        this.recModelObj = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 
         //custom default settings
-        this.recModelObj.style.stroke = '#000'; //black
-        this.recModelObj.style.fill = 'transparent';
+        this.recModelObj.style.stroke = "#000"; //black
+        this.recModelObj.style.fill = "transparent";
         this.recModelObj.style.strokeWidth = 1;
-    };
+    }
 
+    draw (graphWinObj) {
+        this.recModelObj.setAttribute("x", (this.point1.x, this.point2.x));
+        this.recModelObj.setAttribute("y", (this.point1.y, this.point2.y));
 
-    Rectangle.prototype.draw = function(graphWinObj)
-    {
-        this.recModelObj.setAttribute('x', (this.point1.x, this.point2.x));
-        this.recModelObj.setAttribute('y', (this.point1.y, this.point2.y));
+        let width = Math.max(this.point1.x, this.point2.x) - Math.min(this.point1.x, this.point2.x);
+        let height = Math.max(this.point1.y, this.point2.y) - Math.min(this.point1.y, this.point2.y);
 
-        var width = Math.max(this.point1.x, this.point2.x) - Math.min(this.point1.x, this.point2.x);
-        var height = Math.max(this.point1.y, this.point2.y) - Math.min(this.point1.y, this.point2.y);
-
-        this.recModelObj.setAttribute('width', width);
-        this.recModelObj.setAttribute('height', height);
+        this.recModelObj.setAttribute("width", width);
+        this.recModelObj.setAttribute("height", height);
         this.__insertIfNeeded(this.recModelObj, graphWinObj);
-    };
+    }
 
-
-    Rectangle.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        if($(graphWinObj.svg).find(domElem).length == 0)
-        {
+    __insertIfNeeded (domElem, graphWinObj) {
+        if ($(graphWinObj.svg).find(domElem).length === 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
             this.domObj = domElem;
         }
-    };
+    }
 
-
-    Rectangle.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1)
-            {
+    undraw (graphWinObj) {
+        if (this.domObj != null) {
+            if ($(graphWinObj.svg).find(this.domObj).length == 1) {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
-    };
+    }
 
-
-    Rectangle.prototype.getCenter = function()
-    {
+    getCenter () {
         /**
          *
          * Formula to get Mid Point of Rectangle using Points
          */
 
-        var P1 = ((this.point1.x + this.point2.x) / 2);
-        var P2 = ((this.point1.y + this.point2.y) / 2);
+        let P1 = ((this.point1.x + this.point2.x) / 2);
+        let P2 = ((this.point1.y + this.point2.y) / 2);
 
-        var point1 = P1;
-        var point2 = P2;
+        return new Point(P1, P2);
+    }
 
-        //console.log(new Point(P1, P2));
-        return new Point(point1, point2);
-
-    };
-
-
-    Rectangle.prototype.getP1 = function()
-    {
+    getP1 () {
         // Returns a clone of the corresponding endpoint of the segment.
-        console.log(new Point (this.point1.x, this.point1.y));
         return new Point(this.point1.x, this.point1.y);
-    };
+    }
 
-
-    Rectangle.prototype.getP2 = function()
-    {
+    getP2 () {
         // Returns a clone of the corresponding endpoint of the segment.
-        console.log(new Point (this.point2.x, this.point2.y));
         return new Point(this.point2.x, this.point2.y);
-    };
+    }
 
-
-    Rectangle.prototype.setFill = function(fill)
-    {
+    setFill (fill) {
         this.recModelObj.style.fill = fill;
-    };
+    }
 
-
-    Rectangle.prototype.setOutline = function(stroke)
-    {
+    setOutline (stroke) {
         this.recModelObj.style.stroke = stroke;
-    };
+    }
 
-
-    Rectangle.prototype.setWidth = function(width)
-    {
+    setWidth (width) {
         this.recModelObj.style.strokeWidth = width;
+    }
 
-    };
+    move (dx, dy) {
+        this.recModelObj.setAttribute("x", dx);
+        this.recModelObj.setAttribute("y", dy);
+    }
 
-
-    Rectangle.prototype.move = function(dx, dy)
-    {
-        this.recModelObj.setAttribute('x', dx);
-        this.recModelObj.setAttribute('y', dy);
-    };
-
-
-    Rectangle.prototype.clone = function()
-    {
+    clone () {
         let rectangleCopy = {};
         Object.setPrototypeOf(rectangleCopy, this.__proto__);
         rectangleCopy = Object.assign(rectangleCopy, this);
@@ -759,131 +681,123 @@ $(function()
         rectangleCopy.rectangleModelObj = null;
         console.log("copy/clone", rectangleCopy);
         return rectangleCopy;
-    };
+    }
+
+};
 
 
 
-    /**
-     *
-     * @param point1
-     * @param point2
-     * @constructor
-     */
-    Oval = function(point1,  point2)
-    {
-        if(point1 == undefined)
-            throw ('A Ellipse needs cords');
-        if(point2 == undefined)
-            point2 = new Point(20,20);
+/**
+ *
+ * @type {{new(point1?, point2?)=>{point2, point2, point1, point1, getCenter: (()), draw: ((graphWinObj?)),
+ * setOutline: ((stroke)), getP1: (()), getP2: (()), setWidth: ((width)), __insertIfNeeded: ((domElem?, graphWinObj)),
+  * move: ((dx, dy)), undraw: ((graphWinObj)), clone: (()), setFill: ((fill))}}}
+ */
+Oval = class {
+
+    get point1() {
+        return this._point1;
+    }
+
+    set point1(value) {
+        this._point1 = value;
+    }
+
+    get point2() {
+        return this._point2;
+    }
+
+    set point2(value) {
+        this._point2 = value;
+    }
+
+    constructor (point1, point2) {
+
+        if (point1 === undefined) {
+            throw ("A Oval needs Point x and Point y coordinates");
+        }
+        if (point2 === undefined) {
+            throw ("A Oval needs Point x and Point y coordinates");
+        }
+
         this.point1 = point1;
         this.point2 = point2;
         this.domObj = null;
 
-        this.ovalModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'ellipse');
+        this.ovalModelObj = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
 
         //custom default settings
-        this.ovalModelObj.style.stroke = '#000'; //black
-        this.ovalModelObj.style.fill = 'transparent';
+        this.ovalModelObj.style.stroke = "#000"; //black
+        this.ovalModelObj.style.fill = "transparent";
         this.ovalModelObj.style.strokeWidth = 1;
-    };
+    }
 
-
-    Oval.prototype.draw = function(graphWinObj)
-    {
-        this.ovalModelObj.setAttribute('cx', this.point1.x);
-        this.ovalModelObj.setAttribute('cy', this.point1.y);
-        this.ovalModelObj.setAttribute('rx', this.point2.x);
-        this.ovalModelObj.setAttribute('ry', this.point2.y);
+    draw (graphWinObj) {
+        this.ovalModelObj.setAttribute("cx", this.point1.x);
+        this.ovalModelObj.setAttribute("cy", this.point1.y);
+        this.ovalModelObj.setAttribute("rx", this.point2.x);
+        this.ovalModelObj.setAttribute("ry", this.point2.y);
 
         this.__insertIfNeeded(this.ovalModelObj, graphWinObj);
-    };
+    }
 
-
-    Oval.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        if($(graphWinObj.svg).find(domElem).length == 0)
-        {
+    __insertIfNeeded (domElem, graphWinObj) {
+        if ($(graphWinObj.svg).find(domElem).length === 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
             this.domObj = domElem;
         }
-    };
+    }
 
-
-    Oval.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1)
-            {
+    undraw (graphWinObj) {
+        if (this.domObj != null) {
+            if ($(graphWinObj.svg).find(this.domObj).length == 1) {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
-    };
+    }
 
-
-    Oval.prototype.getCenter = function()
-    {
+    getCenter () {
         // Returns a clone of the corresponding endpoint of the segment.
-        /**
-         *
-         * formula to get center
-         * var V = $V( [ (x1+x2)/2, (y1+y2)/2 ] );
-         */
 
-        var Px = ((this.point1.x + this.point2.x) / 2);
-        var Py = ((this.point1.y + this.point2.y) / 2);
-        console.log("Px", Px);
-        console.log("Py", Py);
+        //formula to get center
+        let Px = ((this.point1.x + this.point2.x) / 2);
+        let Py = ((this.point1.y + this.point2.y) / 2);
 
-        console.log(new Point(Px, Py));
+        console.log("get center ab", new Point(Px, Py));
         return new Point(Px, Py);
-    };
+    }
 
-
-    Oval.prototype.getP1 = function()
-    {
+    getP1 () {
         // Returns a clone of the corresponding endpoint of the segment.
-        console.log(new Point(this.point1.x, this.point1.y));
+        console.log("get p1 ab", new Point(this.point1.x, this.point1.y));
         return new Point(this.point1.x, this.point1.y);
-    };
+    }
 
-
-    Oval.prototype.getP2 = function()
-    {
+    getP2 () {
         // Returns a clone of the corresponding endpoint of the segment.
-        console.log(new Point(this.point2.x, this.point2.y));
+        console.log("get p2 ab", new Point(this.point2.x, this.point2.y));
         return new Point(this.point2.x, this.point2.y);
-    };
+    }
 
-
-    Oval.prototype.setFill = function(fill)
-    {
+    setFill (fill) {
         this.ovalModelObj.style.fill = fill;
-    };
+    }
 
-
-    Oval.prototype.setOutline = function(stroke)
-    {
+    setOutline (stroke) {
         this.ovalModelObj.style.stroke = stroke;
-    };
+    }
 
-
-    Oval.prototype.setWidth = function(width)
-    {
+    setWidth (width) {
         this.ovalModelObj.style.strokeWidth = width;
-    };
+    }
 
+    move (dx, dy) {
+        this.ovalModelObj.setAttribute("cx", dx);
+        this.ovalModelObj.setAttribute("cy", dy);
+    }
 
-    Oval.prototype.move = function(dx, dy)
-    {
-        this.ovalModelObj.setAttribute('cx', dx);
-        this.ovalModelObj.setAttribute('cy', dy);
-    };
-
-
-    Oval.prototype.clone = function()
-    {
+    clone () {
         let ovalCopy = {};
         Object.setPrototypeOf(ovalCopy, this.__proto__);
         ovalCopy = Object.assign(ovalCopy, this);
@@ -891,108 +805,92 @@ $(function()
         ovalCopy.ovalModelObj = null;
         console.log("copy/clone", ovalCopy);
         return ovalCopy;
-    };
+    }
+
+};
 
 
 
-    /**
-     *
-     * @constructor
-     */
-    Polygon = function()
-    {
+/**
+ *
+ * @type {{new()=>{getPoints: (()), clone: (()), setFill: ((fill)), __insertIfNeeded: ((domElem?, graphWinObj)),
+ * move: ((dx?, dy?)), draw: ((graphWinObj?)), setWidth: ((width)), undraw: ((graphWinObj)), setOutline: ((stroke))}}}
+ */
+Polygon = class {
+
+    constructor () {
+
         this.points = [];
         this.domObj = null;
 
         this.polygonModelObj = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 
         //custom default settings
-        this.polygonModelObj.style.stroke = '#000';
-        this.polygonModelObj.style.fill = 'transparent';
+        this.polygonModelObj.style.stroke = "#000";
+        this.polygonModelObj.style.fill = "transparent";
         this.polygonModelObj.style.strokeWidth = 1;
 
         //Adding Multiple Points (should take up to 12)
-        debugger;
 
-        var args = Array.prototype.slice.call(arguments);
-        console.log("this is arg", args);
-        for(var i=0; i < args.length; i++) {
-            this.points.push(args[i].getX());
-            this.points.push(args[i].getY());
+        if (arguments.length <= 12) {
+            let args = Array.prototype.slice.call(arguments);
+            console.log("this is arg", args);
+            for(let i=0; i < args.length; i++) {
+                this.points.push(args[i].getX());
+                this.points.push(args[i].getY());
+            }
         }
-    };
+        else {
+            throw("List of Points must not exceed 12");
+        }
+    }
 
-
-    Polygon.prototype.draw = function(graphWinObj)
-    {
-        this.polygonModelObj.setAttribute('points', this.points);
+    draw (graphWinObj) {
+        this.polygonModelObj.setAttribute("points", this.points);
         this.__insertIfNeeded(this.polygonModelObj, graphWinObj);
-    };
+    }
 
-
-    Polygon.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        if($(graphWinObj.svg).find(domElem).length == 0)
-        {
+    __insertIfNeeded (domElem, graphWinObj) {
+        if ($(graphWinObj.svg).find(domElem).length === 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
             this.domObj = domElem;
         }
-    };
+    }
 
-
-    Polygon.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1)
-            {
+    undraw (graphWinObj) {
+        if (this.domObj != null) {
+            if ($(graphWinObj.svg).find(this.domObj).length == 1) {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
-    };
+    }
 
+    //need to do
+    getPoints () {
 
-    Polygon.prototype.getPoints = function ()
-    {
-        debugger;
-        // Returns a clone of the corresponding endpoint of the segment.
-        // console.log(new Point(this.points.x, this.points.y));
-        // return new Point(this.points.x, this.points.y);
+    }
 
-    //    change
-
-    };
-
-
-    Polygon.prototype.setFill = function(fill)
-    {
+    setFill (fill) {
         this.polygonModelObj.style.fill = fill;
-    };
+    }
 
-
-    Polygon.prototype.setOutline = function(stroke)
-    {
+    setOutline (stroke) {
         this.polygonModelObj.style.stroke = stroke;
-    };
+    }
 
-
-    Polygon.prototype.setWidth = function(width)
-    {
+    setWidth (width) {
         this.polygonModelObj.style.strokeWidth = width;
-    };
+    }
 
-
-    Polygon.prototype.move = function(dx, dy)
-    {
-        this.polygonModelObj.setAttribute('dx', dx);
-        this.polygonModelObj.setAttribute('dx', dy);
-    };
+    move (dx, dy) {
+        this.polygonModelObj.setAttribute("dx", dx);
+        this.polygonModelObj.setAttribute("dx", dy);
+    }
 
     //DOES NOT WORK
-    Polygon.prototype.clone = function()
-    {
-        debugger;
+    //depend on getPoints
+    clone () {
         //not working (need to do getPoints method first)
         let polygonCopy = {};
         Object.setPrototypeOf(polygonCopy, this.__proto__);
@@ -1001,157 +899,151 @@ $(function()
         polygonCopy.polygonModelObj = null;
         console.log("copy/clone", polygonCopy);
         return polygonCopy;
-    };
+    }
+
+};
 
 
 
+/**
+ *
+ * @type {{new(point?, text)=>{getText: (()), setTextColor: {(fill), (fillTextColor)}, text, text, setStyle: ((style)),
+ * setText: ((text)), draw: ((graphWinObj?)), setOutline: ((stroke)), setFace: ((fontFace)), point, point,
+ * move: ((dx?, dy?)), __insertIfNeeded: ((domElem?, graphWinObj)), setSize: ((textFontSize)),
+ * getAnchor: (()), clone: (()), undraw: ((graphWinObj))}}}
+ */
+Text = class {
 
-    /**
-     *
-     * @param point
-     * @param text
-     * @constructor
-     */
-    Text = function(point, text)
-    {
-        if(point == undefined)
-            throw ('A  Text needs cords');
+    get point() {
+        return this._point;
+    }
+
+    set point(value) {
+        this._point = value;
+    }
+
+    get text() {
+        return this._text;
+    }
+
+    set text(value) {
+        this._text = value;
+    }
+
+    constructor (point, text){
+
+        if (point === undefined) {
+            throw ("A  Text needs cords");
+        }
+        if (text === undefined) {
+            throw ("Need a String (Text)");
+        }
 
         this.point = point;
         this.text = text;
         this.domObj = null;
 
-        this.textModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+        this.textModelObj = document.createElementNS("http://www.w3.org/2000/svg", "text");
 
         //custom default settings
         this.textModelObj.textContent = this.text;
-        this.textModelObj.style.fill = 'black';
+        this.textModelObj.style.fill = "black";
         this.textModelObj.style.fontFamily = "arial";
         this.textModelObj.style.fontSize = 100;
-    };
+    }
 
-
-    Text.prototype.draw = function(graphWinObj)
-    {
-        this.textModelObj.setAttribute('x', this.point.x);
-        this.textModelObj.setAttribute('y', this.point.y);
+    draw (graphWinObj) {
+        this.textModelObj.setAttribute("x", this.point.x);
+        this.textModelObj.setAttribute("y", this.point.y);
         this.__insertIfNeeded(this.textModelObj, graphWinObj);
-    };
+    }
 
-
-    Text.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        if($(graphWinObj.svg).find(domElem).length == 0)
-        {
+    __insertIfNeeded (domElem, graphWinObj) {
+        if ($(graphWinObj.svg).find(domElem).length === 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
             this.domObj = domElem;
         }
-    };
+    }
 
+    undraw (graphWinObj) {
 
-    Text.prototype.undraw = function(graphWinObj)
-    {
-
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1)
-            {
+        if (this.domObj != null) {
+            if ($(graphWinObj.svg).find(this.domObj).length == 1) {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
-    };
+    }
 
-
-    Text.prototype.setTextColor = function(fill)
-    {
-        //does not change colour
-        this.textModelObj.style.fill = fill;
-    };
-
-
-    Text.prototype.setOutline = function(stroke)
-    {
+    setOutline (stroke) {
         this.textModelObj.style.stroke = stroke;
-    };
+    }
 
-
-    Text.prototype.setText = function (text)
-    {
-        debugger;
-        console.log(this.textModelObj.textContent = text);
+    setText (text) {
         this.textModelObj.textContent = text;
-    };
+    }
 
-
-    Text.prototype.getText = function ()
-    {
-        // debugger;
-        // console.log(Text(this.textModelObj.textContent));
-        // return new Text((this.textModelObj.point.x) ,this.textModelObj.textContent);
-        console.log(this.textModelObj.textContent);
+    getText () {
         return this.textModelObj.textContent;
+    }
 
-    };
-
-
-    Text.prototype.getAnchor = function (text)
-    {
+    getAnchor () {
         //Returns a clone of the corresponding endpoint of the segment.
-        console.log(new Point(this.point.x, this.point.y));
         return new Point(this.point.x, this.point.y);
-    };
+    }
 
-
-    Text.prototype.setFace = function (fontFace)
-    {
+    setFace (fontFace) {
         this.textModelObj.style.fontFamily = fontFace;
-    };
+    }
 
-
-    Text.prototype.setSize = function (textFontSize)
-    {
-        if(textFontSize >= 5 && textFontSize <= 35)
-        {
+    setSize (textFontSize) {
+        if (textFontSize >= 5 && textFontSize <= 35) {
             this.textModelObj.style.fontSize = textFontSize + "px";
         }
-        else
-        {
+        else {
             console.log("Please enter a number between 5 and 35");
         }
-    };
+    }
 
+    setStyle (style) {
 
-    Text.prototype.setStyle = function (style)
-    {
-        if (style === "bold")
+        if (style === "normal")
+        {
+            this.textModelObj.style.fontFamily = "arial";
+        }
+        else if (style === "bold")
         {
             this.textModelObj.style.fontWeight = style;
+        }
+        else if (style == "bold italic") {
+            this.textModelObj.style.fontWeight = "bold";
+            this.textModelObj.style.fontStyle = "italic";
         }
         else
         {
             this.textModelObj.style.fontStyle = style;
         }
-    };
+    }
 
-
-    Text.prototype.setTextColor = function (fillTextColor)
-    {
+    setTextColor (fillTextColor) {
         this.textModelObj.style.fill = fillTextColor;
-    };
+    }
+
+    setFill (fill) {
+        this.textModelObj.style.fill = fill;
+    }
 
 
-    Text.prototype.move = function(dx, dy)
-    {
-        this.textModelObj.setAttribute('dx', dx);
-        this.textModelObj.setAttribute('dx', dy);
-    };
+    setWidth (width) {
+        this.textModelObj.style.strokeWidth = width;
+    }
 
+    move (dx, dy) {
+        this.textModelObj.setAttribute("dx", dx);
+        this.textModelObj.setAttribute("dx", dy);
+    }
 
-    //DOES NOT WORK
-    Text.prototype.clone = function()
-    {
-        //not working (need to do getPoints method first)
+    clone () {
         let TextCopy = {};
         Object.setPrototypeOf(TextCopy, this.__proto__);
         TextCopy = Object.assign(TextCopy, this);
@@ -1159,163 +1051,163 @@ $(function()
         TextCopy.textModelObj = null;
         console.log("copy/clone", TextCopy);
         return TextCopy;
-    };
+    }
+
+};
 
 
 
-    /**
-     *
-     * @param point
-     * @param radius
-     * @constructor
-     */
-    Entry = function(point, radius)
-    {
-        if(point == undefined || point.x == undefined)
-            throw ('A point needs cords');
-        if(radius == undefined)
-            radius = 20;
+/**
+ *
+ * @type {{new(point?, radius?)=>{getText: (()), setTextColor: ((fillTextColor)), setStyle: ((style)),
+ * setText: ((text?)), draw: ((graphWinObj?)), setOutline: ((stroke)), setFace: ((fontFace)), point,
+ * point, move: ((dx?, dy?)), __insertIfNeeded: ((domElem?, graphWinObj)), setSize: ((textFontSize)),
+ * getRadius: (()), undraw: ((graphWinObj)), getAnchor: (()), clone: (()), radius, radius, setFill: ((fill))}}}
+ */
+Entry = class {
+
+    get point() {
+
+        return this._point;
+    }
+
+    set point(value) {
+        this._point = value;
+    }
+
+    get radius() {
+        return this._radius;
+    }
+
+    set radius(value) {
+        this._radius = value;
+    }
+
+    constructor (point, radius) {
+
+        if (point === undefined || point.x === undefined) {
+            throw ("Entry needs x and y coordinates");
+        }
+        if (radius === undefined) {
+            throw ("Entry need radius");
+        }
+
         this.point = point;
-        //this.width = width;
         this.radius = radius;
 
         this.domObj = null;
 
-        this.entryModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
+        this.entryModelObj = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
 
         //custom default settings
         this.entryModelObj.setAttribute("width", "300");
         this.entryModelObj.setAttribute("height", "100");
         this.entryModelObj.textContent = this.text;
-        this.entryModelObj.style.fill = 'black';
+        this.entryModelObj.style.fill = "black";
         this.entryModelObj.style.fontFamily = "arial";
-        //this.textModelObj.style.fontSize = "normal";
-        var textInput = document.createElement("input");
-        //textInput.value = "hello";
+        // this.textModelObj.style.fontSize = "normal";
+        let textInput = document.createElement("input");
         this.entryModelObj.appendChild(textInput);
+    }
 
-    };
-
-
-    Entry.prototype.draw = function(graphWinObj)
-    {
+    draw (graphWinObj) {
         this.entryModelObj.setAttribute("x", this.point.x);
         this.entryModelObj.setAttribute("y", this.point.y);
-        this.entryModelObj.setAttribute('r', this.radius);
+        this.entryModelObj.setAttribute("r", this.width);
 
-
-        var textInput =  this.entryModelObj.getElementsByTagName('input')[0];
-        //textInput.size = this.width;
-
+        let textInput = this.entryModelObj.getElementsByTagName("input")[0];
         this.__insertIfNeeded(this.entryModelObj, graphWinObj);
+
         textInput.focus();
-    };
+    }
 
-
-    Entry.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
-        if($(graphWinObj.svg).find(domElem).length == 0) {
+    __insertIfNeeded (domElem, graphWinObj) {
+        if ($(graphWinObj.svg).find(domElem).length === 0) {
             //Dom obj not found inside window
             $(graphWinObj.svg).append(domElem);
             this.domObj = domElem;
         }
-    };
+    }
 
-
-    Entry.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1) {
+    undraw (graphWinObj) {
+        if (this.domObj != null) {
+            if ($(graphWinObj.svg).find(this.domObj).length == 1) {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
-    };
+    }
 
-
-    Entry.prototype.setFill = function(fill)
-    {
+    setFill (fill) {
         this.entryModelObj.style.fill = fill;
-    };
+    }
 
-
-    Entry.prototype.setOutline = function(stroke)
-    {
+    setOutline (stroke) {
         this.entryModelObj.style.stroke = stroke;
-    };
+    }
 
-
-    Entry.prototype.getAnchor = function ()
-    {
+    getAnchor () {
         // Returns a clone of the corresponding endpoint of the segment.
         console.log(new Point(this.point.x, this.point.y));
         return new Point(this.point.x, this.point.y);
-    };
+    }
 
+    getRadius () {
+        console.log("This is radius of entry", new Radius(this.radius));
+        return new Radius(this.radius);
+    }
 
-    Entry.prototype.getRadius = function()
-    {
-        console.log(new Radius (this.radius));
-        return new Radius (this.radius);
-    };
+    setText (text) {
+        console.log(this.entryModelObj.getElementsByTagName("input")[0].value = text);
+        this.entryModelObj.getElementsByTagName("input")[0].value = text;
+    }
 
+    getText () {
+        console.log(this.entryModelObj.getElementsByTagName("input")[0].value);
+        return this.entryModelObj.getElementsByTagName("input")[0].value;
+    }
 
-    Entry.prototype.setText = function (text)
-    {
-        console.log("1", this.entryModelObj, text);
-        this.entryModelObj.getElementsByTagName('input')[0].value = text;
-    };
-
-
-    Entry.prototype.getText = function ()
-    {
-        console.log(this.entryModelObj);
-        console.log(this.entryModelObj.getElementsByTagName('input')[0].value);
-        return this.entryModelObj.getElementsByTagName('input')[0].value;
-    };
-
-
-    Entry.prototype.setFace = function (fontFace)
-    {
+    setFace (fontFace) {
         this.textModelObj.style.fontFamily = fontFace;
-    };
+    }
 
-
-    Entry.prototype.setSize = function (textFontSize)
-    {
+    setSize (textFontSize) {
         this.entryModelObj.style.fontSize = textFontSize + "px";
-    };
+    }
 
+    setStyle (style) {
 
-    Entry.prototype.setStyle = function (style)
-    {
-        if (style === "bold")
+        if (style === "normal")
         {
-            this.entryModelObj.style.fontWeight = style;
+            this.textModelObj.style.fontFamily = "arial";
+        }
+        else if (style === "bold")
+        {
+            this.textModelObj.style.fontWeight = style;
+        }
+        else if (style == "bold italic") {
+            this.textModelObj.style.fontWeight = "bold";
+            this.textModelObj.style.fontStyle = "italic";
         }
         else
         {
-            this.entryModelObj.style.fontStyle = style;
+            this.textModelObj.style.fontStyle = style;
         }
-    };
+    }
 
-
-    Entry.prototype.setTextColor = function (fillTextColor)
-    {
+    setTextColor (fillTextColor) {
         this.entryModelObj.style.fill = fillTextColor;
-    };
+    }
 
+    setWidth (width) {
+        this.entryModelObj.style.strokeWidth = width;
+    }
 
-    Entry.prototype.move = function(dx, dy)
-    {
-        this.entryModelObj.setAttribute('x', dx);
-        this.entryModelObj.setAttribute('y', dy);
-    };
+    move (dx, dy) {
+        this.entryModelObj.setAttribute("x", dx);
+        this.entryModelObj.setAttribute("y", dy);
+    }
 
-
-    Entry.prototype.clone = function()
-    {
-        //not working (need to do getPoints method first)
+    clone () {
         let EntryCopy = {};
         Object.setPrototypeOf(EntryCopy, this.__proto__);
         EntryCopy = Object.assign(EntryCopy, this);
@@ -1323,43 +1215,58 @@ $(function()
         EntryCopy.entryModelObj = null;
         console.log("copy/clone", EntryCopy);
         return EntryCopy;
-    };
+    }
+
+};
 
 
 
-    /**
-     *
-     * @param point
-     * @param imageSrc
-     * @constructor
-     */
-    Image = function (point, imageSrc)
-    {
-        if (point == undefined)
-            throw ('A image needs points');
+/**
+ *
+ * @type {{new(point?, imageSrc)=>{getImage: (()), move: ((dx?, dy?)), getWidth: (()),
+ * __insertIfNeeded: ((domElem?, graphWinObj)), getHeight: (()), draw: ((graphWinObj?)), point, point, imageSrc,
+ * imageSrc, getAnchor: (()), clone: (()), undraw: ((graphWinObj))}}}
+ */
+Image = class {
+
+    get point() {
+        return this._point;
+    }
+
+    set point(value) {
+        this._point = value;
+    }
+
+    get imageSrc() {
+        return this._imageSrc;
+    }
+
+    set imageSrc(value) {
+        this._imageSrc = value;
+    }
+
+    constructor (point, imageSrc){
+        if (point === undefined)
+            throw ("A image needs points");
         this.point = point;
         this.imageSrc = imageSrc;
 
-        this.imgModelObj = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+        this.imgModelObj = document.createElementNS("http://www.w3.org/2000/svg", "image");
         this.domObj = null;
-    };
+    }
 
-
-    Image.prototype.draw = function(graphWinObj)
-    {
-        this.imgModelObj.setAttribute('width', this.point.x);
-        this.imgModelObj.setAttribute('height', this.point.y);
-        this.imgModelObj.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', this.imageSrc);
+    draw (graphWinObj) {
+        this.imgModelObj.setAttribute("width", this.point.x);
+        this.imgModelObj.setAttribute("height", this.point.y);
+        this.imgModelObj.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", this.imageSrc);
 
         this.__insertIfNeeded(this.imgModelObj, graphWinObj);
-    };
+    }
 
-    //needs fixing for multiple window option
-    Image.prototype.__insertIfNeeded = function(domElem, graphWinObj)
-    {
+    __insertIfNeeded (domElem, graphWinObj) {
         // //debugger;
-        var $svg = $(graphWinObj.windw.document).find('svg');
-        if($svg.find(domElem).length == 0) {
+        let $svg = $(graphWinObj.windw.document).find("svg");
+        if ($svg.find(domElem).length === 0) {
             //Dom obj not found inside window
             $svg.append(domElem);
             this.domObj = domElem;
@@ -1370,65 +1277,48 @@ $(function()
         //     $(graphWinObj.svg).append(domElem);
         //     this.domObj = domElem;
         // }
-    };
+    }
 
-
-    Image.prototype.undraw = function(graphWinObj)
-    {
-        if(this.domObj != null)
-        {
-            if($(graphWinObj.svg).find(this.domObj).length == 1) {
+    undraw (graphWinObj) {
+        if (this.domObj != null) {
+            if ($(graphWinObj.svg).find(this.domObj).length == 1) {
                 $(graphWinObj.svg).find(this.domObj).remove();
             }
         }
-    };
-
+    }
 
     //DOES NOT WORK
-    Image.prototype.getWidth = function ()
-    {
-        console.log((this.point.x));
+    getWidth () {
+        console.log("width ", this.point.x);
         return this.point.x;
-    };
-
+    }
 
     //DOES NOT WORK
-    Image.prototype.getHeight = function ()
-    {
+    getHeight () {
         console.log("height ", this.point.y);
         return this.point.y;
+    }
 
-    };
-
-
-    Image.prototype.getAnchor = function ()
-    {
+    getAnchor () {
         // Returns a clone of the corresponding endpoint of the segment.
         console.log(new Point(this.point.x, this.point.y));
         return new Point(this.point.x, this.point.y);
-    };
-
+    }
 
     //DOES NOT WORK
-    Image.prototype.getImage = function ()
-    {
+    getImage () {
         // Returns a clone of the corresponding endpoint of the segment.
         console.log((this.imageSrc));
         return this.imageSrc;
-    };
+    }
 
-
-
-    Image.prototype.move = function(dx, dy)
-    {
-        this.imgModelObj.setAttribute('x', dx);
-        this.imgModelObj.setAttribute('y', dy);
-    };
-
+    move (dx, dy) {
+        this.imgModelObj.setAttribute("x", dx);
+        this.imgModelObj.setAttribute("y", dy);
+    }
 
     //DOES NOT WORK
-    Image.prototype.clone = function()
-    {
+    clone () {
         //not working (need to do getPoints method first)
         let ImageCopy = {};
         Object.setPrototypeOf(ImageCopy, this.__proto__);
@@ -1437,8 +1327,7 @@ $(function()
         ImageCopy.imgModelObj = null;
         console.log("copy/clone", ImageCopy);
         return ImageCopy;
-    };
+    }
 
+};
 
-//End of Main Function
-});

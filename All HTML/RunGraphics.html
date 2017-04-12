@@ -108,7 +108,7 @@
 
         </script>
 
-        <h3>Try this for Graphics.py (Under Construction) </h3>
+        <h3>Graphics.py </h3>
 
         <form>
             <textarea id="yourcode" cols="70" rows="12">
@@ -116,7 +116,8 @@ from graphics import*
 
 def main():
 	win = GraphWin ("Title", 500, 500)
-	p = Entry(Point(100, 100), 60)
+	p = Circle(Point(100, 100), 50)
+	p.getRadius()
 	p.draw(win)
 	win.getMouse()
 	#win.close()
