@@ -8,9 +8,9 @@
 let GraphWinJs;
 let Radius;
 let Point;
+let Line;
 let Circle;
 let Rectangle;
-let Line;
 let Oval;
 let Polygon;
 let Text;
@@ -177,7 +177,6 @@ GraphWinJs = class {
 
 
 
-
 /**
  *
  * @type {{new(radius?)=>{radius, radius}}}
@@ -201,6 +200,10 @@ Radius = class {
         this.domObj = null;
 
         this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", "radius");
+    }
+
+    getRadius() {
+        return this.radius;
     }
 
 };
@@ -348,6 +351,7 @@ Line = class {
         //custom default settings
         this.lineModelObj.style.stroke = "#000"; //black
         this.lineModelObj.style.strokeWidth = 1;
+
     }
 
     draw (graphWinObj) {
@@ -504,9 +508,7 @@ Circle = class {
         return new Point(this.point.x, this.point.y);
     }
 
-    // does not work
     getRadius() {
-        console.log("This is radius", new Radius(this.radius));
         return new Radius(this.radius);
     }
 
@@ -1147,12 +1149,10 @@ Entry = class {
 
     getAnchor () {
         // Returns a clone of the corresponding endpoint of the segment.
-        console.log(new Point(this.point.x, this.point.y));
         return new Point(this.point.x, this.point.y);
     }
 
     getRadius () {
-        console.log("This is radius of entry", new Radius(this.radius));
         return new Radius(this.radius);
     }
 
@@ -1171,7 +1171,12 @@ Entry = class {
     }
 
     setSize (textFontSize) {
-        this.entryModelObj.style.fontSize = textFontSize + "px";
+        if (textFontSize >= 5 && textFontSize <= 35) {
+            this.entryModelObj.style.fontSize = textFontSize + "px";
+        }
+        else {
+            console.log("Please enter a number between 5 and 35");
+        }
     }
 
     setStyle (style) {
@@ -1264,7 +1269,6 @@ Image = class {
     }
 
     __insertIfNeeded (domElem, graphWinObj) {
-        // //debugger;
         let $svg = $(graphWinObj.windw.document).find("svg");
         if ($svg.find(domElem).length === 0) {
             //Dom obj not found inside window
@@ -1330,4 +1334,5 @@ Image = class {
     }
 
 };
+
 

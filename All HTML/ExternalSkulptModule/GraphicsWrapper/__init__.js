@@ -182,13 +182,12 @@ let $builtinmodule = function(name){
         $loc.__getattr__ = reuseingGetterSetter.__getattr__;
         $loc.__setattr__ = reuseingGetterSetter.__setattr__;
 
-        //does not work
         $loc.getRadius = new Sk.builtin.func(function (self) {
             let radius = self.modelObj.getRadius();
-            let skulptX = Sk.builtin.float_(radius);
-            return skulptX;
-        });
+            let skulptRadius = Sk.builtin.float_(radius);
+            return skulptRadius;
 
+        });
     };
 
     /**
@@ -394,10 +393,7 @@ let $builtinmodule = function(name){
             return pyObj;
         });
 
-        //does not work
         $loc.getRadius = new Sk.builtin.func(function(self) {
-            debugger;
-            console.log("self get radius is ", self.modelObj.getRadius());
             let model = self.modelObj.getRadius();
             //clone to avoid reference issues....
             let radius = Sk.builtin.float_(model.getRadius());
@@ -405,7 +401,6 @@ let $builtinmodule = function(name){
             return pyObj;
         });
 
-        //need to do
         $loc.getCenter = new Sk.builtin.func(function(self) {
             let model = self.modelObj.getCenter();
 
@@ -832,11 +827,8 @@ let $builtinmodule = function(name){
             return pyObj;
         });
 
-        //does not work
         $loc.getRadius = new Sk.builtin.func(function(self) {
-
             let model = self.modelObj.getRadius();
-
             //clone to avoid reference issues....
             let radius = Sk.builtin.float_(model.getRadius());
             let pyObj = Sk.misceval.callsim(mod.Radius, radius);
@@ -874,7 +866,6 @@ let $builtinmodule = function(name){
         $loc.clone = new Sk.builtin.func(function (self) {
             let p1 = Sk.misceval.callsim(self.getAnchor, self);
             let radius = Sk.misceval.callsim(self.getRadius, self);
-
             let pyObj = Sk.misceval.callsim(mod.Entry, p1, radius.radius);
 
             return pyObj;
@@ -913,15 +904,6 @@ let $builtinmodule = function(name){
         //need to do
         $loc.getWidth = new Sk.builtin.func(function(self) {
             // return self.modelObj.getWidth();
-
-            // let model = self.modelObj.getWidth();
-            // let x = Sk.builtin.float_(model.getX());
-            // let pyObj = Sk.misceval.callsim(mod.Point, x);
-            // return pyObj;
-
-            let y = self.modelObj.getWidth();
-            let skulptY = Sk.builtin.float_(y);
-            return skulptY;
         });
 
         //need to do
