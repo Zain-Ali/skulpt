@@ -15,7 +15,6 @@ let $builtinmodule = function(name){
     let mod = {};
 
     let graphicsClass = {};
-    let radiusClass = {};
     let pointClass = {};
     let circleClass = {};
     let rectangleClass = {};
@@ -25,6 +24,10 @@ let $builtinmodule = function(name){
     let polygonClass = {};
     let imageClass = {};
     let entryClass = {};
+
+    let radiusClass = {};
+    let widthClass = {};
+    let heightClass = {};
 
 
     /**
@@ -56,7 +59,6 @@ let $builtinmodule = function(name){
 
     //P stand for Python
     mod.PGraphics = {};
-    mod.PRadiusClass = {};
     mod.PPointClass = {};
     mod.PCircleClass = {};
     mod.PRectangleClass = {};
@@ -66,6 +68,10 @@ let $builtinmodule = function(name){
     mod.PTextClass = {};
     mod.PImageClass = {};
     mod.PEntryClass = {};
+
+    mod.PRadiusClass = {};
+    mod.PWidthClass = {};
+    mod.PHeightClass = {};
 
 
 
@@ -106,6 +112,24 @@ let $builtinmodule = function(name){
 
         $loc.setBackground = new Sk.builtin.func(function (self, background) {
             self.modelObj.setBackground(background.v);
+        });
+
+        //need to do (does not work)
+        $loc.getWidth = new Sk.builtin.func(function(self) {
+            // let model = self.modelObj.getWidth();
+            // //clone to avoid reference issues....
+            // let width = Sk.builtin.float_(model.getWidth());
+            // let pyObj = Sk.misceval.callsim(mod.Width, width);
+            // return pyObj;
+        });
+
+        //need to do (does not work)
+        $loc.getHeight = new Sk.builtin.func(function(self) {
+            // let model = self.modelObj.getHeight();
+            // //clone to avoid reference issues....
+            // let height = Sk.builtin.float_(model.getHeight());
+            // let pyObj = Sk.misceval.callsim(mod.Height, height);
+            // return pyObj;
         });
 
         $loc.getMouse = new Sk.builtin.func(function(self) {
@@ -189,6 +213,61 @@ let $builtinmodule = function(name){
 
         });
     };
+
+
+
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
+    widthClass = function($glb, $loc) {
+        $loc.__init__ = new Sk.builtin.func(function(self, width) {
+            self.modelObj = new Width(width.v);
+            self.width = width;
+
+            return self;
+        });
+
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+        $loc.getWidth = new Sk.builtin.func(function (self) {
+            let width = self.modelObj.getWidth();
+            let skulptWidth = Sk.builtin.float_(width);
+            return skulptWidth;
+
+        });
+    };
+
+
+
+    /**
+     *
+     * @param $glb
+     * @param $loc
+     */
+    heightClass = function($glb, $loc) {
+
+        $loc.__init__ = new Sk.builtin.func(function(self, height) {
+            self.modelObj = new Height(height.v);
+            self.height = height;
+
+            return self;
+        });
+
+        $loc.__getattr__ = reuseingGetterSetter.__getattr__;
+        $loc.__setattr__ = reuseingGetterSetter.__setattr__;
+
+        $loc.getHeight = new Sk.builtin.func(function (self) {
+            let height = self.modelObj.getHeight();
+            let skulptHeight = Sk.builtin.float_(height);
+            return skulptHeight;
+
+        });
+    };
+
+
 
     /**
      *
@@ -901,13 +980,20 @@ let $builtinmodule = function(name){
             self.modelObj.undraw(graphWinObj.modelObj);
         });
 
-        //need to do
         $loc.getWidth = new Sk.builtin.func(function(self) {
-            // return self.modelObj.getWidth();
+            let model = self.modelObj.getWidth();
+            //clone to avoid reference issues....
+            let width = Sk.builtin.float_(model.getWidth());
+            let pyObj = Sk.misceval.callsim(mod.Width, width);
+            return pyObj;
         });
 
-        //need to do
         $loc.getHeight = new Sk.builtin.func(function(self) {
+            let model = self.modelObj.getHeight();
+            //clone to avoid reference issues....
+            let height = Sk.builtin.float_(model.getHeight());
+            let pyObj = Sk.misceval.callsim(mod.Height, height);
+            return pyObj;
         });
 
         $loc.getAnchor = new Sk.builtin.func(function(self) {
@@ -931,10 +1017,9 @@ let $builtinmodule = function(name){
 
         // need to do
         $loc.clone = new Sk.builtin.func(function (self) {
-            let getIma = Sk.misceval.callsim(self.getImage, self);
+            let getImage = Sk.misceval.callsim(self.getImage, self);
             let p1 = Sk.misceval.callsim(self.getAnchor, self);
-
-            let pyObj = Sk.misceval.callsim(mod.Image, p1, getIma);
+            let pyObj = Sk.misceval.callsim(mod.Image, p1, getImage);
 
             return pyObj;
         });
@@ -944,7 +1029,6 @@ let $builtinmodule = function(name){
 
 
     mod.GraphWin = Sk.misceval.buildClass(mod, graphicsClass, "PGraphics", []);
-    mod.Radius = Sk.misceval.buildClass(mod, radiusClass, "PRadiusClass", []);
     mod.Point  = Sk.misceval.buildClass(mod, pointClass, "PPointClass", []);
     mod.Circle = Sk.misceval.buildClass(mod, circleClass, "PCircleClass", []);
     mod.Rectangle = Sk.misceval.buildClass(mod, rectangleClass, "PRectangleClass", []);
@@ -954,6 +1038,10 @@ let $builtinmodule = function(name){
     mod.Text = Sk.misceval.buildClass(mod, textClass, "PTextClass", []);
     mod.Image = Sk.misceval.buildClass(mod, imageClass, "PImageClass", []);
     mod.Entry = Sk.misceval.buildClass(mod, entryClass, "PEntryClass", []);
+
+    mod.Radius = Sk.misceval.buildClass(mod, radiusClass, "PRadiusClass", []);
+    mod.Width = Sk.misceval.buildClass(mod, widthClass, "PWidthClass", []);
+    mod.Height = Sk.misceval.buildClass(mod, heightClass, "PHeightClass", []);
 
 
     return mod;

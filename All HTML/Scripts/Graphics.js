@@ -6,7 +6,6 @@
 
 
 let GraphWinJs;
-let Radius;
 let Point;
 let Line;
 let Circle;
@@ -16,6 +15,10 @@ let Polygon;
 let Text;
 let Entry;
 let Image;
+
+let Radius;
+let Width;
+let Height;
 
 
 
@@ -116,6 +119,16 @@ GraphWinJs = class {
         svg.style.backgroundColor = background;
     }
 
+    //need to do (does not work)
+    getWidth () {
+        // return new Width(this.width);
+    }
+
+    //need to do (does not work)
+    getHeight () {
+        // return new Height(this.height);
+    }
+
     getMouse () {
         let handleClick = function () {
             this.resolve(this._this.windw.mousePosition);
@@ -199,11 +212,78 @@ Radius = class {
         this.radius = radius;
         this.domObj = null;
 
-        this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", "radius");
+        // this.pointModelObj = document.createElementNS("http://www.w3.org/2000/svg", "radius");
+        this.radiusModelObj = document.createElementNS("http://www.w3.org/2000/svg", "radius");
     }
 
     getRadius() {
         return this.radius;
+    }
+
+};
+
+
+
+/**
+ *
+ * @type {{new(width?)=>{getWidth: (()), width, width}}}
+ */
+Width = class {
+
+    get width() {
+        return this._width;
+    }
+
+    set width(value) {
+        this._width = value;
+    }
+
+    constructor(width) {
+
+        if (width === undefined) {
+            throw ("Width needs width");
+        }
+        this.width = width;
+        this.domObj = null;
+
+        this.widthModelObj = document.createElementNS("http://www.w3.org/2000/svg", "width");
+    }
+
+    getWidth() {
+        return this.width;
+    }
+
+};
+
+
+
+/**
+ *
+ * @type {{new(height?)=>{getHeight: (()), height, height}}}
+ */
+Height = class {
+
+    get height() {
+        return this._height;
+    }
+
+    set height(value) {
+        this._height = value;
+    }
+
+    constructor(height) {
+
+        if (height === undefined) {
+            throw ("Height needs height");
+        }
+        this.height = height;
+        this.domObj = null;
+
+        this.heightModelObj = document.createElementNS("http://www.w3.org/2000/svg", "height");
+    }
+
+    getHeight() {
+        return this.height;
     }
 
 };
@@ -1291,16 +1371,14 @@ Image = class {
         }
     }
 
-    //DOES NOT WORK
     getWidth () {
-        console.log("width ", this.point.x);
-        return this.point.x;
+        return new Width(this.point.x);
     }
 
     //DOES NOT WORK
     getHeight () {
-        console.log("height ", this.point.y);
-        return this.point.y;
+        console.log("height ", new Height (this.point.y));
+        return new Height (this.point.y);
     }
 
     getAnchor () {
