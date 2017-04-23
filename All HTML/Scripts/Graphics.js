@@ -435,10 +435,10 @@ Line = class {
     }
 
     draw (graphWinObj) {
-        this.lineModelObj.setAttribute("x1", this.point1.x);
-        this.lineModelObj.setAttribute("y1", this.point1.y);
-        this.lineModelObj.setAttribute("x2", this.point2.x);
-        this.lineModelObj.setAttribute("y2", this.point2.y);
+        this.lineModelObj.setAttribute("x1", Math.min(this.point1.x, this.point2.x));
+        this.lineModelObj.setAttribute("y1", Math.min(this.point1.y, this.point2.y));
+        this.lineModelObj.setAttribute("x2", Math.max(this.point1.x, this.point2.x));
+        this.lineModelObj.setAttribute("y2", Math.max(this.point1.y, this.point2.y));
         this.__insertIfNeeded(this.lineModelObj, graphWinObj);
     }
 
@@ -484,7 +484,7 @@ Line = class {
     }
 
     setFill(fill) {
-        this.lineModelObj.style.fill = fill;
+        this.lineModelObj.style.stroke = fill;
     }
 
     setOutline (stroke) {
@@ -689,11 +689,11 @@ Rectangle = class {
     }
 
     draw (graphWinObj) {
-        this.recModelObj.setAttribute("x", (this.point1.x, this.point2.x));
-        this.recModelObj.setAttribute("y", (this.point1.y, this.point2.y));
+        this.recModelObj.setAttribute("x", Math.min(this.point1.x, this.point2.x));
+        this.recModelObj.setAttribute("y", Math.min(this.point1.y, this.point2.y));
 
-        let width = Math.max(this.point1.x, this.point2.x) - Math.min(this.point1.x, this.point2.x);
-        let height = Math.max(this.point1.y, this.point2.y) - Math.min(this.point1.y, this.point2.y);
+        let width = Math.abs(this.point1.x - this.point2.x);
+        let height = Math.abs(this.point1.y - this.point2.y);
 
         this.recModelObj.setAttribute("width", width);
         this.recModelObj.setAttribute("height", height);
