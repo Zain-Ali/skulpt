@@ -435,10 +435,19 @@ Line = class {
     }
 
     draw (graphWinObj) {
-        this.lineModelObj.setAttribute("x1", Math.min(this.point1.x, this.point2.x));
-        this.lineModelObj.setAttribute("y1", Math.min(this.point1.y, this.point2.y));
-        this.lineModelObj.setAttribute("x2", Math.max(this.point1.x, this.point2.x));
-        this.lineModelObj.setAttribute("y2", Math.max(this.point1.y, this.point2.y));
+
+        // this.lineModelObj.setAttribute("x1", Math.min(this.point1.x, this.point2.x));
+        // this.lineModelObj.setAttribute("y1", Math.min(this.point1.y, this.point2.y));
+        // this.lineModelObj.setAttribute("x2", Math.max(this.point1.x, this.point2.x));
+        // this.lineModelObj.setAttribute("y2", Math.max(this.point1.y, this.point2.y));
+        // console.log(this.lineModelObj);
+
+        this.lineModelObj.setAttribute("x1", this.point1.x);
+        this.lineModelObj.setAttribute("y1", this.point1.y);
+        this.lineModelObj.setAttribute("x2", this.point2.x);
+        this.lineModelObj.setAttribute("y2", this.point2.y);
+        console.log(this.lineModelObj);
+
         this.__insertIfNeeded(this.lineModelObj, graphWinObj);
     }
 
