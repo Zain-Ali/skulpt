@@ -1,12 +1,7 @@
+
+
 /**
- * Created by zain on 11/11/2016.
- */
-
-
-
-// This is a JavaScript and SVG wrapper class. Wrapping JS and SVG in Python
-/**
- *
+ * This is a JavaScript and SVG wrapper class. Wrapping JS and SVG in Python
  * @param name
  * @returns {{}}
  */
@@ -38,11 +33,11 @@ let $builtinmodule = function(name){
 
         __getattr__ : new Sk.builtin.func(function (self, key) {
 
-            if(self[key.v] !== undefined) { //everything is stored on self object
-                self[key.v].v = self.modelObj[key.v]; //
+            if(self[key.v] !== undefined) {
+                //everything is stored on self object
+                self[key.v].v = self.modelObj[key.v];
                 return self[key.v];
             }
-            //else throw exception
         }),
 
         __setattr__: new Sk.builtin.func(function (self, key, value) {
@@ -51,7 +46,6 @@ let $builtinmodule = function(name){
                 self.modelObj[key.v] = value;
                 return self[key.v] = value;
             }
-            //else throw exception
         })
     };
 
@@ -1006,20 +1000,14 @@ let $builtinmodule = function(name){
             return pyObj;
         });
 
-        //need to do
-        $loc.getImage = new Sk.builtin.func(function(self) {
-
-        });
-
         $loc.move = new Sk.builtin.func(function (self, x, y) {
             self.modelObj.move(x.v, y.v);
         });
 
         // need to do
         $loc.clone = new Sk.builtin.func(function (self) {
-            let getImage = Sk.misceval.callsim(self.getImage, self);
-            let p1 = Sk.misceval.callsim(self.getAnchor, self);
-            let pyObj = Sk.misceval.callsim(mod.Image, p1, getImage);
+            let anchor = Sk.misceval.callsim(self.getAnchor, self);
+            let pyObj = Sk.misceval.callsim(mod.Image, anchor);
 
             return pyObj;
         });

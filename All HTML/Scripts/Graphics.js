@@ -1,9 +1,4 @@
 
-/**
- * Created by zain on 11/11/2016.
- */
-
-
 
 let GraphWinJs;
 let Point;
@@ -33,12 +28,11 @@ function getHtmlTemplate() {
 }
 
 
-
 /**
  *
- * @type {{new(title?, width?, height?)=>{setCoords: (()), height, height, checkMouse: (()), checkKey: (()),
- * width, width, plot: (()), getMouse: (()), close: (()), title, title, plotPixel: (()), getKey: (()),
- * setTitle: ((title)), setBackground: ((background))}}}
+ * @type {{new(title?, width?, height?)=>{getHeight: (()), setCoords: (()), height, height, checkMouse: (()), checkKey: (()),
+ * width, width, plot: (()), getMouse: (()), close: (()), title, title, setBackground: ((background)), plotPixel: (()),
+ * getKey: (()), setTitle: ((title)), getWidth: (())}}}
  */
 GraphWinJs = class {
 
@@ -119,16 +113,6 @@ GraphWinJs = class {
         svg.style.backgroundColor = background;
     }
 
-    //need to do (does not work)
-    getWidth () {
-        // return new Width(this.width);
-    }
-
-    //need to do (does not work)
-    getHeight () {
-        // return new Height(this.height);
-    }
-
     getMouse () {
         let handleClick = function () {
             this.resolve(this._this.windw.mousePosition);
@@ -184,6 +168,12 @@ GraphWinJs = class {
     }
 
     setCoords () {
+    }
+
+    getWidth () {
+    }
+
+    getHeight () {
     }
 
 };
@@ -436,17 +426,10 @@ Line = class {
 
     draw (graphWinObj) {
 
-        // this.lineModelObj.setAttribute("x1", Math.min(this.point1.x, this.point2.x));
-        // this.lineModelObj.setAttribute("y1", Math.min(this.point1.y, this.point2.y));
-        // this.lineModelObj.setAttribute("x2", Math.max(this.point1.x, this.point2.x));
-        // this.lineModelObj.setAttribute("y2", Math.max(this.point1.y, this.point2.y));
-        // console.log(this.lineModelObj);
-
         this.lineModelObj.setAttribute("x1", this.point1.x);
         this.lineModelObj.setAttribute("y1", this.point1.y);
         this.lineModelObj.setAttribute("x2", this.point2.x);
         this.lineModelObj.setAttribute("y2", this.point2.y);
-        console.log(this.lineModelObj);
 
         this.__insertIfNeeded(this.lineModelObj, graphWinObj);
     }
@@ -706,6 +689,7 @@ Rectangle = class {
 
         this.recModelObj.setAttribute("width", width);
         this.recModelObj.setAttribute("height", height);
+
         this.__insertIfNeeded(this.recModelObj, graphWinObj);
     }
 
@@ -1384,9 +1368,7 @@ Image = class {
         return new Width(this.point.x);
     }
 
-    //DOES NOT WORK
     getHeight () {
-        console.log("height ", new Height (this.point.y));
         return new Height (this.point.y);
     }
 
