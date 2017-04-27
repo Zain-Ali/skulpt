@@ -3,11 +3,13 @@
   // To ignore any custom global variables, enable the `predef` option and list
   // your variables within it.
 
+  "esversion": 6,
   "predef": [
     "Sk",
     "goog",
     "COMPILED",
-    "Promise"
+    "Promise",
+    "$"
   ],
 
   /*** Enforcing options ***/
@@ -36,5 +38,5 @@
   /*** Environments ***/
   // Set each environment that you're using to `true`.
   "browser":      true,
-  "devel":        false
+  "devel":        true
 }
